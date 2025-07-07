@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualização de Hierarquia de Indicadores</title>
+    <link rel="stylesheet" href="visu_2.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h1>Visualização de Hierarquia de Indicadores</h1>
+
+    <div class="controls">
+        <label for="state-select">Estado:</label>
+        <select id="state-select">
+            <option value="">Selecione o estado...</option>
+        </select>
+        <label for="city-select">Cidade:</label>
+        <select id="city-select">
+            <option value="">Selecione uma cidade...</option>
+        </select>
+        <br><br>
+        <label for="json-file">Arquivo JSON com estrutura:</label>
+        <input type="file" id="json-file" accept=".json">
+        <div class="file-info" id="file-info">Nenhum arquivo selecionado</div>
+        <div style="margin-top: 15px;">
+            <label for="sector-filter">Filtrar por Setor:</label>
+            <select id="sector-filter">
+                <option value="all">Todos os Setores</option>
+            </select>
+            <label for="level-filter">Filtrar por Nível:</label>
+            <select id="level-filter">
+                <option value="all">Todos os Níveis</option>
+            </select>
+            <button id="collapse-all">Recolher Todos</button>
+            <button id="expand-all">Expandir Todos</button>
+        </div>
+    </div>
+
+    <div id="visualization"></div>
+
+    <script src="visu_2.js"></script>
+</body>
+</html>
