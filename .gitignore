@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.env
+.venv/
+venv/
+*.sqlite3
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+.history/
+
+# Data & Output
+data/
+output/
+*.log
+*.bak
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node/npm (if you ever add JS tooling)
+node_modules/
+
+# Secrets (if any)
+*.env
+config.yaml
+
+# Ignore large raw API dumps (if not needed in repo)
+*.txt
+
+# Frontend build artifacts (if any)
+dist/
+build/
