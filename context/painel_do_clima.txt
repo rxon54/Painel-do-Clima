@@ -1,0 +1,93 @@
+Brazil's Climate Data: From Science to Local Action
+Detailed Briefing Document: Climate Data Communication and Adaptation in Brazil
+This briefing document reviews the AdaptaBrasil platform and a complementary initiative, Painel do Clima, highlighting their roles in providing and communicating climate risk information for Brazil.
+1. AdaptaBrasil Platform: A Comprehensive Climate Risk Assessment Tool
+The AdaptaBrasil platform, developed by the MCTI (Ministry of Science, Technology and Innovation), is a free, online system designed to provide accessible information and analysis on climate change risks and impacts in Brazil. Its primary purpose is to empower "decision-makers at all levels, as well as researchers, civil society, and the private sector" with relevant climate data.
+1.1. Core Concept: Climate Change Impact Risk
+AdaptaBrasil's foundational concept, "climate change impact risk," aligns with the Intergovernmental Panel on Climate Change (IPCC) definition. This risk is "associated with the potential adverse consequences of climate change in a given environment," impacting "lives, health, ecosystems, economic, social and cultural assets, and infrastructure."
+The platform breaks down climate change impact risk into three interconnected dimensions:
+•
+Climate Threat (Ameaça Climática): "changes in climatic parameters such as annual precipitation or average temperatures, as well as the intensification of extreme events such as prolonged droughts, heavy rains, or heatwaves."
+•
+Vulnerability (Vulnerabilidade): This measures "how susceptible the system under analysis is to certain effects of the climate threat." It comprises two sub-dimensions:
+◦
+Sensitivity (Sensibilidade): "the degree to which the system is affected by stimuli related to the topic."
+◦
+Adaptive Capacity (Capacidade Adaptativa): "the system's ability to adjust."
+◦
+Example: "a municipality with limited water supply alternatives is more vulnerable to a climate threat of drought."
+•
+Exposure (Exposição): This refers to "the presence of people, livelihoods, species or ecosystems, environmental functions, services and resources, and infrastructure or economic, social or cultural goods in places that may be adversely affected."
+◦
+Example: "a population residing in an area prone to flooding being more exposed to a climate threat related to excessive rain."
+The "union of these three dimensions generates the climate change impact risk index" displayed on the platform.
+1.2. Hierarchical Data Structure and Accessibility
+AdaptaBrasil organises its data using a multi-level "tree" structure, facilitating detailed exploration of risk indices:
+•
+Level 1: Strategic sector (no data).
+•
+Level 2: Aggregated "climate change impact risk index" for a strategic sector.
+•
+Level 3: Composed of "vulnerability, exposure, and climate threat" indices.
+•
+Level 4: Within vulnerability, includes "sensitivity and adaptive capacity" indices.
+•
+Levels 5 and 6: "Indicators" specific to each strategic sector. Level 5 contains "thematic indicators" (combinations of simple indicators), while Level 6 holds "simple indicators" or "influencing factors" – these are crucial as they represent specific factors "on which public and private managers can elaborate strategic actions."
+The platform covers various "strategic sectors," including "water resources, food, and energy," and provides data for "all regions, states, and municipalities of Brazil." Users can view data at different territorial scales and access future projections for 2030 and 2050 under "pessimistic or optimistic scenarios." Data can be visualised as "maps" or "graphs" and is available for sharing via URL or download in various formats (e.g., shapefile, GeoJSON, Excel, CSV, PNG).
+1.3. Actionable Insights and Transparency
+A key feature of AdaptaBrasil is its ability to help users interpret results and identify areas for intervention. By "descend[ing] or ascend[ing] the hierarchical levels," users can understand the composition of observed results. When a municipality is selected, the platform lists "factors that influence the obtained result" ordered by their degree of influence, providing managers with precise targets for "adaptation actions or measures to improve the risk impact index."
+The platform prioritises transparency, making all "indices/indicators produced... available for download," along with "details on methodology, data sources, management, and partners involved in the development of the tool" on its "about" page. It also highlights "continuous improvement" through updates, research, and analyses.
+1.4. API Access for Automated Data Retrieval
+Beyond the user interface, AdaptaBrasil provides an API for automated data retrieval. The GitHub repository "AdaptaBrasil/AdaptaBrasilAPIAccess" offers scripts and examples for accessing platform data dynamically. This includes generating CSV files with all indicators, obtaining data in JSON format, or downloading geospatial and tabular data in various formats (e.g., SHPz, GEOJSONz, XLSXz, CSV). The API allows specifying parameters such as indicator ID, year, scenario, region (recorte), and resolution (e.g., municipality). This automated access is particularly useful for obtaining data for "many indicators and/or in different formats."
+2. Painel do Clima: Bridging the Gap Between Science and Communication
+Painel do Clima, powered by A Economia B, is a digital tool that transforms Brazil’s public climate data into accessible, localised content, combining visual dashboards, editorial curation, and AI-powered storytelling for every Brazilian city. Its main source of data is AdaptaBrasil.
+2.1. Addressing the Problem of Climate Data Disconnect
+Painel do Clima identifies a critical "pain point": while "world-class datasets [like AdaptaBrasil] are locked in silos," their "huge potential insight never reaches decision-makers," local newsrooms, or the general public. This leads to:
+•
+Low personal engagement from the general public, where climate "feels abstract" and they "only see disaster headlines."
+•
+Missed opportunities to educate and mobilise communities by local newsrooms that "lack tools & context" for climate stories.
+•
+Policies not being climate-first due to politicians and public servants lacking "clear, localized data to guide adaptation & mitigation."
+Essentially, there is "no bridge between science and communication," resulting in "urgency lost, resilience delayed."
+2.2. Painel do Clima's Solution: Localised, Accessible Climate Storytelling
+Painel do Clima aims to "build a climate culture, one city at a time" by embedding its tool into the "daily flow of local newsrooms, city halls, and municipal chambers." Its core solution is to take sophisticated climate science data, particularly from AdaptaBrasil, and make it "local, relevant, and continuous" for all of Brazil's 5,568 municipalities.
+The platform delivers:
+•
+Cutting-edge climate coverage service for newsrooms: Providing tailored content and context.
+•
+Public utility tool for citizens: Making complex climate topics understandable through "accessible language," "visual dashboards, editorial curation and AI-powered storytelling." This includes information like "What will happen to our city?" and "How can we prepare?" with practical action tips.
+•
+Data-driven management resource for mayors, councillors, and civil servants: Guiding climate adaptation laws and public policies by "bridging science, storytelling and governance."
+2.3. Broader Strategy and Partnerships
+Painel do Clima's strategy extends beyond the direct digital product:
+•
+Content Library: Curated by specialised journalists, offering courses, and webinars.
+•
+AI-powered interaction: Features like "Chat with ClimateCuritiba AI" to answer questions with "real-time responses," "science-based" information, and "practical action tips."
+•
+Audio Bulletins: Climate updates "designed for radio broadcast, reaching communities across Brazil with accessible information."
+•
+Training Courses: Specialised programs "for Journalists & Public Servants" to build climate communication capacity.
+•
+Climate Tools: Interactive resources "for Public Engagement."
+The initiative benefits from strong connections with the AdaptaBrasil network, including technical support from their team and visibility through official communication channels of the MCTI and Ministry of Environment (MMA). It has a confirmed pilot partner in Campo Largo (PR), intending to feature the panel on both city hall and city council websites. A Economia B will serve as an initial testing ground for newsrooms.
+2.4. Revenue and Sustainability
+Painel do Clima aims for a multi-stream revenue approach to ensure sustainability "beyond media advertising revenue," and democratise climate information. Potential revenue sources include:
+•
+Grants & Philanthropic Funding: From climate-focused foundations.
+•
+Public Funding from Federal Ministries: Leveraging institutional ties with MCTI, MMA, and other government bodies.
+•
+On-Demand Data Storytelling: Tailored dashboards and insights for private sector ESG and sustainability strategies.
+•
+Freemium Model for City Halls: Basic public service version with premium features via subscription.
+Projected revenue for year 1 is 10,500 GBP, rising to 33,500 GBP in year 2, with institutional support being the largest initial contributor.
+3. Key Interconnections and Impact
+The sources reveal a critical connection between AdaptaBrasil and Painel do Clima:
+•
+Data Foundation: AdaptaBrasil serves as the primary "world-class climate science platform" and "main source of data" for Painel do Clima.
+•
+Communication Gap: Painel do Clima explicitly states that AdaptaBrasil, while extraordinary, is "Far from the desks of decision-makers," "Far from the headlines of local newsrooms," and "Far from the daily lives of citizens."
+•
+Synergistic Goal: Painel do Clima seeks to leverage AdaptaBrasil's rich data to make climate risk information truly actionable and understood at the local level, thereby promoting "climate culture" and informing adaptation policies across Brazil's 5,568 municipalities. The aim is to translate complex scientific concepts into compelling narratives that drive engagement and policy change.

@@ -1,0 +1,43 @@
+{
+  "id": "5387",
+  "name": "Ponta Grossa/PR",
+  "value": null,
+  "nextlevel": [
+    {
+      "id": 60001,
+      "pessimist": 1,
+      "title": "Índice de Vulnerabilidade",
+      "simple_description": "Vulnerabilidade da população aos impactos dos desastres geo-hidrológicos de inundações, enxurradas e alagamentos",
+      "complete_description": "Grau de suscetibilidade a inundações, enxurradas e alagamentos, com potencial para mudança ou transformação do sistema socioecológico, quando confrontado com uma ameaça. A vulnerabilidade está associada às situações de sensibilidade e capacidade adaptativa do sistema socioecológico às alterações climáticas. Assim, o Índice de Vulnerabilidade é resultante da composição dos índices de Sensibilidade e Capacidade Adaptativa.<br><br>Fontes:<br>GALLOPÍN, G. C.. Linkages between vulnerability, resilience, and adaptive capacity. Global Environmental Change, v. 16, p. 293-303, 2006.<br>INTERGOVERNMENTAL PANEL ON CLIMATE CHANGE - IPCC. Climate Change 2014: Synthesis Report. Working Groups I, II and III to the Fifth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, R.K. Pachauri and L.A. Meyer (eds.)]. IPCC, Geneva, Switzerland, 151 pp.",
+      "year": 2015,
+      "value": "0,10",
+      "valuecolor": "#02C650",
+      "rangelabel": "Muito baixo"
+    },
+    {
+      "id": 60002,
+      "pessimist": 1,
+      "title": "Índice de Exposição",
+      "simple_description": "Exposição da população aos desastres geo-hidrológico de inundações, enxurradas e alagamentos",
+      "complete_description": "Grau de contato em que a população e moradias estão sujeitas aos desastres geo-hidrológicos (deslizamento de terra e inundações, enxurradas e alagamentos), considerando a distribuição geográfica desses elementos no espaço geográfico, ou com a proximidade de áreas potenciais de impacto. O Índice de Exposição é resultante da composição dos indicadores temáticos - moradias em ambiente de risco e densidade demográfica - sendo considerado o maior valor dentre esses indicadores para compor o valor deste Índice. <br><br>Fontes:<br>ADGER, W. N.. Vulnerability. Global Environmental Change, v. 16, n. 3, p. 268-281, ago. 2006.<br>GALLOPÍN, G. C.. Box 1: A systemic synthesis of the relations between vulnerability, hazard, exposure and impact, aimed at policy identification. In: Economic Commission for Latin American and the Caribbean (ECLAC). Handbook for Estimating the Socio-Economic and Environmental Effects of Disasters. Mexico, D.F.: ECLAC, LC/MEX/G.S., p. 2-5, 2003.<br>INTERGOVERNMENTAL PANEL ON CLIMATE CHANGE - IPCC. Climate Change 2014: Synthesis Report. Working Groups I, II and III to the Fifth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, R.K. Pachauri and L.A. Meyer (eds.)]. IPCC, Geneva, Switzerland, 151 pp.<br>KASPERSON, J. X.; KASPERSON, R. E.; TURNER II., B. L., SCHILLER, A., HSIEL, W. H.. Vulnerability to global environmental change. In: KASPERSON, J. X.; KASPERSON, R. E. (Eds.), Social Contours of Risk, vol. II. Earthscan, London, 2005. p. 245-285.<br>População em áreas de risco no Brasil / IBGE, Coordenação de Geografia.Rio de Janeiro: IBGE, 2018",
+      "year": 2015,
+      "value": "0,50",
+      "valuecolor": "#FFCD00",
+      "rangelabel": "Médio"
+    },
+    {
+      "id": 60003,
+      "pessimist": 1,
+      "title": "Índice de Ameaça de inundações, enxurradas e alagamentos",
+      "simple_description": "Índice de Ameaça de inundações, enxurradas e alagamentos ocasionadas por chuvas intensas e características geográficas",
+      "complete_description": "A ameaça é modelada a partir da interação entre os eventos climáticos relacionados a inundações, enxurradas e alagamentos. Consideram-se as características topográficas (altitude, declividade, aspecto, curvatura vertical, curvatura horizontal, acúmulo de fluxo), geológicas (tipo de solo, distância dos rios), fatores humanos (cobertura e uso do solo) e as características meteorológicas (índices climáticos Rx1day e Rx5day).<br><br>Fontes:<br>Reisinger, A., M. Garschagen, K.J. Mach, M. Pathak, E. Poloczanska, M. van Aalst, A.C. Ruane, K. Mintenbeck, R. Pedace, M. Rojas Corradi, D. Viner, C. Vera, B O'Neill, H.-O. Pörtner, J. Sillmann, R. Jones, and R. Ranasinghe, 2020: The Concept of Risk in the IPCC Sixth Assessment Report: A Summary of Cross-Working Group Discussions: Guidance for IPCC Authors. Intergovernmental Panel on Climate Change.<br>Sistema de Informações e Análises sobre Impactos das Mudanças Climáticas - AdaptaBrasil MCTI.",
+      "year": 2015,
+      "value": "0,70",
+      "valuecolor": "#FF8300",
+      "rangelabel": "Alto"
+    }
+  ],
+  "lastlevel": [],
+  "valuecolor": "#DCDCDC",
+  "rangelabel": "Dado indisponível"
+}

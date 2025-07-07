@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualização de Hierarquia de Indicadores</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+        .sector {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .sector-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .root-container {
+            margin-bottom: 40px;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .root-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            font-size: 14px;
+        }
+        .tree-container {
+            overflow-x: auto;
+        }
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+        .node text {
+            font: 12px sans-serif;
+        }
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        select, button, input {
+            padding: 8px 12px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .node:hover circle {
+            stroke: #333;
+            stroke-width: 3px;
+        }
+        .node:hover text {
+            font-weight: bold;
+        }
+        .level-1 { fill: #1f77b4; }
+        .level-2 { fill: #2ca02c; }
+        .level-3 { fill: #ff7f0e; }
+        .level-4 { fill: #d62728; }
+        .level-5 { fill: #9467bd; }
+        .level-6 { fill: #8c564b; }
+        .file-info {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+        .tooltip {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            line-height: 1.5;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .level2-container {
+            border: 2px solid #2ca02c;
+            background-color: #f4fff4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visualização de Hierarquia de Indicadores</h1>
+
+    <div class="controls">
+        <label for="json-file">Carregar Arquivo JSON:</label>
+        <input type="file" id="json-file" accept=".json">
+        <div class="file-info" id="file-info">Nenhum arquivo selecionado</div>
+
+        <div style="margin-top: 15px;">
+            <label for="sector-filter">Filtrar por Setor:</label>
+            <select id="sector-filter">
+                <option value="all">Todos os Setores</option>
+            </select>
+
+            <label for="level-filter">Filtrar por Nível:</label>
+            <select id="level-filter">
+                <option value="all">Todos os Níveis</option>
+            </select>
+
+            <button id="collapse-all">Recolher Todos</button>
+            <button id="expand-all">Expandir Todos</button>
+        </div>
+    </div>
+
+    <div id="visualization"></div>
+
+    <script>
+        // Global variables for the visualization
+        let allData, hierarchyData;
+
+        // Function to build hierarchy from flat data
+        function buildHierarchy(data) {
+            const sectors = {};
+            const indicatorMap = {};
+
+            // First, create a map of all indicators by ID
+            data.forEach(indicator => {
+                // Convert nivel to number for proper sorting
+                const nivel = indicator.nivel ? parseInt(indicator.nivel) : 0;
+                indicator.nivel_num = nivel;
+
+                indicatorMap[indicator.id] = indicator;
+                if (!sectors[indicator.setor_estrategico]) {
+                    sectors[indicator.setor_estrategico] = [];
+                }
+            });
+
+            // Then build the hierarchy for each sector
+            const sectorHierarchies = {};
+            Object.keys(sectors).forEach(sector => {
+                // Find root indicators (those with no parent or parent not in the same sector)
+                const roots = data.filter(indicator =>
+                    indicator.setor_estrategico === sector &&
+                    (!indicator.indicador_pai ||
+                     !data.some(i => i.id === indicator.indicador_pai && i.setor_estrategico === sector))
+                ).map(indicator => buildTree(indicator, data, sector));
+
+                sectorHierarchies[sector] = roots.length > 0 ? roots : null;
+            });
+
+            // Get all unique levels
+            const levels = new Set();
+            data.forEach(indicator => {
+                if (indicator.nivel) levels.add(indicator.nivel);
+            });
+            // Sort levels numerically
+            const sortedLevels = Array.from(levels)
+                .map(l => parseInt(l))
+                .sort((a, b) => a - b)
+                .map(l => l.toString());
+
+            // Get all unique sectors for the filter
+            const sectorList = Object.keys(sectors).sort();
+
+            return {
+                sectors: sectorList,
+                hierarchy: sectorHierarchies,
+                levels: sortedLevels
+            };
+        }
+
+        // Recursive function to build the tree structure
+        function buildTree(rootIndicator, allIndicators, sector) {
+            // Ensure parent_indicator is treated as empty string if missing/null
+            const parentIndicator = rootIndicator.indicador_pai || "";
+
+            const children = allIndicators.filter(child =>
+                (child.indicador_pai || "") === rootIndicator.id &&
+                child.setor_estrategico === sector
+            ).map(child => buildTree(child, allIndicators, sector));
+
+            // Sort children by nivel_num to maintain hierarchy order
+            if (children.length > 0) {
+                children.sort((a, b) => (a.nivel_num || 0) - (b.nivel_num || 0));
+            }
+
+            return {
+                id: rootIndicator.id || "",
+                nome: rootIndicator.nome || "",
+                nivel: rootIndicator.nivel || "Unknown",
+                nivel_num: rootIndicator.nivel_num || 0,
+                sector: rootIndicator.setor_estrategico || "",
+                descricao: rootIndicator.descricao_simples || rootIndicator.descricao || "",
+                children: children.length > 0 ? children : null
+            };
+        }
+
+        // Function to calculate the height needed for a subtree
+        function calculateTreeHeight(root, margin, minVerticalSpacing = 40) {
+            // Calculate the maximum depth of the tree
+            function getMaxDepth(node, depth = 0) {
+                if (!node.children || node.children.length === 0) {
+                    return depth;
+                }
+                let maxChildDepth = 0;
+                for (const child of node.children) {
+                    const childDepth = getMaxDepth(child, depth + 1);
+                    if (childDepth > maxChildDepth) {
+                        maxChildDepth = childDepth;
+                    }
+                }
+                return maxChildDepth;
+            }
+
+            const maxDepth = getMaxDepth(root);
+            // Use minVerticalSpacing per level
+            return (maxDepth + 1) * minVerticalSpacing + margin.top + margin.bottom;
+        }
+
+        // Function to render a single subtree
+        function renderSubtree(container, root, sector, rootIndex) {
+            // Calculate dimensions based on the size of the subtree
+            const margin = {top: 20, right: 90, bottom: 30, left: 90};
+            const minVerticalSpacing = 36; // Vertical spacing between nodes
+            // Create a group for this tree with proper margins
+            const svgGroup = container.append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Create the tree layout
+            const treeLayout = d3.tree()
+                .nodeSize([minVerticalSpacing, 180]); // 180px horizontal spacing per level
+
+            // Create a hierarchy from our root
+            const hierarchyData = d3.hierarchy(root);
+            const treeData = treeLayout(hierarchyData);
+
+            // Draw links (lines connecting nodes)
+            svgGroup.selectAll(".link")
+                .data(treeData.links())
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .x(d => d.y)
+                    .y(d => d.x));
+
+            // Create a group for each node
+            const nodes = svgGroup.selectAll(".node")
+                .data(treeData.descendants())
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.y},${d.x})`)
+                .attr("data-id", d => d.data.id);
+
+            // Add circles for the nodes
+            nodes.append("circle")
+                .attr("r", 10)
+                .attr("class", d => `level-${d.data.nivel || 'unknown'}`);
+
+            // Add labels to the nodes
+            nodes.append("text")
+                .attr("dy", ".35em")
+                .attr("x", d => d.children ? -13 : 13)
+                .style("text-anchor", d => d.children ? "end" : "start")
+                .text(d => `${d.data.id}: ${d.data.nome}`)
+                .on("click", function(event, d) {
+                    // Toggle children visibility
+                    const node = d3.select(this.parentNode);
+                    if (d.children) {
+                        node.classed("collapsed", !node.classed("collapsed"));
+                        // Find all descendants and toggle their display
+                        const descendants = treeData.descendants().filter(n =>
+                            d.data.id && n.data.id && isDescendant(d, n));
+                        descendants.forEach(desc => {
+                            d3.selectAll(`.node[data-id="${desc.data.id}"]`)
+                                .style("display", node.classed("collapsed") ? "none" : null);
+                        });
+                    }
+                });
+
+            // Helper function to check if one node is a descendant of another
+            function isDescendant(ancestor, node) {
+                if (!node.parent || !node.parent.data) return false;
+                if (node.parent.data.id === ancestor.data.id) return true;
+                return isDescendant(ancestor, node.parent);
+            }
+
+            // Add tooltip or more details on hover
+            nodes.on("mouseover", function(event, d) {
+                d3.select(".tooltip").remove(); // Remove any existing tooltip
+
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+
+                let content = `
+                    <strong>ID:</strong> ${d.data.id}<br/>
+                    <strong>Nome:</strong> ${d.data.nome}<br/>
+                    <strong>Nível:</strong> ${d.data.nivel}<br/>
+                    <strong>Setor:</strong> ${d.data.sector}<br/>
+                `;
+
+                if (d.parent && d.parent.data && d.parent.data.id) {
+                    content += `<strong>Indicador Pai:</strong> ${d.parent.data.id}: ${d.parent.data.nome}<br/>`;
+                }
+
+                if (d.data.descricao) {
+                    content += `<strong>Descrição:</strong> ${d.data.descricao}`;
+                }
+
+                tooltip.html(content);
+            })
+            .on("mouseout", function() {
+                d3.select(".tooltip").remove();
+            });
+
+            // --- Responsive SVG: set viewBox and dynamic height/width ---
+            setTimeout(() => {
+                try {
+                    const nodeElements = container.node().querySelectorAll('.node');
+                    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                    nodeElements.forEach(el => {
+                        const transform = el.getAttribute('transform');
+                        if (transform) {
+                            // D3 uses translate(y, x): y is horizontal, x is vertical
+                            const match = /translate\\(([-\\d.]+),([-.\\d]+)\\)/.exec(transform);
+                            if (match) {
+                                const y = parseFloat(match[1]); // horizontal
+                                const x = parseFloat(match[2]); // vertical
+                                if (x < minY) minY = x;
+                                if (x > maxY) maxY = x;
+                                if (y < minX) minX = y;
+                                if (y > maxX) maxX = y;
+                            }
+                        }
+                    });
+                    // Calculate width/height including margins
+                    const width = (maxX - minX) + margin.left + margin.right;
+                    const height = (maxY - minY) + margin.top + margin.bottom;
+                    // Move the group so the tree is always visible
+                    container.select('g')
+                        .attr('transform', `translate(${-minX + margin.left},${-minY + margin.top})`);
+                    container
+                        .attr("viewBox", `0 0 ${width} ${height}`)
+                        .attr("width", "100%")
+                        .attr("height", height > 0 ? height : 400);
+                } catch (e) {
+                    // fallback: do nothing
+                }
+            }, 0);
+        }
+
+        // Function to check if one node is a descendant of another
+        function isDescendant(ancestor, node) {
+            if (!node.parent || !node.parent.data) return false;
+            if (node.parent.data.id === ancestor.data.id) return true;
+            return isDescendant(ancestor, node.parent);
+        }
+
+        // Function to render the hierarchy
+        function renderHierarchy(hierarchyData) {
+            const visualization = d3.select("#visualization");
+            visualization.html(""); // Clear previous content
+
+            // Populate sector filter
+            const sectorFilter = d3.select("#sector-filter");
+            sectorFilter.selectAll("option:not(:first-child)").remove();
+            hierarchyData.sectors.forEach(sector => {
+                sectorFilter.append("option")
+                    .attr("value", sector)
+                    .text(sector);
+            });
+
+            // Populate level filter
+            const levelFilter = d3.select("#level-filter");
+            levelFilter.selectAll("option:not(:first-child)").remove();
+            hierarchyData.levels.forEach(level => {
+                levelFilter.append("option")
+                    .attr("value", level)
+                    .text(`Nível ${level}`);
+            });
+
+            // Add event listeners for buttons
+            d3.select("#collapse-all").on("click", () => {
+                collapseAllNodes();
+            });
+
+            d3.select("#expand-all").on("click", () => {
+                expandAllNodes();
+            });
+
+            // Render each sector's hierarchy
+            hierarchyData.sectors.forEach(sector => {
+                const sectorDiv = visualization.append("div")
+                    .attr("class", "sector")
+                    .attr("id", `sector-${sector.replace(/\s+/g, '-')}`);
+
+                sectorDiv.append("div")
+                    .attr("class", "sector-title")
+                    .text(sector);
+
+                const roots = hierarchyData.hierarchy[sector];
+                if (roots && roots.length > 0) {
+                    roots.forEach((root, rootIndex) => {
+                        let hasLevel2 = false;
+                        if (root.children && root.children.length > 0) {
+                            root.children.forEach((child, childIndex) => {
+                                if (child.nivel === "2" || child.nivel === 2) {
+                                    hasLevel2 = true;
+                                    const level2Container = sectorDiv.append("div")
+                                        .attr("class", "root-container level2-container")
+                                        .style("margin-bottom", "40px")
+                                        .style("border", "2px solid #2ca02c")
+                                        .style("background-color", "#f4fff4");
+
+                                    level2Container.append("div")
+                                        .attr("class", "root-title")
+                                        .text(`${child.id}: ${child.nome} (Nível ${child.nivel})`);
+
+                                    // Wrap SVG in a scrollable div
+                                    const treeDiv = level2Container.append("div")
+                                        .attr("class", "tree-container")
+                                        .style("overflow-x", "auto");
+                                    const svg = treeDiv.append("svg");
+                                    renderSubtree(svg, child, sector, `${rootIndex}-${childIndex}`);
+                                }
+                            });
+                        }
+                        // If no Level 2 children, or root itself is Level 2, render the root as a normal tree
+                        if (!hasLevel2 || root.nivel === "2" || root.nivel === 2) {
+                            const rootContainer = sectorDiv.append("div")
+                                .attr("class", root.nivel === "2" || root.nivel === 2 ? "root-container level2-container" : "root-container")
+                                .style("margin-bottom", "40px");
+                            if (root.nivel === "2" || root.nivel === 2) {
+                                rootContainer.style("border", "2px solid #2ca02c").style("background-color", "#f4fff4");
+                            }
+                            rootContainer.append("div")
+                                .attr("class", "root-title")
+                                .text(`${root.id}: ${root.nome} (Nível ${root.nivel})`);
+                            // Wrap SVG in a scrollable div
+                            const treeDiv = rootContainer.append("div")
+                                .attr("class", "tree-container")
+                                .style("overflow-x", "auto");
+                            const svg = treeDiv.append("svg");
+                            renderSubtree(svg, root, sector, rootIndex);
+                        }
+                    });
+                } else {
+                    sectorDiv.append("p").text("Nenhum indicador neste setor.");
+                }
+            });
+
+            // Add event listeners for filters
+            sectorFilter.on("change", function() {
+                const selectedSector = this.value;
+                d3.selectAll(".sector").style("display", null);
+                if (selectedSector !== "all") {
+                    d3.selectAll(".sector").style("display", "none");
+                    d3.select(`#sector-${selectedSector.replace(/\s+/g, '-')}`).style("display", null);
+                }
+            });
+
+            levelFilter.on("change", function() {
+                const selectedLevel = this.value;
+                if (selectedLevel === "all") {
+                    d3.selectAll(".node").style("display", null);
+                } else {
+                    d3.selectAll(".node").style("display", function() {
+                        const nodeData = d3.select(this).datum();
+                        return (nodeData.data.nivel === selectedLevel) ? null : "none";
+                    });
+                }
+            });
+        }
+
+        // Function to load and process JSON data
+        function loadJsonData(jsonData) {
+            // Check if data is already in the correct format
+            if (Array.isArray(jsonData)) {
+                // Map through the data to ensure consistent property names and formats
+                const processedData = jsonData.map(item => ({
+                    id: item.id || "",
+                    nome: item.nome || item.name || "",
+                    nivel: item.nivel || item.level || "Unknown",
+                    setor_estrategico: item.setor_estrategico || item.setor || item.sector || "Unknown",
+                    indicador_pai: item.indicador_pai || item.parent_indicator || item.parent || "",
+                    descricao: item.descricao_simples || item.descricao || "",
+                    nivel_num: item.nivel ? parseInt(item.nivel) : 0
+                }));
+
+                const hierarchyData = buildHierarchy(processedData);
+                renderHierarchy(hierarchyData);
+            } else {
+                console.error("Invalid JSON data format");
+                alert("Formato de dados inválido. Certifique-se de que o arquivo JSON contém uma matriz de indicadores.");
+            }
+        }
+
+        // Event listener for file upload
+        document.addEventListener("DOMContentLoaded", function() {
+            const fileInput = document.getElementById("json-file");
+            const fileInfo = document.getElementById("file-info");
+
+            fileInput.addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                fileInfo.textContent = `Arquivo selecionado: ${file.name}`;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const jsonData = JSON.parse(e.target.result);
+                        loadJsonData(jsonData);
+                    } catch (error) {
+                        console.error("Erro ao analisar o arquivo JSON:", error);
+                        alert("Erro ao analisar o arquivo JSON. Por favor, verifique o formato do arquivo.");
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            // Sample data for testing
+            const sampleData = [
+                { id: "1", nome: "Indicador A", nivel: "1", setor_estrategico: "Setor 1", indicador_pai: "", descricao_simples: "Descrição do Indicador A" },
+                { id: "2", nome: "Indicador B", nivel: "2", setor_estrategico: "Setor 1", indicador_pai: "1", descricao_simples: "Descrição do Indicador B" },
+                { id: "3", nome: "Indicador C", nivel: "1", setor_estrategico: "Setor 2", indicador_pai: "", descricao_simples: "Descrição do Indicador C" },
+                { id: "4", nome: "Indicador D", nivel: "3", setor_estrategico: "Setor 1", indicador_pai: "2", descricao_simples: "Descrição do Indicador D" },
+                { id: "5", nome: "Indicador E", nivel: "2", setor_estrategico: "Setor 2", indicador_pai: "3", descricao_simples: "Descrição do Indicador E" },
+                { id: "6", nome: "Indicador F", nivel: "1", setor_estrategico: "Setor 3", indicador_pai: "", descricao_simples: "Descrição do Indicador F" },
+                { id: "7", nome: "Indicador G", nivel: "2", setor_estrategico: "Setor 1", indicador_pai: "1", descricao_simples: "Descrição do Indicador G" },
+                { id: "8", nome: "Indicador H", nivel: "3", setor_estrategico: "Setor 2", indicador_pai: "5", descricao_simples: "Descrição do Indicador H" },
+                { id: "9", nome: "Indicador I", nivel: "4", setor_estrategico: "Setor 1", indicador_pai: "4", descricao_simples: "Descrição do Indicador I" },
+                { id: "10", nome: "Indicador J", nivel: "1", setor_estrategico: "Setor 3", indicador_pai: "", descricao_simples: "Descrição do Indicador J" },
+                { id: "11", nome: "Indicador K", nivel: "2", setor_estrategico: "Setor 3", indicador_pai: "10", descricao_simples: "Descrição do Indicador K" },
+                { id: "12", nome: "Indicador L", nivel: "3", setor_estrategico: "Setor 3", indicador_pai: "11", descricao_simples: "Descrição do Indicador L" }
+            ];
+
+            // For testing, you can uncomment this to load sample data by default
+            // loadJsonData(sampleData);
+        });
+
+        // Function to collapse all nodes in a tree
+        function collapseAllNodes() {
+            d3.selectAll(".node").each(function(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                }
+            });
+            d3.selectAll(".node").style("display", function(d) {
+                return d.depth === 0 ? null : "none";
+            });
+        }
+
+        // Function to expand all nodes in a tree
+        function expandAllNodes() {
+            d3.selectAll(".node").each(function(d) {
+                if (d._children) {
+                    d.children = d._children;
+                    d._children = null;
+                }
+            });
+            d3.selectAll(".node").style("display", null);
+        }
+    </script>
+</body>
+</html>

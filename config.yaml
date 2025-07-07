@@ -1,0 +1,10 @@
+# Configuration for AdaptaBrasil API Ingestor
+
+# State code (e.g., 'PR' for Paraná)
+state: PR
+# Delay (in seconds) between API requests
+delay_seconds: 5.0
+# Output directory for results
+output_dir: data/
+# Save full API responses for debugging
+save_full_response: true

@@ -1,0 +1,1254 @@
+
+# Índices e Indicadores
+
+## Recursos Hídricos  
+
+![Recursos Hídricos](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/recursos-hidricos_0.jpeg)
+
+### Seca  
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para Seca](https://sistema.adaptabrasil.mcti.gov.br//1000/1/2015/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a ameaça climática de seca.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Seca](https://sistema.adaptabrasil.mcti.gov.br//1001/1/2015/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas, especificamente aquelas que resultam em seca.
+
+- [Índice de Exposição para Seca](https://sistema.adaptabrasil.mcti.gov.br//1002/1/2015/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e as ameaças climáticas relacionadas à seca por meio da distribuição de elementos de superfície.
+
+- [Índice de Ameaça Climática para Seca](https://sistema.adaptabrasil.mcti.gov.br//1003/1/2015/null/BR/municipio/): Variações climáticas relacionadas à seca, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Seca](https://sistema.adaptabrasil.mcti.gov.br//1004/1/2015/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática de seca.
+
+- [Índice de Capacidade Adaptativa para Seca](https://sistema.adaptabrasil.mcti.gov.br//1005/1/2015/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis ameaças climáticas de seca.
+
+#### Nível 5  
+
+- [Oferta e demanda dos recursos hídricos para Seca](https://sistema.adaptabrasil.mcti.gov.br//1006/1/2015/null/BR/municipio/): Sensibilidade do sistema socioecológico em relação à quantidade de recursos hídricos disponíveis e demandados para múltiplos usos.
+
+- [Acesso limitado e ineficiência do uso da água no sistema de abastecimento público para Seca](https://sistema.adaptabrasil.mcti.gov.br//1007/1/2015/null/BR/municipio/): Limitação de acesso e perdas de água no sistema de abastecimento público.
+
+- [Riscos à saúde ambiental para Seca](https://sistema.adaptabrasil.mcti.gov.br//1008/1/2015/null/BR/municipio/): Sensibilidade do sistema em relação aos riscos à saúde do ambiente em situação de seca.
+
+- [Planejamento e gestão de risco para recursos hídricos para Seca](https://sistema.adaptabrasil.mcti.gov.br//1009/1/2015/null/BR/municipio/): Arcabouço legal existente para diminuição do risco de impacto presente e futuro das mudanças climáticas nos recursos hídricos considerando uma situação de seca.
+
+- [Capacidade de abastecimento e reservação de água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1010/1/2015/null/BR/municipio/): Capacidade de armazenamento e distribuição dos recursos hídricos para abastecimento considerando situações de seca.
+
+- [Capacidade socioeconômica familiar para Seca](https://sistema.adaptabrasil.mcti.gov.br//1011/1/2015/null/BR/municipio/): Capacidade socioeconômica da estrutura familiar de responder positivamente a eventuais situações de seca.
+
+- [Exposição da população ao ambiente natural para Seca](https://sistema.adaptabrasil.mcti.gov.br//1012/1/2015/null/BR/municipio/): Nível de exposição da população em relação aos processos no meio natural (biofísico) que influenciam na distribuição e acessibilidade dos recursos hídricos que podem ser afetados em situação de seca.
+
+- [População exposta para Seca](https://sistema.adaptabrasil.mcti.gov.br//1013/1/2015/null/BR/municipio/): População exposta às adversidades oriundas de situações de seca.
+
+#### Nível 6  
+
+- [Indisponibilidade hídrica superficial para Seca](https://sistema.adaptabrasil.mcti.gov.br//1014/1/2017/null/BR/municipio/): Indisponibilidade hídrica em superfície como fonte de oferta de água para múltiplos usos em situação de seca.
+
+- [Balanço hídrico quantitativo superficial para Seca](https://sistema.adaptabrasil.mcti.gov.br//1015/1/2018/null/BR/municipio/): Balanço hídrico quantitativo superficial nos municípios considerando o saldo de oferta/demanda para situações de seca.
+
+- [Demanda hídrica para múltiplos usos da água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1016/1/2014/null/BR/municipio/): Demanda hídrica para múltiplos usos da água para benefício humano direto ou indireto que pode ser afetada por situações de seca.
+
+- [População não atendida pela rede de abastecimento de água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1017/1/2010/null/BR/municipio/): Percentual da população não atendida pelo sistema de abastecimento de água que pode ser afetada por situações de seca.
+
+- [Perdas de água no sistema de abastecimento para Seca](https://sistema.adaptabrasil.mcti.gov.br//1018/1/2013/null/BR/municipio/): Percentual de perdas de água por habitante no município.
+
+- [Consumo médio per capita de água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1019/1/2013/null/BR/municipio/): Demanda de água para consumo direto da população que pode ser afetada por situação de seca.
+
+- [Isolamento da população considerando a distância a corpos hídricos e estradas para Seca](https://sistema.adaptabrasil.mcti.gov.br//1020/1/2010/null/BR/municipio/): Distribuição da população residente em relação às estradas e corpos hídricos.
+
+- [Ocorrência de doenças relacionadas ao saneamento ambiental inadequado para Seca](https://sistema.adaptabrasil.mcti.gov.br//1021/1/2013/null/BR/municipio/): Percentual de ocorrência das doenças relacionadas ao saneamento ambiental inadequado.
+
+- [Qualidade da água para múltiplos usos para Seca](https://sistema.adaptabrasil.mcti.gov.br//1022/1/2013/null/BR/municipio/): Matéria orgânica lançada nos recursos hídricos utilizada como parâmetro para avaliação da qualidade da água para múltiplos usos nos municípios.
+
+- [Nível de atuação em comitês de bacia para Seca](https://sistema.adaptabrasil.mcti.gov.br//1023/1/2015/null/BR/municipio/): Nível de atuação em planos de gerenciamento dos recursos hídricos nos comitês de bacias hidrográficas nos municípios.
+
+- [Nível de implementação e articulação do plano municipal de saneamento básico para Seca](https://sistema.adaptabrasil.mcti.gov.br//1024/1/2016/null/BR/municipio/): Nível de implementação e articulação de planos municipais de saneamento básico para gestão dos recursos hídricos.
+
+- [Adesão ao Programa Cidades Resilientes para Seca](https://sistema.adaptabrasil.mcti.gov.br//1025/1/2015/null/BR/municipio/): Municípios que aderiram ao Programa Cidades Resilientes.
+
+- [Programas ou ações de prevenção contra impactos da seca para Seca](https://sistema.adaptabrasil.mcti.gov.br//1026/1/2017/null/BR/municipio/): Implementação de estratégias de prevenção contra impactos relacionados à seca.
+
+- [Investimento per capita em políticas de adaptação e infraestrutura para proteção ambiental para Seca](https://sistema.adaptabrasil.mcti.gov.br//1027/1/2016/null/BR/municipio/): Valor per capita das transferências governamentais destinadas à proteção ambiental em políticas de adaptação e infraestrutura.
+
+- [Armazenamento e reservação de água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1028/1/2015/null/BR/municipio/): Capacidade de armazenamento e reservação de água para uso potencial em situações de seca.
+
+- [Alternativas ao abastecimento de água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1029/1/2010/null/BR/municipio/): Nível de articulação pública e segurança hídrica mínima da população em situações de seca.
+
+- [Renda domiciliar não comprometida pela cobrança da água para Seca](https://sistema.adaptabrasil.mcti.gov.br//1030/1/2013/null/BR/municipio/): Renda domiciliar não comprometida pelas alterações de tarifas relacionadas à cobrança da água que pode ser impactada em situação de seca.
+
+- [Domicílios com renda per capita superior a dois salários mínimos para Seca](https://sistema.adaptabrasil.mcti.gov.br//1031/1/2010/null/BR/municipio/): Domicílios cuja renda familiar é superior a dois salários mínimos que os garante um poder mínimo de compra para uma situação de emergência devido aos impactos advindos da seca.
+
+- [Proximidade da população em relação às áreas em processo de degradação ou desmatamento para Seca](https://sistema.adaptabrasil.mcti.gov.br//1032/1/2015/null/BR/municipio/): Proximidade da população em relação às áreas degradadas, desmatadas e/ou frágeis ambientalmente que limitam a qualidade dos recursos hídricos considerando uma situação de seca.
+
+- [População afastada de locais de armazenamento subterrâneo para Seca](https://sistema.adaptabrasil.mcti.gov.br//1033/1/2013/null/BR/municipio/): Exposição da população considerando seu distanciamento aos locais de armazenamento subterrâneo de água que dificultam o acesso aos recursos hídricos em situação de seca.
+
+- [Densidade populacional para Seca](https://sistema.adaptabrasil.mcti.gov.br//1034/1/2016/null/BR/municipio/): Número de habitantes, por área do município, potencialmente expostos às adversidades de uma situação de seca.
+
+- [Dias consecutivos secos para Seca](https://sistema.adaptabrasil.mcti.gov.br//1035/1/2015/null/BR/municipio/): Duração de períodos de estiagem.
+
+- [Índice de precipitação-evapotranspiração padronizado (SPEI) para Seca](https://sistema.adaptabrasil.mcti.gov.br//1036/1/2015/null/BR/municipio/): Recorte do Índice multiescalar que expressa diferentes graus de magnitude de seca .
+
+## Segurança Alimentar  
+
+![Segurança Alimentar](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/seguranca-alimentar.jpeg)
+
+### Seca  
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para Seca](https://sistema.adaptabrasil.mcti.gov.br//5000/1/2015/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a ameaça climática de seca.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Seca](https://sistema.adaptabrasil.mcti.gov.br//5001/1/2015/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas, especificamente aquelas que resultam em seca.
+
+- [Índice de Exposição para Seca](https://sistema.adaptabrasil.mcti.gov.br//5002/1/2015/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e as ameaças climáticas relacionadas à seca por meio da distribuição de elementos de superfície.
+
+- [Índice de Ameaça Climática para Seca](https://sistema.adaptabrasil.mcti.gov.br//5003/1/2015/null/BR/municipio/): Variações climáticas relacionadas à seca, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Seca](https://sistema.adaptabrasil.mcti.gov.br//5004/1/2015/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática de seca.
+
+- [Índice de Capacidade Adaptativa para Seca](https://sistema.adaptabrasil.mcti.gov.br//5005/1/2015/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis ameaças climáticas de seca.
+
+#### Nível 5  
+
+- [Produção e comercialização de alimentos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5006/1/2015/null/BR/municipio/): Sensibilidade do sistema socioecológico quanto à disponibilidade de alimento e as possíveis limitações na sua comercialização no presente e no futuro considerando uma situação de seca.
+
+- [Características dos produtores e dos estabelecimentos agropecuários para Seca](https://sistema.adaptabrasil.mcti.gov.br//5007/1/2015/null/BR/municipio/): Dependência dos estabelecimentos agropecuários aos aspectos que podem expressar a sensibilidade do sistema em situação de seca.
+
+- [Saúde e consumo dos alimentos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5008/1/2015/null/BR/municipio/): Fatores ou situações que podem levar as famílias a terem comida insuficiente e/ou nutrição inadequada em situação de seca.
+
+- [Logística da produção e abastecimento para Seca](https://sistema.adaptabrasil.mcti.gov.br//5009/1/2015/null/BR/municipio/): Capacidade de abastecimento e distribuição de alimentos como meio para a redução do risco de desabastecimento em situações de seca.
+
+- [Planejamento e gestão da segurança alimentar e nutricional para Seca](https://sistema.adaptabrasil.mcti.gov.br//5010/1/2015/null/BR/municipio/): Políticas e programas que auxiliam na contenção de impactos climáticos da seca relacionados com a segurança alimentar.
+
+- [Manutenção da produção agropecuária para Seca](https://sistema.adaptabrasil.mcti.gov.br//5011/1/2015/null/BR/municipio/): Situação de estabilidade presente e futura da produção mediante o acesso de políticas e ações de incentivo e manutenção da produção local em condição de seca.
+
+- [Capacidade socioeconômica familiar para Seca](https://sistema.adaptabrasil.mcti.gov.br//5012/1/2015/null/BR/municipio/): Capacidade da estrutura familiar em adaptar-se positivamente às adversidades climáticas como a seca.
+
+- [Agropecuária e fatores biofísicos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5013/1/2015/null/BR/municipio/): Distribuição de elementos biofísicos de superfície que podem contribuir para o aumento do impacto da seca em sistemas socioecológicos.
+
+- [População exposta e estrutura fundiária para Seca](https://sistema.adaptabrasil.mcti.gov.br//5014/1/2015/null/BR/municipio/): Distribuição da população e da estrutura fundiária que contribuem para exposição ao risco, considerando situações adversas de seca.
+
+#### Nível 6  
+
+- [Baixa produção de alimentos básicos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5015/1/2017/null/BR/municipio/): Baixa disponibilidade de alimentos básicos para abastecimento interno da população.
+
+- [Não diversificação da produção local para Seca](https://sistema.adaptabrasil.mcti.gov.br//5016/1/2017/null/BR/municipio/): Homogeneidade das atividades econômicas no município.
+
+- [Agricultura sem práticas agrícolas sustentáveis para Seca](https://sistema.adaptabrasil.mcti.gov.br//5017/1/2017/null/BR/municipio/): Percentual de estabelecimentos agropecuários sem adoção de prática agrícola sustentável.
+
+- [Dependência da irrigação em grande escala para Seca](https://sistema.adaptabrasil.mcti.gov.br//5018/1/2017/null/BR/municipio/): Proporção da área agrícola com o uso de irrigação de grande escala.
+
+- [Uniformidade de receitas da produção agropecuária para Seca](https://sistema.adaptabrasil.mcti.gov.br//5019/1/2017/null/BR/municipio/): Não diversificação de receitas da produção de cultivares e de produção de origem animal.
+
+- [Analfabetismo do responsável pelo estabelecimento agropecuário para Seca](https://sistema.adaptabrasil.mcti.gov.br//5020/1/2017/null/BR/municipio/): Proporção de estabelecimentos agropecuários cujo responsável não sabe ler e escrever.
+
+- [Nível de insegurança alimentar e nutricional para Seca](https://sistema.adaptabrasil.mcti.gov.br//5021/1/2018/null/BR/municipio/): Nível de insegurança alimentar e nutricional das famílias que pode ser agravado em situações de seca.
+
+- [Uso de agrotóxico para Seca](https://sistema.adaptabrasil.mcti.gov.br//5022/1/2017/null/BR/municipio/): Inferência sobre a saúde das pessoas que estão em contato direto ao produto que pode ser agravada pela necessidade de aumento do uso em situações de seca.
+
+- [Nível de sobrepeso e obesidade da população para Seca](https://sistema.adaptabrasil.mcti.gov.br//5023/1/2007/null/BR/municipio/): Nível de sobrepeso e obesidade nos diferentes estratos da população.
+
+- [Capacidade de armazenamento dos armazéns para Seca](https://sistema.adaptabrasil.mcti.gov.br//5024/1/2016/null/BR/municipio/): Capacidade de armazenamento da produção de grãos.
+
+- [Nível de funcionamento das centrais de abastecimento (Ceasas) para Seca](https://sistema.adaptabrasil.mcti.gov.br//5025/1/2018/null/BR/municipio/): Nível de funcionamento e/ou capacidade das centrais de abastecimento (Ceasas) em atender a população.
+
+- [Eficiência na armazenagem dos alimentos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5026/1/2016/null/BR/municipio/): Nível de eficiência no armazenamento dos alimentos.
+
+- [Acessibilidade da população para Seca](https://sistema.adaptabrasil.mcti.gov.br//5027/1/2018/null/BR/municipio/): Nível de acessibilidade da população do município considerando a infraestrutura de cidade e a logística de transportes.
+
+- [Instrumentos de planejamento e gestão da segurança alimentar para Seca](https://sistema.adaptabrasil.mcti.gov.br//5028/1/2010/null/BR/municipio/): Nível de articulação da segurança alimentar via implementação de instrumentos de ação e planejamento.
+
+- [Investimento per capita em políticas de adaptação e infraestrutura para proteção ambiental para Seca](https://sistema.adaptabrasil.mcti.gov.br//5029/1/2016/null/BR/municipio/): Valor per capita das transferências governamentais destinadas à proteção ambiental em políticas de adaptação e infraestrutura.
+
+- [Adesão ao Programa Cidades Resilientes para Seca](https://sistema.adaptabrasil.mcti.gov.br//5030/1/2015/null/BR/municipio/): Municípios que aderiram ao Programa Cidades Resilientes.
+
+- [Abrangência do Programa Nacional de Alimentação Escolar (PNAE) para Seca](https://sistema.adaptabrasil.mcti.gov.br//5031/1/2015/null/BR/municipio/): Valor investido pelo programa por aluno matriculado na educação básica pública.
+
+- [Acesso ao Programa Garantia Safra para Seca](https://sistema.adaptabrasil.mcti.gov.br//5032/1/2010/null/BR/municipio/): Nível de acesso ao Programa Garantia Safra por produtores rurais.
+
+- [Abrangência do Programa de Fortalecimento da Agricultura Familiar (PRONAF) para Seca](https://sistema.adaptabrasil.mcti.gov.br//5033/1/2016/null/BR/municipio/): Nível de abrangência do PRONAF em relação à distribuição fundiária.
+
+- [Nível de atendimento à população das unidades receptoras do Programa de Aquisição de Alimentos (PAA) para Seca](https://sistema.adaptabrasil.mcti.gov.br//5034/1/2016/null/BR/municipio/): Nível de atendimento per capita das unidades receptoras do Programa de Aquisição de Alimentos da Agricultura Familiar (PAA).
+
+- [Acesso ao Programa Cisternas para Seca](https://sistema.adaptabrasil.mcti.gov.br//5035/1/2016/null/BR/municipio/): Nível de acesso à água para produção por meio do Programa Cisternas.
+
+- [Acesso ao Proagro Mais para Seca](https://sistema.adaptabrasil.mcti.gov.br//5036/1/2014/null/BR/municipio/): Nível de acesso ao ProAgro Mais do município.
+
+- [Produtividade pecuária para Seca](https://sistema.adaptabrasil.mcti.gov.br//5037/1/2017/null/BR/municipio/): Eficiência da produção pecuária que, em situação de seca, pode ser impactada.
+
+- [Renda domiciliar não comprometida pelas alterações de preço da cesta básica para Seca](https://sistema.adaptabrasil.mcti.gov.br//5038/1/2015/null/BR/municipio/): Renda domiciliar não comprometida pelas alterações de preço da cesta básica que pode ser impactada em uma situação de seca.
+
+- [Nível de formalidade na economia para Seca](https://sistema.adaptabrasil.mcti.gov.br//5039/1/2010/null/BR/municipio/): Percentual da população formalmente ocupada.
+
+- [Abrangência do Programa Bolsa Família para Seca](https://sistema.adaptabrasil.mcti.gov.br//5040/1/2015/null/BR/municipio/): Abrangência do Programa Bolsa Família considerando o total de domicílios com renda domiciliar mensal de até 2 salários mínimos.
+
+- [Baixa densidade de moradores por cômodo de domicílio para Seca](https://sistema.adaptabrasil.mcti.gov.br//5041/1/2010/null/BR/municipio/): Densidade média de moradores por cômodo de domicílio.
+
+- [Distância da agropecuária em relação à disponibilidade hídrica para Seca](https://sistema.adaptabrasil.mcti.gov.br//5042/1/2015/null/BR/municipio/): Distância dos locais com atividade agropecuária em relação à disponibilidade hídrica .
+
+- [Agropecuária em pastagens degradadas para Seca](https://sistema.adaptabrasil.mcti.gov.br//5043/1/2016/null/BR/municipio/): Atividades agropecuárias sobre áreas de pastagens degradadas.
+
+- [Áreas agropecuárias com baixo potencial agrícola para Seca](https://sistema.adaptabrasil.mcti.gov.br//5044/1/2020/null/BR/municipio/): Áreas de atividades agropecuárias com baixo potencial agrícola .
+
+- [Zonas de risco bioclimático para cultivos alimentares para Seca](https://sistema.adaptabrasil.mcti.gov.br//5045/1/2015/null/BR/municipio/): Zonas sob risco bioclimático para cultivos alimentares que podem ser mais afetadas em situações de seca.
+
+- [Densidade populacional para Seca](https://sistema.adaptabrasil.mcti.gov.br//5046/1/2015/null/BR/municipio/): Número de habitantes, por área do município, potencialmente expostos às adversidades de uma situação de seca.
+
+- [Densidade de estabelecimentos agropecuários para Seca](https://sistema.adaptabrasil.mcti.gov.br//5047/1/2017/null/BR/municipio/): Número de estabelecimentos agropecuários por unidade de área do município.
+
+- [Dias consecutivos secos para Seca](https://sistema.adaptabrasil.mcti.gov.br//5048/1/2015/null/BR/municipio/): Duração de períodos de estiagem.
+
+- [Índice de precipitação-evapotranspiração padronizado (SPEI) para Seca](https://sistema.adaptabrasil.mcti.gov.br//5049/1/2015/null/BR/municipio/): Recorte do Índice multiescalar que expressa diferentes graus de magnitude de seca .
+
+### Chuva  
+
+![Seguranca alimentar chuva](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/seg-alim-chuva.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para a Chuva](https://sistema.adaptabrasil.mcti.gov.br//7500/1/2015/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a ameaça climática de chuvas intensas sobre a segurança alimentar.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7501/1/2015/null/BR/municipio/): Grau de suscetibilidade de um sistema ou sociedade aos efeitos das mudanças climáticas, especificamente aquelas que resultam em chuvas intensas.
+
+- [Índice de Exposição para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7502/1/2015/null/BR/municipio/): Grau de exposição dos elementos distribuídos na superfície terrestre em função da magnitude do contato entre o sistema socioecológico e as ameaças climáticas relacionadas às chuvas intensas .
+
+- [Índice de Ameaça Climática para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7503/1/2015/null/BR/municipio/): Variações climáticas relacionadas às chuvas intensas, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7504/1/2015/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por chuvas intensas.
+
+- [Índice de Capacidade Adaptativa para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7505/1/2015/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis ameaças climáticas como chuvas intensas.
+
+#### Nível 5  
+
+- [Produção e comercialização de alimentos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7506/1/2015/null/BR/municipio/): Sensibilidade do sistema quanto à disponibilidade de alimento e as possíveis limitações na sua comercialização no presente e no futuro considerando uma situação de chuvas intensas.
+
+- [Características dos produtores e dos estabelecimentos agropecuários para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7507/1/2015/null/BR/municipio/): Dependência dos estabelecimentos agropecuários aos aspectos que podem expressar a sensibilidade do sistema socioecológico sob a ameaça de chuvas intensas.
+
+- [Saúde e consumo dos alimentos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7508/1/2015/null/BR/municipio/): Fatores ou situações que podem levar as famílias a terem comida insuficiente, e/ou nutrição inadequada, bem como acesso limitado ao abastecimento de água e saneamento básico em situação de chuvas intensas.
+
+- [Logística da produção e abastecimento para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7509/1/2015/null/BR/municipio/): Capacidade de abastecimento e distribuíção de alimentos como meio de redução do risco de desabastecimento em situações de chuvas intensas.
+
+- [Planejamento e gestão da segurança alimentar e nutricional para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7510/1/2015/null/BR/municipio/): Políticas e programas que auxiliam na contenção de impactos climáticos de chuvas intensas relacionados com a segurança alimentar.
+
+- [Manutenção da produção agropecuária para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7511/1/2015/null/BR/municipio/): Situação de estabilidade presente e futura da produção mediante o acesso de políticas e ações de incentivo e manutenção da produção local em situação de chuvas intensas.
+
+- [Capacidade socioeconômica familiar para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7512/1/2015/null/BR/municipio/): Capacidade da estrutura familiar em adaptar-se positivamente às adversidades climáticas, como as chuvas intensas.
+
+- [Agropecuária e fatores biofísicos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7513/1/2015/null/BR/municipio/): Distribuição de elementos biofísicos de superfície que podem contribuir com o aumento do impacto das chuvas intensas em sistemas socioecológicos.
+
+- [População exposta e estrutura fundiária para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7514/1/2015/null/BR/municipio/): Características de isolamento da população e estrutura fundiária que contribuem para exposição ao risco, considerando situações adversas de chuvas intensas.
+
+#### Nível 6  
+
+- [Baixa produção de alimentos básicos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7515/1/2015/null/BR/municipio/): Baixa disponibilidade de alimentos básicos para abastecimento interno da população.
+
+- [Não diversificação da produção local para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7516/1/2017/null/BR/municipio/): Homogeneidade das atividades econômicas nos estabelecimentos agropecuários.
+
+- [Agricultura sem práticas agrícolas sustentáveis para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7517/1/2017/null/BR/municipio/): Percentual de estabelecimentos agropecuários sem adoção de prática agrícola sustentável .
+
+- [Pastagens em más condições para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7518/1/2017/null/BR/municipio/): Percentual das áreas com pastagens plantadas em más condições de uso.
+
+- [Uniformidade de receitas da produção agropecuária para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7519/1/2017/null/BR/municipio/): Não diversificação de receitas da produção de cultivares e de produção de origem animal.
+
+- [Analfabetismo do responsável pelo estabelecimento agropecuário para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7520/1/2017/null/BR/municipio/): Proporção de estabelecimentos agropecuários cujo responsável não sabe ler e escrever .
+
+- [Nível de consumo de alimentos não saudáveis para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7521/1/2013/null/BR/municipio/): Nível de consumo de alimentos não saudáveis como indicador de risco à saúde ligada à alimentação que pode ser agravado devido às adversidades em situações de chuvas intensas.
+
+- [Insegurança alimentar e nutricional para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7522/1/2018/null/BR/municipio/): Nível de insegurança alimentar e nutricional das famílias que pode ser agravado em situações de chuvas intensas.
+
+- [Uso de agrotóxico para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7523/1/2017/null/BR/municipio/): Inferência sobre a saúde das pessoas que estão em contato direto ao produto que pode ser agravada pela necessidade de aumento do uso em situações de chuvas intensas.
+
+- [Nível de sobrepeso e obesidade nos diferentes estratos da população para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7524/1/2007/null/BR/municipio/): Nível de sobrepeso e obesidade nos diferentes estratos da população.
+
+- [Capacidade de armazenamento dos armazéns para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7525/1/2016/null/BR/municipio/): Capacidade de armazenamento da produção de grãos.
+
+- [Nível de funcionamento das centrais de abastecimento (Ceasas) para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7526/1/2018/null/BR/municipio/): Nível de funcionamento e/ou capacidade das centrais de abastecimento (Ceasas) em atender a população.
+
+- [Eficiência na armazenagem dos alimentos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7527/1/2016/null/BR/municipio/): Nível de eficiência no armazenamento dos alimentos.
+
+- [Capilaridade e qualidade de rodovias para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7528/1/2015/null/BR/municipio/): Capilaridade e qualidade das rodovias para escoamento da produção e acesso aos alimentos.
+
+- [Instrumentos de planejamento e gestão da segurança alimentar para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7529/1/2010/null/BR/municipio/): Nível de articulação da segurança alimentar via implementação de instrumentos de ação e planejamento.
+
+- [Investimento per capita em políticas de adaptação e infraestrutura para proteção ambiental para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7530/1/2016/null/BR/municipio/): Valor per capita das transferências governamentais destinadas à proteção ambiental em políticas de adaptação e infraestrutura.
+
+- [Adesão ao Programa Cidades Resilientes para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7531/1/2015/null/BR/municipio/): Municípios que aderiram ao Programa Cidades Resilientes.
+
+- [Abrangência do Programa Nacional de Alimentação Escolar (PNAE) para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7532/1/2015/null/BR/municipio/): Valor investido pelo programa por aluno matriculado na educação básica pública.
+
+- [Acesso ao Programa Garantia Safra para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7533/1/2010/null/BR/municipio/): Nível de acesso ao Programa Garantia Safra por produtores rurais.
+
+- [Abrangência do Programa de Fortalecimento da Agricultura Familiar (PRONAF) para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7534/1/2016/null/BR/municipio/): Nível de abrangência do PRONAF em relação à distribuição fundiária.
+
+- [Nível de atendimento à população das unidades receptoras do Programa de Aquisição de Alimentos (PAA) para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7535/1/2016/null/BR/municipio/): Nível de atendimento per capita das unidades receptoras do Programa de Aquisição de Alimentos da Agricultura Familiar (PAA).
+
+- [Acesso ao Proagro Mais para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7536/1/2015/null/BR/municipio/): Nível de acesso ao ProAgro Mais do município.
+
+- [Nível de associativismo para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7537/1/2017/null/BR/municipio/): Percentual de estabelecimentos agropecuários associados em cooperativa e/ou à entidade de classe.
+
+- [Nível de orientação técnica para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7538/1/2017/null/BR/municipio/): Percentual estabelecimentos agropecuários que recebem orientação técnica.
+
+- [Renda domiciliar não comprometida pelas alterações de preço da cesta básica para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7539/1/2015/null/BR/municipio/): Renda domiciliar não comprometida pelas alterações de preço da cesta básica que pode ser impactada em uma situação de chuvas intensas.
+
+- [Abrangência do Programa Bolsa Família para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7540/1/2014/null/BR/municipio/): Abrangência do Programa Bolsa Família considerando o total de domicílios com renda domiciliar mensal de até 2 salários mínimos.
+
+- [Domicílios com renda per capita superior a dois salários mínimos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7541/1/2010/null/BR/municipio/): Domicílios cuja renda familiar é superior a dois salários mínimos que os garante um poder mínimo de compra para uma situação de emergência devido aos impactos advindos das chuvas intensas.
+
+- [Balanço hídrico no solo em áreas agropecuarias com solo suceptível a erosão para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7542/1/2015/null/BR/municipio/): Balanço hídrico em solos suscetíveis à erosão demandado pela agropecuária .
+
+- [Agropecuária em pastagens degradadas para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7543/1/2016/null/BR/municipio/): Atividades agropecuárias sobre áreas de pastagens degradadas.
+
+- [Áreas agropecuárias com baixo potencial agrícola para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7544/1/2010/null/BR/municipio/): Áreas de atividades agropecuárias com baixo potencial agrícola .
+
+- [Zonas de risco bioclimático para cultivos alimentares para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7545/1/2015/null/BR/municipio/): Zonas sob risco bioclimático para cultivos alimentares que podem ser mais afetadas em situações de chuvas intensas.
+
+- [Densidade populacional para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7546/1/2015/null/BR/municipio/): Número de habitantes, por área do município, potencialmente expostos às adversidades de uma situação de chuvas intensas.
+
+- [Densidade de estabelecimentos agropecuários para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7547/1/2017/null/BR/municipio/): Número de estabelecimentos agropecuários por unidade de área do município.
+
+- [Máxima precipitação anual em cinco dias consecutivos para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7548/1/2015/null/BR/municipio/): Indicador de intensidade de chuva que pode causar deslizamentos em áreas mais susceptíveis.
+
+- [Precipitação total anual acima do percentil 95 para Chuva](https://sistema.adaptabrasil.mcti.gov.br//7549/1/2015/null/BR/municipio/): Indicador de precipitação de intensidade extrema.
+
+## Segurança Energética  
+
+### Disponiblidade  
+
+![Energia disponibilidade](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/disponibilidade-final.jpg)
+
+#### Nível 2  
+
+- [Risco à Disponibilidade de Energia Elétrica para Disponiblidade](https://sistema.adaptabrasil.mcti.gov.br//24003/1/2019/null/BR/municipio/): Variações na geração de energia elétrica, com base nos impactos das mudanças climáticas sobre a oferta e a demanda de eletricidade.
+
+#### Nível 6  
+
+- [Potencial de Energia Hidrelétrica para Disponiblidade](https://sistema.adaptabrasil.mcti.gov.br//24019/1/2019/null/BR/municipio/): Potencial de Energia Hidrelétrica, representada pela Energia Natural Afluente.
+
+- [Potencial de Energia Solar para Disponiblidade](https://sistema.adaptabrasil.mcti.gov.br//24020/1/2019/null/BR/municipio/): Potencial de Energia Solar.
+
+- [Potencial de Energia Eólica para Disponiblidade](https://sistema.adaptabrasil.mcti.gov.br//24021/1/2019/null/BR/municipio/): Potencial de Energia Eólica.
+
+- [Demanda de resfriamento para Disponiblidade](https://sistema.adaptabrasil.mcti.gov.br//24022/1/2019/null/BR/municipio/): Demanda de resfriamento por ar condicionado.
+
+### Acesso  
+
+![Energia Acesso](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/energ-acesso.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para o Acesso à Energia Elétrica](https://sistema.adaptabrasil.mcti.gov.br//25000/1/2019/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a mudança climáticas para o setor elétrico.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25001/1/2019/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas, especificamente aquelas que afetam o sistema elétrico.
+
+- [Índice de Exposição para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25002/1/2019/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e as ameaças climáticas relacionadas ao setor elétrico por meio da distribuição de elementos de superfície.
+
+- [Índice de Ameaça Climática para o Sistema Elétrico para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25003/1/2019/null/BR/municipio/): Variações na geração de energia elétrica, com base nos impactos das mudanças climáticas sobre a oferta e a demanda de eletricidade.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25004/1/2019/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática ao setor elétrico.
+
+- [Índice de Capacidade Adaptativa para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25005/1/2019/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis ameaças climáticas ao setor elétrico.
+
+#### Nível 6  
+
+- [Multi-índice de pobreza energética para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25006/1/2018/null/BR/municipio/): Multi-índice de pobreza energética.
+
+- [Descontinuidade do fornecimento de eletricidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25007/1/2021/null/BR/municipio/): Descontinuidade do fornecimento de energia elétrica.
+
+- [Consumo elétrico residencial per capita para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25008/1/2019/null/BR/municipio/): Consumo de energia elétrica por habitante no setor residencial.
+
+- [Intensidade de energia elétrica para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25009/1/2019/null/BR/municipio/): Consumo de eletricidade em relação ao PIB.
+
+- [Unidades autoprodutoras de eletricidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25010/1/2018/null/BR/municipio/): Porcentagem da geração de energia elétrica de unidades autoprodutoras de eletricidade, em relação ao consumo de eletricidade.
+
+- [Geração distribuída de eletricidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25011/1/2022/null/BR/municipio/): Porcentagem da geração distribuída de eletricidade, em relação ao consumo de eletricidade.
+
+- [Armazenamento de energia em reservatórios de hidrelétricas para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25012/1/2015/null/BR/municipio/): Potencial de armazenamento de energia em reservatórios de hidrelétricas, em relação à carga .
+
+- [Diversificação da geração de eletricidade para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25013/1/2018/null/BR/municipio/): Diversificação de fontes energéticas na geração de eletricidade.
+
+- [PIB municipal per capita para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25014/1/2018/null/BR/municipio/): PIB municipal por habitante.
+
+- [Domicílios com renda superior a dois salários mínimos para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25015/1/2010/null/BR/municipio/): Porcentagem de domicílios com rendimento nominal mensal domiciliar superior a dois salários mínimos .
+
+- [Adesão ao Programa Cidades Resilientes para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25016/1/2015/null/BR/municipio/): Municípios que aderiram ao Programa Cidades Resilientes.
+
+- [Densidade populacional para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25017/1/2019/null/BR/municipio/): Densidade populacional por região.
+
+- [Percentual de indústrias energointensivas para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25018/1/2019/null/BR/municipio/): Percentual de indústrias energointensivas em relação ao total de indústrias na região.
+
+- [Potencial de Energia Hidrelétrica para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25019/1/2019/null/BR/municipio/): Potencial de Energia Hidrelétrica, representada pela Energia Natural Afluente.
+
+- [Potencial de Energia Solar para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25020/1/2019/null/BR/municipio/): Potencial de Energia Solar.
+
+- [Potencial de Energia Eólica para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25021/1/2019/null/BR/municipio/): Potencial de Energia Eólica.
+
+- [Demanda de resfriamento para Acesso](https://sistema.adaptabrasil.mcti.gov.br//25022/1/2019/null/BR/municipio/): Demanda de resfriamento por ar condicionado.
+
+## Infraestrutura Portuária  
+
+### Tempestade  
+
+![Tempestade](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/tempestade_cor_azul.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40000/1/2020/null/BR/porto/): Risco de impacto da infraestrutura portuária obtido em função do Índice Vulnerabilidade, Índice Exposição e Índice de Ameaça Climática para tempestade .
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40001/1/2020/null/BR/porto/): Vulnerabilidade da infraestrutura portuária frente à tempestade, obtida em função do Índice de Sensibilidade e Índice de Capacidade Adaptativa.
+
+- [Índice de Exposição para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40002/1/2020/null/BR/porto/): Exposição das infraestruturas existentes e carga anual movimentada dos portos, frente à ameaça climática de tempestade.
+
+- [Índice de Ameaça Climática para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40003/1/2019/null/BR/porto/): Variações climáticas relacionadas às tempestades, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40004/1/2020/null/BR/porto/): Predisponiblidade das operações portuárias aos impactos frente à ocorrência de uma ameaça climática de tempestade.
+
+- [Índice de Capacidade Adaptativa para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40005/1/2020/null/BR/porto/): Capacidade adaptativa dos portos às tempestades, obtida em função da adoção de medidas estrutrais e não estruturais.
+
+#### Nível 5  
+
+- [Medidas estruturais para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40006/1/2020/null/BR/porto/): Capacidade adaptativa por meio de medidas estruturais existentes no porto, frente à ameaça climática de tempestade.
+
+- [Medidas não estruturais para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40007/1/2020/null/BR/porto/): Capacidade adaptativa por meio de medidas de gestão existentes no porto, frente à ameaça climática de tempestade.
+
+#### Nível 6  
+
+- [Tipo de porto para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40008/1/2020/null/BR/porto/): Expressa a sensibildiade às tempestades por meio do tipo de porto.
+
+- [Tipo de carga movimentada para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40009/1/2019/null/BR/porto/): Porcentagem de carga vegetal movimentada pelo porto.
+
+- [Condição da área abrigada do porto para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40010/1/2020/null/BR/porto/): Condição da integridade estrutural da área abrigada dos portos.
+
+- [Acessos alternativos aos portos para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40011/1/2020/null/BR/porto/): Adoção e status de implementação da medida estrutural de acesso alternativos aos portos.
+
+- [Existência de sistema de informação de gestão de tráfego de embarcações (VTMS) para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40012/1/2020/null/BR/porto/): Existência de sistema de informação de gestão de tráfego de embarcações (VTMS) nos portos.
+
+- [Presença de sistema de drenagem na área do porto público para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40013/1/2020/null/BR/porto/): Adoção e status de implementação da medida estrutural de sistema de drenagem na área do porto público.
+
+- [Existência do registro de impactos relacionados às ameaças climáticas para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40014/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de registro de impactos relacionados às ameaças climáticas.
+
+- [Existência de planos de ação emergencial para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40015/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de ação emergencial, como protoloco de evacuação.
+
+- [Existência de planos de comitê de crise para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40016/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de comitê de crise.
+
+- [Existência de monitoramento meteorológico contínuo para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40017/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de monitoramento meteorológico contínuo.
+
+- [Reuniões regulares sobre adaptação às mudanças climáticas para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40018/1/2020/null/BR/porto/): Execução de reuniões regulares com o intuito de discutir adaptação às mudanças climáticas.
+
+- [Inclusão de mudanças climáticas no plano estratégico para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40019/1/2020/null/BR/porto/): Abordagem de mudanças climáticas no plano estratégico do porto.
+
+- [Presença de planejamento específico para mudanças do clima para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40020/1/2020/null/BR/porto/): Presença de planejamento específico refrente às mudanças climáticas pelo porto.
+
+- [Atualização de diretrizes e projetos de engenharia para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40021/1/2020/null/BR/porto/): Atualização de diretrizes e projetos de engenharia frente aos novos padrões climáticos.
+
+- [Inclusão de adaptação à mudança do clima no orçamento para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40022/1/2020/null/BR/porto/): Inclusão de adaptação à mudança do clima no orçamento do porto.
+
+- [Presença de seguro específico contra mudanças climáticas para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40023/1/2020/null/BR/porto/): Presença de seguro específico contra mudanças climáticas pelo porto.
+
+- [Número de infraestruturas existentes para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40024/1/2019/null/BR/porto/): Número de infraestruturas portuárias existentes e expostas à mudança do clima de aumento do nível do mar.
+
+- [Movimentação de carga anual para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40025/1/2019/null/BR/porto/): Média da movimentação de carga anual pelo porto .
+
+- [Precipitação Máxima Anual em Um Dia para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40026/1/2020/null/BR/porto/): Maior volume anual de precipitação em um dia.
+
+- [Precipitação Total Anual acima do Percentil 99 para Tempestade](https://sistema.adaptabrasil.mcti.gov.br//40027/1/2020/null/BR/porto/): Porcentagem de dias no ano em que a precipitação ficou acima do percentil 99 em relação ao período base (1986-2005).
+
+### Vendaval  
+
+#### ![Vendaval](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/vendaval_cor_azul.jpg)  
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40100/1/2020/null/BR/porto/): Risco de impacto da infraestrutura portuária obtido em função do Índice Vulnerabilidade, Índice Exposição e Índice de Ameaça Climática de vendaval.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40101/1/2020/null/BR/porto/): Vulnerabilidade da infraestrutura portuária frente ao vendaval, obtida em função do Índice de Sensibilidade e Índice de Capacidade Adaptativa.
+
+- [Índice de Exposição para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40102/1/2020/null/BR/porto/): Exposição das infraestruturas existentes e carga anual movimentada dos portos, frente à ameaça climática de vendaval.
+
+- [Índice de Ameaça Climática para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40103/1/2020/null/BR/porto/): Variações climáticas relacionadas aos vendavais, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40104/1/2020/null/BR/porto/): Predisponiblidade das operações portuárias aos impactos frente à ocorrência de uma ameaça climática de vendaval.
+
+- [Índice de Capacidade Adaptativa para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40105/1/2020/null/BR/porto/): Capacidade adaptativa dos portos ao vendaval, obtida em função da adoção de medidas estrutrais e não estruturais.
+
+#### Nível 5  
+
+- [Medidas estruturais para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40106/1/2020/null/BR/porto/): Expressa a capacidade adaptativa por meio de medidas estruturais existentes no porto, frente à ameaça climática de vendaval.
+
+- [Medidas não estruturais para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40107/1/2020/null/BR/porto/): Expressa a capacidade adaptativa por meio de medidas de gestão existentes no porto, frente à ameaça climática de vendaval.
+
+#### Nível 6  
+
+- [Tipo de porto para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40108/1/2020/null/BR/porto/): Expressa a sensibildiade ao vendaval por meio do tipo de porto.
+
+- [Tipo de carga movimentada para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40109/1/2020/null/BR/porto/): Média da movimentação de contêineres, carga geral e granéis sólidos no porto.
+
+- [Condição da área abrigada do porto para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40110/1/2020/null/BR/porto/): Condição da integridade estrutural da área abrigada dos portos.
+
+- [Acessos alternativos aos portos para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40111/1/2020/null/BR/porto/): Adoção e status de implementação da medida estrutural de acesso alternativos aos portos.
+
+- [Existência de sistema de informação de gestão de tráfego de embarcações (VTMS) para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40112/1/2020/null/BR/porto/): Existência de sistema de informação de gestão de tráfego de embarcações (VTMS) nos portos.
+
+- [Existência do registro de impactos relacionados às ameaças climáticas para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40113/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de registro de impactos relacionados às ameaças climáticas.
+
+- [Existência de planos de ação emergencial para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40114/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de ação emergencial, como protoloco de evacuação.
+
+- [Existência de planos de comitê de crise para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40115/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de comitê de crise.
+
+- [Existência de monitoramento meteorológico contínuo para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40116/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de monitoramento meteorológico contínuo.
+
+- [Reuniões regulares sobre adaptação às mudanças climáticas para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40117/1/2020/null/BR/porto/): Execução de reuniões regulares com o intuito de discutir adaptação às mudanças climáticas.
+
+- [Inclusão de mudanças climáticas no plano estratégico para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40118/1/2020/null/BR/porto/): Abordagem de mudanças climáticas no plano estratégico do porto.
+
+- [Presença de planejamento específico para mudanças do clima para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40119/1/2020/null/BR/porto/): Presença de planejamento específico refrente às mudanças climáticas pelo porto.
+
+- [Atualização de diretrizes e projetos de engenharia para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40120/1/2020/null/BR/porto/): Atualização de diretrizes e projetos de engenharia frente aos novos padrões climáticos.
+
+- [Inclusão de adaptação à mudança do clima no orçamento para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40121/1/2020/null/BR/porto/): Inclusão de adaptação à mudança do clima no orçamento do porto.
+
+- [Presença de seguro específico contra mudanças climáticas para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40122/1/2020/null/BR/porto/): Presença de seguro específico contra mudanças climáticas pelo porto.
+
+- [Execução do monitoramento de rajadas de ventos para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40123/1/2020/null/BR/porto/): Execução do monitoramento de rajadas de ventos no porto.
+
+- [Número de infraestruturas existentes para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40124/1/2019/null/BR/porto/): Número de infraestruturas portuárias existentes e expostas à mudança do clima de vendaval.
+
+- [Movimentação de carga anual para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40125/1/2019/null/BR/porto/): Média da movimentação de carga anual pelo porto .
+
+- [Velocidade máxima do vento igual ou superior a 90 percentil para Vendaval](https://sistema.adaptabrasil.mcti.gov.br//40126/1/2020/null/BR/porto/): Porcentagem de dias em que a velocidade máxima do vento é superior a 90 percentil.
+
+### Aumento do Nível do Mar  
+
+![Aumento do Nível do Mar](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/AMN_cor_azul.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40200/1/2020/null/BR/porto/): Risco de impacto da infraestrutura portuária obtido em função do Índice Vulnerabilidade, Índice Exposição e Índice de Ameaça Climática para aumento do nível do mar.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40201/1/2020/null/BR/porto/): Vulnerabilidade da infraestrutura portuária frente ao aumento do nível do mar, obtida em função do Índice de Sensibilidade e Índice de Capacidade Adaptativa.
+
+- [Índice de Exposição para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40202/1/2020/null/BR/porto/): Exposição das infraestruturas existentes e carga anual movimentada dos portos, frente à ameaça climática de aumento do nível do mar.
+
+- [Índice de Ameaça Climática para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40203/1/2020/null/BR/porto/): Variações climáticas relacionadas ao aumento do nível do mar, com base no modelo de elevação digital “CoastalDEM”.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40204/1/2020/null/BR/porto/): Predisponiblidade das operações portuárias aos impactos frente à ocorrência de uma ameaça climática de aumento do nível do mar.
+
+- [Índice de Capacidade Adaptativa para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40205/1/2020/null/BR/porto/): Capacidade adaptativa dos portos ao aumento do nível do mar, obtida em função da adoção de medidas não estruturais.
+
+#### Nível 5  
+
+- [Medidas não estruturais para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40206/1/2020/null/BR/porto/): Expressa a capacidade adaptativa por meio de medidas de gestão existentes no porto, frente à ameaça climática de aumento do nível do mar.
+
+#### Nível 6  
+
+- [Tipo de porto para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40207/1/2020/null/BR/porto/): Expressa a sensibildiade ao aumento do nível do mar por meio do tipo de porto.
+
+- [Condição da área abrigada do porto para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40208/1/2020/null/BR/porto/): Condição da integridade estrutural da área abrigada dos portos.
+
+- [Existência do registro de impactos relacionados às ameaças climáticas para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40209/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de registro de impactos relacionados às ameaças climáticas.
+
+- [Existência de planos de ação emergencial para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40210/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de planos de ação emergencial, como protoloco de evacuação.
+
+- [Existência de planos de comitê de crise para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40211/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de comitê de crise.
+
+- [Existência de monitoramento meteorológico contínuo para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40212/1/2020/null/BR/porto/): Adoção e status de implementação da medida de gestão de monitoramento meteorológico contínuo.
+
+- [Reuniões regulares sobre adaptação às mudanças climáticas para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40213/1/2020/null/BR/porto/): Execução de reuniões regulares com o intuito de discutir adaptação às mudanças climáticas.
+
+- [Inclusão de mudanças climáticas no plano estratégico para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40214/1/2020/null/BR/porto/): Abordagem de mudanças climáticas no plano estratégico do porto.
+
+- [Presença de planejamento específico para mudanças do clima para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40215/1/2020/null/BR/porto/): Presença de planejamento específico refrente às mudanças climáticas pelo porto.
+
+- [Atualização de diretrizes e projetos de engenharia para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40216/1/2020/null/BR/porto/): Atualização de diretrizes e projetos de engenharia frente aos novos padrões climáticos.
+
+- [Inclusão de adaptação à mudança do clima no orçamento para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40217/1/2020/null/BR/porto/): Inclusão de adaptação à mudança do clima no orçamento do porto.
+
+- [Presença de seguro específico contra mudanças climáticas para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40218/1/2020/null/BR/porto/): Presença de seguro específico contra mudanças climáticas pelo porto.
+
+- [Número de infraestruturas existentes para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40219/1/2019/null/BR/porto/): Número de infraestruturas portuárias existentes e expostas à mudança do clima de aumento do nível do mar.
+
+- [Movimentação de carga anual para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40220/1/2019/null/BR/porto/): Média da movimentação de carga anual pelo porto .
+
+- [Inundação anual devido ao aumento do nível do mar para Aumento do Nível do Mar](https://sistema.adaptabrasil.mcti.gov.br//40221/1/2020/null/BR/porto/): Presença de inundação anual devido ao aumento do nível do mar no porto.
+
+## Saúde  
+
+### Malária  
+
+![Saude Malaria](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/saude-malaria.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco para Ocorrência de Malária](https://sistema.adaptabrasil.mcti.gov.br//50000/1/2020/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando o desfecho Malária.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Malária](https://sistema.adaptabrasil.mcti.gov.br//50001/1/2020/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas à Malária, especificamente aquelas que resultam em variação de temperatura, precipitação e umidade.
+
+- [Índice de Exposição para Malária](https://sistema.adaptabrasil.mcti.gov.br//50002/1/2020/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e a ameaça climática relacionadas à temperatura, precipitação e umidade relativa para a Malária.
+
+- [Índice de Ameaça Climática para Malária](https://sistema.adaptabrasil.mcti.gov.br//50003/1/2020/null/BR/municipio/): Variações climáticas de temperatura máxima, precipitação e umidade relativa relacionadas a variação na ocorrência da Malária, com base em um intervalo de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Malária](https://sistema.adaptabrasil.mcti.gov.br//50004/1/2020/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática combinada de temperatura, precipitação e umidade relativa para a Malária.
+
+- [Índice de Capacidade Adaptativa para Malária](https://sistema.adaptabrasil.mcti.gov.br//50005/1/2020/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar às possíveis ameaças climáticas associadas à temperatura, precipitação e umidade relativa para a Malária.
+
+#### Nível 5  
+
+- [Suscetibilidade Social para Malária](https://sistema.adaptabrasil.mcti.gov.br//50006/1/2020/null/BR/municipio/): Suscetibilidade da população em relação à ocorrência da Malária.
+
+- [Mobilidade Populacional para Malária](https://sistema.adaptabrasil.mcti.gov.br//50007/1/2020/null/BR/municipio/): Sensibilidade da ocorrência da Malária quanto ao fluxo e mobilidade populacional .
+
+- [Perfil Epidemiológico da Malária](https://sistema.adaptabrasil.mcti.gov.br//50008/1/2020/null/BR/municipio/): Perfil epidemiológico da Malária no município considerando o Índice Parasitário Anual (IPA) e a ocorrência de Malária falciparum no município.
+
+- [Acesso aos serviços de saúde para Malária](https://sistema.adaptabrasil.mcti.gov.br//50009/1/2020/null/BR/municipio/): Acesso aos serviços de vigilância e de assistência à saúde.
+
+- [Malha rodoviária para Malária](https://sistema.adaptabrasil.mcti.gov.br//50010/1/2020/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município.
+
+- [Uso e ocupação do solo no território municipal para Malária](https://sistema.adaptabrasil.mcti.gov.br//50011/1/2020/null/BR/municipio/): Padrões de atividades e ocupação no território municipal que favorecem à ocorrência e ao desenvolvimento dos vetores da Malária ou do seu agente etiológico.
+
+#### Nível 6  
+
+- [Domicílios sem acesso ao saneamento adequado para Malária](https://sistema.adaptabrasil.mcti.gov.br//50012/1/2010/null/BR/municipio/): Proporção de domicílios sem acesso ao saneamento adequado no município.
+
+- [Baixo Índice de Desenvolvimento Humano Municipal (IDH-M) para Malária](https://sistema.adaptabrasil.mcti.gov.br//50013/1/2010/null/BR/municipio/): Baixo IDH do município como indicador de condições de vida.
+
+- [Turistas recebidos no município para Malária](https://sistema.adaptabrasil.mcti.gov.br//50014/1/2019/null/BR/municipio/): Visitas de turistas recebidos no município em relação à população total do município.
+
+- [Imigrantes chegados no último ano para Malária](https://sistema.adaptabrasil.mcti.gov.br//50015/1/2010/null/BR/municipio/): Proporção de pessoas residentes no município há menos de um ano.
+
+- [Estimativa do Índice Parasitário Anual (IPA) para Malária](https://sistema.adaptabrasil.mcti.gov.br//50016/1/2019/null/BR/municipio/): Estimativa do Índice Parasitário Anual (IPA) do município.
+
+- [Ocorrência de Malária falciparum no município](https://sistema.adaptabrasil.mcti.gov.br//50017/1/2019/null/BR/municipio/): Ocorrência de casos de Malária falciparum no município resulta na maior sensibilidade da população local à Malária.
+
+- [Cobertura da Atenção Básica no município para Malária](https://sistema.adaptabrasil.mcti.gov.br//50018/1/2020/null/BR/municipio/): Percentual da população coberta pela Atenção Básica no município.
+
+- [Acesso a diagnóstico e tratamento para Malária](https://sistema.adaptabrasil.mcti.gov.br//50019/1/2021/null/BR/municipio/): Proporção de casos de Malária notificados com diagnóstico em tempo oportuno para tratamento do desfecho.
+
+- [Densidade de rodovias federais e/ou estaduais para Malária](https://sistema.adaptabrasil.mcti.gov.br//50020/1/2021/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município .
+
+- [Presença de assentamentos rurais para Malária](https://sistema.adaptabrasil.mcti.gov.br//50021/1/2014/null/BR/municipio/): Presença de assentamentos rurais recentes no município.
+
+- [Mineração industrial e garimpos para Malária](https://sistema.adaptabrasil.mcti.gov.br//50022/1/2020/null/BR/municipio/): Presença de área municipal dedicada à mineração industrial e garimpos no município .
+
+- [Área desflorestada recente para Malária](https://sistema.adaptabrasil.mcti.gov.br//50023/1/2020/null/BR/municipio/): Redução da área de floresta nativa recentemente no município.
+
+- [População municipal residente em área rural para Malária](https://sistema.adaptabrasil.mcti.gov.br//50024/1/2010/null/BR/municipio/): Percentual da população municipal residente em área rural.
+
+- [Área municipal coberta por corpos d'água para Malária](https://sistema.adaptabrasil.mcti.gov.br//50025/1/2020/null/BR/municipio/): Percentual da área municipal coberta por corpos d'água.
+
+- [Temperatura Máxima Anual para Malária](https://sistema.adaptabrasil.mcti.gov.br//50026/1/2020/null/BR/municipio/): Média Anual da Temperatura Máxima.
+
+- [Intensidade Simples de Precipitação para Malária](https://sistema.adaptabrasil.mcti.gov.br//50027/1/2020/null/BR/municipio/): Média Anual da Intensidade Simples de Precipitação.
+
+- [Média da umidade relativa para Malária](https://sistema.adaptabrasil.mcti.gov.br//50028/1/2020/null/BR/municipio/): Média Anual da umidade relativa.
+
+### Leishmaniose Tegumentar Americana  
+
+![Leishmaniose Americana](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/saude-leish-americana.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco para Ocorrência de Leishmaniose Visceral para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51000/1/2020/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando o desfecho Leishmaniose Tegumentar Americana.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51001/1/2020/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas à Leishmaniose Tegumentar Americana, especificamente aquelas que resultam em variação de temperatura, precipitação e umidade.
+
+- [Índice de Exposição para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51002/1/2020/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e a ameaça climática relacionadas à temperatura, precipitação e umidade relativa para a Leishmaniose Tegumentar Americana.
+
+- [Índice de Ameaça Climática para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51003/1/2020/null/BR/municipio/): Variações climáticas de temperatura, precipitação e umidade relativa relacionadas ao aumento de ocorrência da Leishmaniose Tegumentar Americana, com base em um intervalo de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51004/1/2020/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática combinada de temperatura, precipitação e umidade relativa para a Leishmaniose Tegumentar Americana.
+
+- [Índice de Capacidade Adaptativa para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51005/1/2020/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar às possíveis ameaças climáticas associadas à temperatura, precipitação e umidade relativa para a Leishmaniose Tegumentar Americana.
+
+#### Nível 5  
+
+- [Suscetibilidade Social para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51006/1/2020/null/BR/municipio/): Suscetibilidade da população em relação à ocorrência da Leishmaniose Tegumentar Americana .
+
+- [Mobilidade Populacional para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51007/1/2020/null/BR/municipio/): Sensibilidade da ocorrência da Leishmaniose Tegumentar Americana quanto ao fluxo e mobilidade populacional .
+
+- [Perfil Epidemiológico da Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51008/1/2020/null/BR/municipio/): Perfil epidemiológico da Leishmaniose Tegumentar Americana no município considerando a ocorrência do desfecho.
+
+- [Acesso aos serviços de saúde para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51009/1/2020/null/BR/municipio/): Acesso a serviços de vigilância e assistência à saúde.
+
+- [Malha rodoviária para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51010/1/2020/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município.
+
+- [Uso e ocupação do solo para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51011/1/2020/null/BR/municipio/): Padrões de atividades e ocupação no território municipal que favorecem à ocorrência e desenvolvimento dos vetores da Leishmaniose Tegumentar Americana ou do seu agente etiológico.
+
+#### Nível 6  
+
+- [Domicílios sem acesso à coleta de lixo doméstico para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51012/1/2010/null/BR/municipio/): Percentual de domicílios no município sem acesso à coleta de lixo doméstico.
+
+- [Baixo Índice de Desenvolvimento Humano Municipal (IDH-M) para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51013/1/2010/null/BR/municipio/): Baixo IDH do município como indicador de condições de vida.
+
+- [Imigrantes chegados no último ano para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51014/1/2010/null/BR/municipio/): Proporção de pessoas residentes no município há menos de um ano.
+
+- [Ocorrência da Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51015/1/2013/null/BR/municipio/): Ocorrência da Leishmaniose Tegumentar Americana no município por 100 mil habitantes.
+
+- [Cobertura da Atenção Básica no município para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51016/1/2020/null/BR/municipio/): Percentual da população coberta pela Atenção Básica no município.
+
+- [Densidade de rodovias federais e/ou estaduais para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51017/1/2021/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município.
+
+- [Presença de assentamentos rurais para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51018/1/2014/null/BR/municipio/): Presença de assentamentos rurais recentes no município.
+
+- [Aglomerados subnormais para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51019/1/2010/null/BR/municipio/): Proporção da população residente em domicílios particulares em aglomerado no município.
+
+- [Cobertura florestal e natural não florestal para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51020/1/2020/null/BR/municipio/): Percentual da área municipal coberta por floresta ou formação natural não florestal.
+
+- [Cobertura agropecuária para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51021/1/2020/null/BR/municipio/): Percentual da área municipal dedicada à agricultura ou pecuária.
+
+- [Temperatura Máxima Anual para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51022/1/2020/null/BR/municipio/): Média Anual da Temperatura Máxima.
+
+- [Intensidade Simples de Precipitação para Leishmaniose Tegumentar Americana](https://sistema.adaptabrasil.mcti.gov.br//51023/1/2020/null/BR/municipio/): Média Anual da Intensidade Simples de Precipitação.
+
+### Leishmaniose Visceral  
+
+![Saude Leishmaniose Visceral](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/saude-leish-visceral.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco para Ocorrência de Leishmaniose Tegumentar Americana para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52000/1/2020/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando o desfecho Leishmaniose Visceral.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52001/1/2020/null/BR/municipio/): Grau de suscetibilidade de um sistema socioecológico aos efeitos das mudanças climáticas à Leishmaniose Visceral, especificamente aquelas que resultam em variação de temperatura, precipitação e umidade.
+
+- [Índice de Exposição para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52002/1/2020/null/BR/municipio/): Magnitude do contato entre o sistema socioecológico e a ameaça climática relacionadas à temperatura, precipitação e umidade relativa para a Leishmaniose Visceral.
+
+- [Índice de Ameaça Climática para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52003/1/2020/null/BR/municipio/): Variações climáticas de temperatura, precipitação e umidade relativa relacionadas ao aumento de ocorrência da Leishmaniose Visceral, com base em um intervalo de 20 anos.
+
+#### Nível 4  
+
+- [Índice de Sensibilidade para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52004/1/2020/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por uma ameaça climática combinada de temperatura, precipitação e umidade relativa para a Leishmaniose Visceral.
+
+- [Índice de Capacidade Adaptativa para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52005/1/2020/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar às possíveis ameaças climáticas associadas à temperatura, precipitação e umidade relativa para a Leishmaniose Visceral.
+
+#### Nível 5  
+
+- [Suscetibilidade Social para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52006/1/2020/null/BR/municipio/): Suscetibilidade da população em relação à ocorrência da Leishmaniose Visceral .
+
+- [Perfil Epidemiológico da Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52007/1/2020/null/BR/municipio/): Perfil epidemiológico da Leishmaniose Visceral no município considerando a ocorrência do desfecho.
+
+- [Acesso aos serviços de saúde para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52008/1/2020/null/BR/municipio/): Acesso a serviços de vigilância e assistência à saúde.
+
+- [Malha rodoviária para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52009/1/2020/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município.
+
+- [Uso e ocupação do solo para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52010/1/2020/null/BR/municipio/): Padrões de atividades e ocupação no território municipal que favorecem à ocorrência e desenvolvimento dos vetores da Leishmaniose Visceral ou do seu agente etiológico..
+
+#### Nível 6  
+
+- [Média da umidade relativa para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//51024/1/2020/null/BR/municipio/): Média Anual da umidade relativa.
+
+- [Domicílios sem acesso à coleta de lixo doméstico para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52011/1/2010/null/BR/municipio/): Percentual de domicílios no município sem acesso à coleta de lixo doméstico.
+
+- [Baixo Índice de Desenvolvimento Humano Municipal (IDH-M) para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52012/1/2010/null/BR/municipio/): Baixo IDH do município como indicador de condições de vida.
+
+- [Ocorrência da Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52013/1/2013/null/BR/municipio/): Ocorrência da Leishmaniose Visceral no município por 100 mil habitantes.
+
+- [Cobertura da Atenção Básica no município para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52014/1/2020/null/BR/municipio/): Percentual da população coberta pela Atenção Básica no município.
+
+- [Densidade de rodovias federais e/ou estaduais para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52015/1/2021/null/BR/municipio/): Densidade de rodovias federais e/ou estaduais no município.
+
+- [Presença de assentamentos rurais para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52016/1/2014/null/BR/municipio/): Presença de assentamentos rurais recentes no município.
+
+- [Cobertura florestal e natural não florestal para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52017/1/2020/null/BR/municipio/): Percentual da área municipal coberta por floresta ou formação natural não florestal.
+
+- [Temperatura Mínima Anual para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52018/1/2020/null/BR/municipio/): Média Anual da Temperatura Mínima .
+
+- [Intensidade Simples de Precipitação para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52019/1/2020/null/BR/municipio/): Média Anual da Intensidade Simples de Precipitação.
+
+- [Média da umidade relativa para Leishmaniose Visceral](https://sistema.adaptabrasil.mcti.gov.br//52020/1/2020/null/BR/municipio/): Média Anual da umidade relativa.
+
+## Desastres Geo-hidrológicos  
+
+### Inundações, enxurradas e alagamentos  
+
+![Deslizamento ou inundações](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/Desastres%20Geo-hidrol%C3%B3gicos%20-%20Inunda%C3%A7%C3%B5es.png)
+
+#### Nível 2  
+
+- [Índice de Risco para inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60000/1/2015/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a ameaça de desastres geo-hidrológicos no evento de inundações, enxurradas e alagamentos.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60001/1/2015/null/BR/municipio/): Vulnerabilidade da população aos impactos dos desastres geo-hidrológicos de inundações, enxurradas e alagamentos.
+
+- [Índice de Exposição para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60002/1/2015/null/BR/municipio/): Exposição da população aos desastres geo-hidrológico de inundações, enxurradas e alagamentos.
+
+- [Índice de Ameaça de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60003/1/2015/null/BR/municipio/): Índice de Ameaça de inundações, enxurradas e alagamentos ocasionadas por chuvas intensas e características geográficas.
+
+#### Nível 4  
+
+- [Índice de Capacidade Adaptativa para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60004/1/2015/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis desastres geo-hidrológicos de inundações, enxurradas e alagamentos.
+
+- [Índice de Sensibilidade para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60005/1/2015/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por desatre geo-hidrológicos.
+
+#### Nível 5  
+
+- [Capacidade de investimento público municipal e renda para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60006/1/2015/null/BR/municipio/): Capacidade de investimento do município e renda da população, bem como investimentos em políticas de adaptação e em populações socioeconomicamente vulneráveis.
+
+- [Governança e gestão de risco de desastres de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60007/1/2015/null/BR/municipio/): Capacidade política e institucional em governança do risco, ações para redução e resposta em situações de desastres de inundações, enxurradas e alagamentos.
+
+- [Capacidade municipal em cidadania e políticas setoriais para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60008/1/2015/null/BR/municipio/): Capacidade de adaptação do município a partir de instrumentos de gestão urbana, governança setorial e de serviços sociais.
+
+- [Condições socioeconômicas e demografia da população para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60009/1/2015/null/BR/municipio/): Fatores populacionais que contribuem para a sensibilidade da população em situações de desastre de inundações, enchentes ou alagamentos..
+
+- [Deficiência em infraestrutura municipal para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60010/1/2015/null/BR/municipio/): Deficiência dos sistemas públicos municipais de saneamento básico e de mobilidade urbana.
+
+- [Moradias em ambiente de risco para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60011/1/2018/null/BR/municipio/): Domicílios particulares permanentes expostos a desatre naturais.
+
+- [Densidade demográfica para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60012/1/2015/null/BR/municipio/): Densidade demográfica em áreas urbanizadas.
+
+#### Nível 6  
+
+- [Investimento per capita em políticas de adaptação e infraestrutura para proteção ambiental para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60013/1/2016/null/BR/municipio/): Valor per capita das transferências governamentais destinadas à proteção ambiental em políticas de adaptação e infraestrutura.
+
+- [Índice Firjan de Gestão Fiscal para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60014/1/2015/null/BR/municipio/): Capacidade municipal de eficiência da gestão fiscal.
+
+- [Índice Firjan de Desenvolvimento Municipal de emprego e renda para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60015/1/2015/null/BR/municipio/): Índice Firjan de Desenvolvimento Municipal de emprego e renda.
+
+- [Produto Interno Bruto por área urbana para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60016/1/2015/null/BR/municipio/): Capacidade econômica municipal em função da densidade urbana municipal.
+
+- [Programa Cidades Resilientes para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60017/1/2015/null/BR/municipio/): Adesão ao Programa Cidades Resilientes.
+
+- [Instituições que atuam em gestão de risco de desastres para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60018/1/2020/null/BR/municipio/): Capacidade institucional de atuar no planejamento adaptativo e que contribui com a capacidade de resposta do município, para situações de desastres de inundações, enxurradas e alagamentos.
+
+- [Gestão de resíduos e limpeza pública para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60019/1/2020/null/BR/municipio/): Capacidade municipal na gestão dos resíduos sólidos e ações periódicas de limpeza pública em épocas de chuva.
+
+- [Instrumentos de gestão de ocupação urbana em áreas de risco de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60020/1/2020/null/BR/municipio/): Capacidade de gestão adaptativa de ocupação urbana em áreas de risco de inundações, enxurradas e alagamentos.
+
+- [Ações adaptativas para redução de risco em situações de desastres de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60021/1/2020/null/BR/municipio/): Capacidade institucional de atuar no planejamento adaptativo e que contribui com a capacidade de resposta do município, para situações de desastres de inundações, enxurradas e alagamentos.
+
+- [Sistemas de alerta antecipado para desastres de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60022/1/2020/null/BR/municipio/): Capacidade de lidar com a ameaça de inundações, enxurradas e alagamentos e emitir alertas para que ações possam ser desdobradas pelas instituições municipais e comunitárias.
+
+- [Plano de contingência para desastres de inundações, enxurradas e alagamentos para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60023/1/2020/null/BR/municipio/): Capacidade de resposta do município em caso de ocorrência de inundações, enxurradas e alagamentos, medido pela existência de um planejamento adaptativo para ações emergenciais.
+
+- [Legislação de zoneamento e uso e ocupação do solo para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60024/1/2020/null/BR/municipio/): Gestão municipal do uso e ocupação do solo.
+
+- [Governança em meio ambiente para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60025/1/2020/null/BR/municipio/): Existência e condição de conselho municipal de meio ambiente e de fundo municipal de meio ambiente.
+
+- [Governança em habitação para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60026/1/2020/null/BR/municipio/): Existência de conselho municipal de habitação, existência de fundo e de plano municipal de habitação.
+
+- [Governança em transporte para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60027/1/2020/null/BR/municipio/): Existência e condição de conselho municipal de transporte, existência de fundo e de plano municipal de transporte.
+
+- [Nível de atendimento dos estabelecimentos de saúde para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60028/1/2015/null/BR/municipio/): Capacidade de atendimento dos estabelecimentos de saúde no município.
+
+- [Nível de implementação e articulação do plano municipal de saneamento básico para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60029/1/2016/null/BR/municipio/): Nível de implementação e articulação de planos municipais de saneamento básico para gestão dos recursos hídricos.
+
+- [População com demandas especiais em situação de desastres para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60030/1/2010/null/BR/municipio/): Percentual da população que compõem grupos com alguma capacidade física e psíquica diminuída e/ou de locomoção e que possui dependência e atenção especial em situação de desastres geo-hidrológicos.
+
+- [Jovens sem ensino médio concluído até os 19 anos de idade para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60031/1/2010/null/BR/municipio/): Jovens sem ensino médio concluído até os 19 anos de idade.
+
+- [Renda municipal apropriada pelos 20% mais pobres para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60032/1/2010/null/BR/municipio/): Renda municipal apropriada pelos 20% mais pobres (%).
+
+- [Proporção de domicílios inadequados ou semi-inadequados para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60033/1/2010/null/BR/municipio/): Proporção de domicílios inadequados ou semi-inadequados.
+
+- [Falta de mobilidade urbana para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60034/1/2020/null/BR/municipio/): Déficit em infraestrutura e equipamentos para o mobilidade urbana.
+
+- [Inacessibilidade às cidades para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60035/1/2015/null/BR/municipio/): Tempo de deslocamento nas rodovias do município.
+
+- [Nível de falta de acesso ao saneamento básico para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60036/1/2017/null/BR/municipio/): Nível de falta atendimento domiciliar aos serviços de abastecimento de água, esgotamento sanitário e resíduos sólidos urbanos.
+
+- [Inexistência de manejo de águas pluviais para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60037/1/2015/null/BR/municipio/): Inexistência de sistemas de manejo de águas pluviais no município.
+
+- [Proporção de domicílios em áreas de risco para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60038/1/2018/null/BR/municipio/): Domicílios particulares permanentes expostos a desastres naturais.
+
+- [Densidade da população em áreas urbanizadas para Inundações, enxurradas e alagamentos](https://sistema.adaptabrasil.mcti.gov.br//60039/1/2015/null/BR/municipio/): Densidade da população em áreas urbanizadas: Indicador calculado pela razão entre o número de moradores em áreas urbanas e o cálculo de área urbanizada.
+
+### Deslizamento de terra  
+
+![Deslizamento de terra](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/Desastres%20Geo-hidrol%C3%B3gicos%20-%20Deslizamento%20de%20Terra.png)
+
+#### Nível 2  
+
+- [Índice de Risco para deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60100/1/2015/null/BR/municipio/): Risco de impacto das mudanças climáticas em sistemas socioecológicos, considerando a ameaça de desastre geo-hidrológico no evento de deslizamento de terra.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60101/1/2015/null/BR/municipio/): Vulnerabilidade da população aos impactos de desastre geo-hidrológico de deslizamento de terra.
+
+- [Índice de Exposição para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60102/1/2015/null/BR/municipio/): Exposição da população ao desastre geo-hidrológico de deslizamento de terra.
+
+- [Índice de Ameaça de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60103/1/2015/null/BR/municipio/): Índice de Ameaça de deslizamento de terra ocasionado por chuvas intensas e características geográficas.
+
+#### Nível 4  
+
+- [Índice de Capacidade Adaptativa para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60104/1/2015/null/BR/municipio/): Capacidade do sistema socioecológico de se ajustar a possíveis desastres geo-hidrológicos de deslizamentos de terra.
+
+- [Índice de Sensibilidade para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60105/1/2015/null/BR/municipio/): Grau em que um sistema socioecológico é potencialmente modificado ou afetado por desastres geo-hidrológicos.
+
+#### Nível 5  
+
+- [Capacidade de investimento público municipal e renda para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60106/1/2015/null/BR/municipio/): Capacidade de investimento do município e renda da população, bem como investimentos em políticas de adaptação e em populações socioeconomicamente vulneráveis.
+
+- [Governança e gestão de risco de desastre de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60107/1/2015/null/BR/municipio/): Capacidade política e institucional em governança do risco, ações para redução e resposta em situação de desastre de deslizamento de terra.
+
+- [Capacidade municipal em cidadania e políticas setoriais para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60108/1/2015/null/BR/municipio/): Capacidade de adaptação do município a partir de instrumentos de gestão urbana, governança setorial e de serviços sociais.
+
+- [Condições socioeconômicas e demografia da população para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60109/1/2015/null/BR/municipio/): Fatores populacionais que contribuem para a sensibilidade da população em situações de desastre de deslizamento de terra.
+
+- [Deficiência em infraestrutura municipal para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60110/1/2015/null/BR/municipio/): Deficiência dos sistemas públicos municipais de saneamento básico e de mobilidade urbana.
+
+- [Moradias em ambiente de risco para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60111/1/2018/null/BR/municipio/): Domicílios particulares permanentes expostos a desastres naturais.
+
+- [Densidade demográfica para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60112/1/2015/null/BR/municipio/): Densidade demográfica em áreas urbanizadas.
+
+#### Nível 6  
+
+- [Investimento per capita em políticas de adaptação e infraestrutura para proteção ambiental para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60113/1/2016/null/BR/municipio/): Valor per capita das transferências governamentais destinadas à proteção ambiental em políticas de adaptação e infraestrutura.
+
+- [Índice Firjan de Gestão Fiscal para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60114/1/2015/null/BR/municipio/): Capacidade municipal de eficiência da gestão fiscal.
+
+- [Índice Firjan de Desenvolvimento Municipal de emprego e renda para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60115/1/2015/null/BR/municipio/): Índice Firjan de Desenvolvimento Municipal de emprego e renda.
+
+- [Produto Interno Bruto por área urbana para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60116/1/2015/null/BR/municipio/): Capacidade econômica municipal em função da densidade urbana municipal.
+
+- [Programa Cidades Resilientes para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60117/1/2015/null/BR/municipio/): Adesão ao Programa Cidades Resilientes.
+
+- [Instituições que atuam em gestão de risco de desastres para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60118/1/2020/null/BR/municipio/): Capacidade institucional de atuar no planejamento adaptativo e que contribui com a capacidade de resposta do município, para situações de desastres de deslizamentos de terra.
+
+- [Gestão de resíduos e limpeza pública para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60119/1/2020/null/BR/municipio/): Capacidade municipal na gestão dos resíduos sólidos e ações periódicas de limpeza pública em épocas de chuva.
+
+- [Instrumentos de gestão de ocupação urbana em áreas de risco de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60120/1/2020/null/BR/municipio/): Capacidade de gestão adaptativa de ocupação urbana em áreas de risco de deslizamento de terra.
+
+- [Ações adaptativas para redução de risco em situações de desastre de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60121/1/2020/null/BR/municipio/): Capacidade institucional de atuar no planejamento adaptativo e que contribui com a capacidade de resposta do município, para situações de desastres de deslizamentos de terra.
+
+- [Sistemas de alerta antecipado para desastres de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60122/1/2020/null/BR/municipio/): Capacidade de lidar com a ameaça de deslizamento de terra e emitir alertas para que ações possam ser desdobradas pelas instituições municipais e comunitárias.
+
+- [Plano de contingência para desastre de deslizamento de terra para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60123/1/2020/null/BR/municipio/): Capacidade de resposta do município em caso de ocorrência de deslizamento de terra, medido pela existência de um planejamento adaptativo para ações emergenciais.
+
+- [Legislação de zoneamento e uso e ocupação do solo para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60124/1/2020/null/BR/municipio/): Gestão municipal do uso e ocupação do solo.
+
+- [Governança em meio ambiente para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60125/1/2020/null/BR/municipio/): Existência e condição de conselho municipal de meio ambiente e de fundo municipal de meio ambiente.
+
+- [Governança em habitação para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60126/1/2020/null/BR/municipio/): Existência de conselho municipal de habitação, existência de fundo e de plano municipal de habitação.
+
+- [Governança em transporte para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60127/1/2020/null/BR/municipio/): Existência e condição de conselho municipal de transporte, existência de fundo e de plano municipal de transporte.
+
+- [Nível de atendimento dos estabelecimentos de saúde para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60128/1/2015/null/BR/municipio/): Capacidade de atendimento dos estabelecimentos de saúde no município.
+
+- [Nível de implementação e articulação do plano municipal de saneamento básico para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60129/1/2016/null/BR/municipio/): Nível de implementação e articulação de planos municipais de saneamento básico para gestão dos recursos hídricos.
+
+- [População com demandas especiais em situação de desastres para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60130/1/2010/null/BR/municipio/): Percentual da população que compõem grupos com alguma capacidade física e psíquica diminuída e/ou de locomoção e que possui dependência e atenção especial em situações de desastres geo-hidrológicos.
+
+- [Jovens sem ensino médio concluído até os 19 anos de idade para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60131/1/2010/null/BR/municipio/): Jovens sem ensino médio concluído até os 19 anos de idade.
+
+- [Renda municipal apropriada pelos 20% mais pobres para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60132/1/2010/null/BR/municipio/): Renda municipal apropriada pelos 20% mais pobres (%).
+
+- [Proporção de domicílios inadequados ou semi-inadequados para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60133/1/2010/null/BR/municipio/): Proporção de domicílios inadequados ou semi-inadequados.
+
+- [Falta de mobilidade urbana para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60134/1/2020/null/BR/municipio/): Déficit em infraestrutura e equipamentos para o mobilidade urbana.
+
+- [Inacessibilidade às cidades para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60135/1/2015/null/BR/municipio/): Tempo de deslocamento nas rodovias do município.
+
+- [Nível de falta de acesso ao saneamento básico para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60136/1/2017/null/BR/municipio/): Nível de falta atendimento domiciliar aos serviços de abastecimento de água, esgotamento sanitário e resíduos sólidos urbanos.
+
+- [Inexistência de manejo de águas pluviais para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60137/1/2015/null/BR/municipio/): Inexistência de sistemas de manejo de águas pluviais no município.
+
+- [Proporção de domicílios em áreas de risco para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60138/1/2018/null/BR/municipio/): Domicílios particulares permanentes expostos a desastres naturais.
+
+- [Densidade da população em áreas urbanizadas para Deslizamento de terra](https://sistema.adaptabrasil.mcti.gov.br//60139/1/2015/null/BR/municipio/): Densidade da população em áreas urbanizadas: Indicador calculado pela razão entre o número de moradores em áreas urbanas e o cálculo de área urbanizada.
+
+## Infraestrutura Rodoviária  
+
+### Deslizamento  
+
+![Rodovias Deslizamento](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/rodovias-deslizam.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido ao Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91000/1/2021/null/BR/trechorodovia/): Risco de impacto das mudanças climáticas para a infraestrutura rodoviária devido ao impacto de deslizamento.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91001/1/2021/null/BR/trechorodovia/): Grau de suscetibilidade da infraestrutura rodoviária aos efeitos das mudanças climáticas, especificamente aquelas que resultam em deslizamento.
+
+- [Índice de Exposição para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91002/1/2021/null/BR/trechorodovia/): Magnitude do contato entre a infraestrutura rodoviária e as ameaças climáticas, especificamente aquelas que resultam em deslizamento .
+
+- [Índice de Ameaça Climática para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91003/1/2021/null/BR/trechorodovia/): Variações climáticas relacionadas à precipitação intensa que resultam em deslizamento, com base em um intervalo climático normal de 20 anos .
+
+#### Nível 6  
+
+- [Suscetibilidade a Deslizamentos](https://sistema.adaptabrasil.mcti.gov.br//91004/1/2019/null/BR/trechorodovia/): Potencialidade a deslizamentos do Brasil.
+
+- [Índice da Condição da Superfície (ICS) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91005/1/2018/null/BR/trechorodovia/): Normalização do ICS.
+
+- [Tipo de Rodovias para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91006/1/2021/null/BR/trechorodovia/): Normalização do tipo de rodovia.
+
+- [Peso da carga para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91007/1/2017/null/BR/trechorodovia/): Normalização do peso da carga transportada.
+
+- [Localização da OAE para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91008/1/2018/null/BR/trechorodovia/): Localização das Obras de Arte Especiais (OAE).
+
+- [Volume Médio Diário Anual (VMDA) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91009/1/2020/null/BR/trechorodovia/): Volume Médio Diário Anual (VMDA).
+
+- [Número de dias com chuva igual ou maior a 50 mm (R50mm) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91010/1/2021/null/BR/trechorodovia/): Indica a frequência de extremos de chuva.
+
+- [Chuva máxima acumulada em 5 dias (Rx5day) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91011/1/2021/null/BR/trechorodovia/): Indica a intensidade de extremos de chuva.
+
+- [Número máximo de dias consecutivos com chuva (CWD) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//91012/1/2021/null/BR/trechorodovia/): Indica a persistência de chuva .
+
+### Erosão  
+
+![Rodovias Erosao](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/rodovias-erosao_0.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido à Erosão](https://sistema.adaptabrasil.mcti.gov.br//92000/1/2021/null/BR/trechorodovia/) : Risco de impacto das mudanças climáticas para a infraestrutura rodoviária devido ao impacto de erosão.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92001/1/2021/null/BR/trechorodovia/): Grau de suscetibilidade da infraestrutura rodoviária aos efeitos das mudanças climáticas, especificamente aquelas que resultam em erosão.
+
+- [Índice de Exposição para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92002/1/2021/null/BR/trechorodovia/): Magnitude do contato entre a infraestrutura rodoviária e as ameaças climáticas, especificamente aquelas que resultam em erosão.
+
+- [Índice de Ameaça Climática para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92003/1/2021/null/BR/trechorodovia/): Variações climáticas relacionadas à precipitação intensa que resultam em erosão, com base em um intervalo climático normal de 20 anos .
+
+#### Nível 6  
+
+- [Suscetibilidade a Erosão](https://sistema.adaptabrasil.mcti.gov.br//92004/1/2018/null/BR/trechorodovia/): Potencialidade a erosão.
+
+- [Índice da Condição da Superfície (ICS) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92005/1/2018/null/BR/trechorodovia/): Normalização do ICS.
+
+- [Tipo de Rodovias para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92006/1/2021/null/BR/trechorodovia/): Normalização do tipo de rodovia.
+
+- [Peso da carga para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92007/1/2017/null/BR/trechorodovia/): Normalização do peso da carga transportada.
+
+- [Localização da OAE para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92008/1/2018/null/BR/trechorodovia/): Localização das Obras de Arte Especiais (OAE).
+
+- [Volume Médio Diário Anual (VMDA) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92009/1/2020/null/BR/trechorodovia/): Volume Médio Diário Anual (VMDA).
+
+- [Número de dias com chuva igual ou maior a 20 mm (R20mm) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92010/1/2021/null/BR/trechorodovia/): Indica a frequência de extremos de chuva.
+
+- [Chuva máxima acumulada em 1 dia (Rx1day) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92011/1/2021/null/BR/trechorodovia/): Indica a intensidade de extremos de chuva.
+
+- [Índice de intensidade de precipitação simples (SDII) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//92012/1/2021/null/BR/trechorodovia/): Indica a intensidade de extremos de chuva.
+
+### Temperatura  
+
+![Rodovias Temperatura](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/rodovias-temp.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido à Alta Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94000/1/2021/null/BR/trechorodovia/): Risco de impacto das mudanças climáticas para a infraestrutura rodoviária devido ao impacto de alta temperatura.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94001/1/2021/null/BR/trechorodovia/): Grau de suscetibilidade da infraestrutura rodoviária aos efeitos das mudanças climáticas, especificamente aquelas que resultam em alta temperatura.
+
+- [Índice de Exposição para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94002/1/2021/null/BR/trechorodovia/): Magnitude do contato entre a infraestrutura rodoviária e as ameaças climáticas, especificamente aquelas que resultam em alta temperatura.
+
+- [Índice de Ameaça Climática para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94003/1/2021/null/BR/trechorodovia/): Variações climáticas relacionadas à alta temperatura com base em um intervalo climático normal de 20 anos.
+
+#### Nível 6  
+
+- [Índice da Condição da Superfície (ICS) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94004/1/2018/null/BR/trechorodovia/): Normalização do ICS.
+
+- [Tipo de Rodovias para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94005/1/2021/null/BR/trechorodovia/): Normalização do tipo de rodovia.
+
+- [Peso da carga para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94006/1/2017/null/BR/trechorodovia/): Normalização do peso da carga transportada.
+
+- [Localização da OAE para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94007/1/2018/null/BR/trechorodovia/): Localização das Obras de Arte Especiais (OAE).
+
+- [Volume Médio Diário Anual (VMDA) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94008/1/2020/null/BR/trechorodovia/): Volume Médio Diário Anual (VMDA).
+
+- [Índice de duração de ondas de calor (HWDI) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94009/1/2021/null/BR/trechorodovia/): Indica a persistência de temperaturas altas .
+
+- [Média dos 7 dias consecutivos mais quentes do ano (Tx7day) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//94010/1/2021/null/BR/trechorodovia/): Indica a persistência de temperaturas altas .
+
+### Alagamento e Inundação  
+
+![Rodovias Alagamento](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/rodovias-alag.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido ao Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90000/1/2021/null/BR/trechorodovia/): Risco de impacto das mudanças climáticas para a infraestrutura rodoviária devido ao impacto de alagamento e inundação.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90001/1/2021/null/BR/trechorodovia/): Grau de suscetibilidade da infraestrutura rodoviária aos efeitos das mudanças climáticas, especificamente aquelas que resultam em alagamento e inundação.
+
+- [Índice de Exposição para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90002/1/2021/null/BR/trechorodovia/): Magnitude do contato entre a infraestrutura rodoviária e as ameaças climáticas, especificamente aquelas que resultam em alagamento e inundação.
+
+- [Índice de Ameaça Climática para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90003/1/2021/null/BR/trechorodovia/): Variações climáticas relacionadas à precipitação intensa que resultam em alagamento e inundação, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 6  
+
+- [Vulnerabilidade à inundação para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90004/1/2014/null/BR/trechorodovia/): Normalização do mapa da vulnerabilidade à inundação.
+
+- [Índice da Condição da Superfície (ICS) para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90005/1/2018/null/BR/trechorodovia/): Normalização do ICS.
+
+- [Tipo de Rodovias para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90006/1/2021/null/BR/trechorodovia/): Normalização do tipo de rodovia.
+
+- [Peso da carga para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90007/1/2017/null/BR/trechorodovia/): Normalização do peso da carga transportada.
+
+- [Localização da OAE para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90008/1/2018/null/BR/trechorodovia/): Localização das Obras de Arte Especiais (OAE).
+
+- [Volume Médio Diário Anual (VMDA) para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90009/1/2020/null/BR/trechorodovia/): Volume Médio Diário Anual (VMDA).
+
+- [Número de dias com chuva igual ou maior a 20 mm (R20mm) para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90010/1/2021/null/BR/trechorodovia/): Indica a frequência de extremos de chuva.
+
+- [Chuva máxima acumulada em 1 dia (Rx1day) para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90011/1/2021/null/BR/trechorodovia/): Indica a intensidade de extremos de chuva.
+
+- [Número máximo de dias consecutivos com chuva (CWD) para Alagamento e Inundação](https://sistema.adaptabrasil.mcti.gov.br//90012/1/2021/null/BR/trechorodovia/): Indica a persistência de chuva .
+
+### Queimada  
+
+![Rodovias Queimada](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/rodovias-queimada.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido à Queimada](https://sistema.adaptabrasil.mcti.gov.br//93000/1/2021/null/BR/trechorodovia/): Risco de impacto das mudanças climáticas para a infraestrutura rodoviária devido ao impacto de queimada.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93001/1/2021/null/BR/trechorodovia/): Grau de suscetibilidade da infraestrutura rodoviária aos efeitos das mudanças climáticas, especificamente aquelas que resultam em queimada.
+
+- [Índice de Exposição para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93002/1/2021/null/BR/trechorodovia/): Magnitude do contato entre a infraestrutura rodoviária e as ameaças climáticas, especificamente aquelas que resultam em queimada.
+
+- [Índice de Ameaça Climática para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93003/1/2021/null/BR/trechorodovia/): Variações climáticas relacionadas à alta temperatura com seca prolongada, com base em um intervalo climático normal de 20 anos .
+
+#### Nível 6  
+
+- [Foco de incêndios para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93004/1/2018/null/BR/trechorodovia/): Mapa de Focos de Queimadas.
+
+- [Índice da Condição da Superfície (ICS) para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93005/1/2018/null/BR/trechorodovia/): Normalização do ICS.
+
+- [Tipo de Rodovias para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93006/1/2021/null/BR/trechorodovia/): Normalização do tipo de rodovia.
+
+- [Peso da carga para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93007/1/2017/null/BR/trechorodovia/): Normalização do peso da carga transportada.
+
+- [Localização da OAE para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93008/1/2018/null/BR/trechorodovia/): Localização das Obras de Arte Especiais (OAE).
+
+- [Volume Médio Diário Anual (VMDA) para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93009/1/2020/null/BR/trechorodovia/): Volume Médio Diário Anual (VMDA).
+
+- [Número de dias com temperatura máxima acima de 30°C (TXge30) para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93010/1/2021/null/BR/trechorodovia/): Indica a frequência de temperaturas altas.
+
+- [Índice de duração de ondas de calor (HWDI) para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93011/1/2021/null/BR/trechorodovia/): Indica a persistência de temperaturas altas .
+
+- [Número máximo de dias secos consecutivos (CDD) para Queimada](https://sistema.adaptabrasil.mcti.gov.br//93012/1/2021/null/BR/trechorodovia/): Indica persistência de seca.
+
+## Infraestrutura Ferroviária  
+
+### Deslizamento  
+
+![Ferrovias Deslizamento](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/ferrov-desliz.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido ao Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80000/1/2021/null/BR/trechoferrovia/): Risco de impacto das mudanças climáticas para a infraestrutura ferroviária devido ao impacto de deslizamento .
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80001/1/2021/null/BR/trechoferrovia/): Grau de suscetibilidade da infraestrutura ferroviária aos efeitos das mudanças climáticas, especificamente aquelas que resultantes do deslizamento.
+
+- [Índice de Exposição para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80002/1/2021/null/BR/trechoferrovia/): Magnitude do contato entre a infraestrutura ferroviária e as ameaças climáticas, especificamente aquelas que resultam em deslizamento.
+
+- [Índice de Ameaça Climática para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80003/1/2021/null/BR/trechoferrovia/): Variações climáticas relacionadas à precipitação intensa, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 6  
+
+- [Suscetibilidade a Deslizamentos](https://sistema.adaptabrasil.mcti.gov.br//80004/1/2019/null/BR/trechoferrovia/): Potencialidade a deslizamentos do Brasil.
+
+- [Tipo de bitola para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80005/1/2021/null/BR/trechoferrovia/): Largura entre as faces interiores de dois trilhos de um trecho ferroviário.
+
+- [Peso da carga para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80006/1/2017/null/BR/trechoferrovia/): Peso da carga transportada.
+
+- [Volume de veículos para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80007/1/2017/null/BR/trechoferrovia/): Volume de veículos ferroviários.
+
+- [Número de dias com chuva igual ou maior a 50 mm (R50mm) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80008/1/2021/null/BR/trechoferrovia/): Indica a frequência de extremos de chuva.
+
+- [Chuva máxima acumulada em 5 dias (Rx5day) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80009/1/2021/null/BR/trechoferrovia/): Indica a intensidade de extremos de chuva.
+
+- [Número máximo de dias consecutivos com chuva (CWD) para Deslizamento](https://sistema.adaptabrasil.mcti.gov.br//80010/1/2021/null/BR/trechoferrovia/): Indica a persistência de chuva .
+
+### Erosão  
+
+![Ferrovias Erosao](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/ferrov-erosao.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido à Erosão](https://sistema.adaptabrasil.mcti.gov.br//81000/1/2021/null/BR/trechoferrovia/) : Risco de impacto das mudanças climáticas para a infraestrutura ferroviária devido ao impacto de erosão.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81001/1/2021/null/BR/trechoferrovia/): Grau de suscetibilidade da infraestrutura ferroviária aos efeitos das mudanças climáticas, especificamente aquelas que resultantes da erosão.
+
+- [Índice de Exposição para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81002/1/2021/null/BR/trechoferrovia/): Magnitude do contato entre a infraestrutura ferroviária e as ameaças climáticas, especificamente aquelas que resultam em erosão.
+
+- [Índice de Ameaça Climática para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81003/1/2021/null/BR/trechoferrovia/): Variações climáticas relacionadas à precipitação intensa, com base em um intervalo climático normal de 20 anos.
+
+#### Nível 6  
+
+- [Suscetibilidade a Erosão](https://sistema.adaptabrasil.mcti.gov.br//81004/1/2019/null/BR/trechoferrovia/): Potencialidade a erosão.
+
+- [Tipo de bitola para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81005/1/2021/null/BR/trechoferrovia/): Largura entre as faces interiores de dois trilhos de um trecho ferroviário.
+
+- [Peso da carga para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81006/1/2017/null/BR/trechoferrovia/): Peso da carga transportada.
+
+- [Volume de veículos para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81007/1/2017/null/BR/trechoferrovia/): Volume de veículos ferroviários.
+
+- [Chuva máxima acumulada em 1 dia (Rx1day) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81008/1/2021/null/BR/trechoferrovia/): Indica a intensidade de extremos de chuva.
+
+- [Índice de intensidade de precipitação simples (SDII) para Erosão](https://sistema.adaptabrasil.mcti.gov.br//81009/1/2021/null/BR/trechoferrovia/): Indica a intensidade de extremos de chuva.
+
+### Temperatura  
+
+![Ferrovias Temperatura](https://adaptabrasil.mcti.gov.br/sites/default/files/inline-images/ferrov-temp.jpg)
+
+#### Nível 2  
+
+- [Índice de Risco de Impacto devido à Alta Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82000/1/2021/null/BR/trechoferrovia/): Risco de impacto das mudanças climáticas para a infraestrutura ferroviária devido ao impacto de altas temperaturas.
+
+#### Nível 3  
+
+- [Índice de Vulnerabilidade para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82001/1/2021/null/BR/trechoferrovia/): Grau de suscetibilidade da infraestrutura ferroviária aos efeitos das mudanças climáticas, especificamente aquelas que resultantes das altas temperaturas.
+
+- [Índice de Exposição para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82002/1/2021/null/BR/trechoferrovia/): Magnitude do contato entre a infraestrutura ferroviária e as ameaças climáticas, especificamente aquelas resultantes das altas temperaturas.
+
+- [Índice de Ameaça Climática para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82003/1/2021/null/BR/trechoferrovia/): Variações climáticas relacionadas às altas temperaturas com base em um intervalo climático normal de 20 anos.
+
+#### Nível 6  
+
+- [Tipo de bitola para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82004/1/2021/null/BR/trechoferrovia/): Largura entre as faces interiores de dois trilhos de um trecho ferroviário.
+
+- [Peso da carga para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82005/1/2017/null/BR/trechoferrovia/): Peso da carga transportada.
+
+- [Volume de veículos para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82006/1/2017/null/BR/trechoferrovia/): Volume de veículos ferroviários.
+
+- [Índice de duração de ondas de calor (HWDI) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82007/1/2021/null/BR/trechoferrovia/): Indica a persistência de temperaturas altas .
+
+- [Média dos 7 dias consecutivos mais quentes do ano (Tx7day) para Temperatura](https://sistema.adaptabrasil.mcti.gov.br//82008/1/2021/null/BR/trechoferrovia/): Indica a persistência de temperaturas altas .
+
+

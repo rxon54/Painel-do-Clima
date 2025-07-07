@@ -1,0 +1,33 @@
+# Project Tasks: Painel do Clima
+
+## 1. Visualization Scaffolding (DONE)
+- [x] Add a value badge (span) to each indicator node in the indented list.
+- [x] Implement updateIndicatorValues(data) to update values/colors dynamically.
+- [x] Style value badges for clarity and accessibility.
+
+## 2. API Data Ingestor (TO DO)
+- [ ] Develop a Python script/module to fetch indicator values from the AdaptaBrasil API for a given state/year/Level 2 indicator/city.
+- [ ] Use `config.yaml` for all parameters (state, year, cities, L2 indicators, delay, output dir).
+- [ ] For each Level 2 indicator and each city, fetch all sublevel indicator values and save as one file per city per L2 indicator (including all sublevels).
+- [ ] Add a delay between requests (default: 1s, configurable).
+- [ ] No authentication required.
+- [ ] Save full API responses for debugging if enabled.
+- [ ] Document usage and expected output format.
+
+## 3. Data Integration in Frontend (TO DO)
+- [ ] Add UI to select/load a city (or upload a JSON file with indicator values).
+- [ ] On city selection, call updateIndicatorValues(data) to populate the tree.
+- [ ] Optionally, show a legend for value colors/ranges.
+
+## 4. Documentation (TO DO)
+- [ ] Update project requirements and README to describe:
+    - The new indicator value display logic.
+    - How to run the API ingestor and connect data to the frontend.
+    - Example data record and expected JSON structure.
+- [ ] Add usage instructions for both backend and frontend.
+
+## 5. Stretch/Next Steps
+- [ ] Support batch processing for multiple cities.
+- [ ] Add summary/statistics/insights for a city (top risks, etc.).
+- [ ] Integrate with dashboard or reporting tools.
+- [ ] Accessibility and open data compliance review.
