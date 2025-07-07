@@ -261,45 +261,17 @@ function renderIndentedList(container, root) {
         label.innerHTML = `<strong>${node.id}</strong>: ${node.nome}`;
         // Tooltip on hover
         label.title = (node.descricao ? node.descricao + '\n' : '') + `Nível: ${node.nivel}\nSetor: ${node.sector}`;
-        // Value badges container (for present, 2030, 2050)
-        const valuesContainer = document.createElement('span');
-        valuesContainer.className = 'indicator-values-multi';
-        valuesContainer.style.display = 'flex';
-        valuesContainer.style.gap = '30px'; // Increased gap for more spacing
-        // Present value
-        const valueSpanPresent = document.createElement('span');
-        valueSpanPresent.className = 'indicator-value indicator-value-present';
-        valueSpanPresent.setAttribute('data-indicator-id', node.id);
-        valueSpanPresent.setAttribute('data-indicator-year', 'present');
-        valueSpanPresent.style.whiteSpace = 'nowrap';
-        valueSpanPresent.style.display = 'inline-block';
-        // 2030 placeholder
-        const valueSpan2030 = document.createElement('span');
-        valueSpan2030.className = 'indicator-value indicator-value-2030';
-        valueSpan2030.setAttribute('data-indicator-id', node.id);
-        valueSpan2030.setAttribute('data-indicator-year', '2030');
-        valueSpan2030.style.whiteSpace = 'nowrap';
-        valueSpan2030.style.display = 'inline-block';
-        valueSpan2030.textContent = '2030';
-        valueSpan2030.style.background = '#eee';
-        valueSpan2030.style.color = '#aaa';
-        // 2050 placeholder
-        const valueSpan2050 = document.createElement('span');
-        valueSpan2050.className = 'indicator-value indicator-value-2050';
-        valueSpan2050.setAttribute('data-indicator-id', node.id);
-        valueSpan2050.setAttribute('data-indicator-year', '2050');
-        valueSpan2050.style.whiteSpace = 'nowrap';
-        valueSpan2050.style.display = 'inline-block';
-        valueSpan2050.textContent = '2050';
-        valueSpan2050.style.background = '#eee';
-        valueSpan2050.style.color = '#aaa';
-        // Add all value spans to valuesContainer
-        valuesContainer.appendChild(valueSpanPresent);
-        valuesContainer.appendChild(valueSpan2030);
-        valuesContainer.appendChild(valueSpan2050);
-        // Add label and values to container
+        // Value badge placeholder
+        const valueSpan = document.createElement('span');
+        valueSpan.className = 'indicator-value';
+        valueSpan.setAttribute('data-indicator-id', node.id);
+        valueSpan.style.float = 'right';
+        valueSpan.style.marginLeft = '8px';
+        valueSpan.style.whiteSpace = 'nowrap';
+        valueSpan.style.display = 'inline-block';
+        // Add label and value to container
         labelValueContainer.appendChild(label);
-        labelValueContainer.appendChild(valuesContainer);
+        labelValueContainer.appendChild(valueSpan);
         // Children
         let ul = null;
         if (node.children && node.children.length > 0) {
@@ -343,26 +315,11 @@ function renderIndentedList(container, root) {
 // --- Update indicator values in the indented list ---
 function updateIndicatorValues(data) {
     data.forEach(record => {
-        // Present value
-        const elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}']`);
-        if (elPresent) {
-            elPresent.textContent = `${record.value} ${record.rangelabel || ''}`;
-            elPresent.style.background = record.valuecolor || '#eee';
-            elPresent.style.color = '#222';
-        }
-        // 2030 placeholder (future: update with real data)
-        const el2030 = document.querySelector(`.indicator-value-2030[data-indicator-id='${record.indicator_id}']`);
-        if (el2030) {
-            el2030.textContent = '2030';
-            el2030.style.background = '#eee';
-            el2030.style.color = '#aaa';
-        }
-        // 2050 placeholder (future: update with real data)
-        const el2050 = document.querySelector(`.indicator-value-2050[data-indicator-id='${record.indicator_id}']`);
-        if (el2050) {
-            el2050.textContent = '2050';
-            el2050.style.background = '#eee';
-            el2050.style.color = '#aaa';
+        const el = document.querySelector(`.indicator-value[data-indicator-id='${record.indicator_id}']`);
+        if (el) {
+            el.textContent = `${record.value} ${record.rangelabel || ''}`;
+            el.style.background = record.valuecolor || '#eee';
+            el.style.color = '#222';
         }
     });
 }
@@ -429,32 +386,11 @@ function renderHierarchy(hierarchyData) {
                     const rootContainer = flexRow.append('div')
                         .attr('class', 'root-container level2-flex-item level2-container')
                         .style('margin-bottom', '0')
-                        .style('flex-basis', '45%')
-                        .style('max-width', '45%');
-                    // Add root title
-                    const rootTitleRow = rootContainer.append('div')
-                        .attr('class', 'root-title-row')
-                        .style('display', 'flex')
-                        .style('justify-content', 'space-between')
-                        .style('align-items', 'center');
-                    rootTitleRow.append('div')
+                        .style('flex-basis', '35%')
+                        .style('max-width', '35%');
+                    rootContainer.append('div')
                         .attr('class', 'root-title')
                         .text(`${root.id}: ${root.nome} (Nível ${root.nivel})`);
-                    // Add indicator year headers
-                    rootTitleRow.append('div')
-                        .attr('class', 'indicator-years-header')
-                        .style('display', 'flex')
-                        .style('gap', '30px') // Match the gap used in .indicator-values-multi
-                        .style('min-width', '270px')
-                        .selectAll('span')
-                        .data(['Presente', '2030', '2050'])
-                        .enter()
-                        .append('span')
-                        .style('font-weight', 'bold')
-                        .style('color', '#444')
-                        .style('text-align', 'center')
-                        .style('min-width', '70px')
-                        .text(d => d);
                     renderIndentedList(rootContainer, root);
                 });
             }

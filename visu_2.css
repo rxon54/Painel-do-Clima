@@ -1,0 +1,37 @@
+.indented-node {
+    margin: 4px 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.indented-label {
+    margin-left: 2px;
+    flex: 1 1 auto;
+    min-width: 200px;
+}
+.indicator-value-row {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    min-width: 220px;
+    justify-content: flex-end;
+}
+.indicator-value {
+    display: inline-block;
+    min-width: 60px;
+    margin-left: 0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    background: #eee;
+    vertical-align: middle;
+    text-align: right;
+    transition: background 0.2s;
+}
+.indicator-value-present { background: #eee; }
+.indicator-value-2030 { background: #e0f7fa; }
+.indicator-value-2050 { background: #f3e5f5; }
