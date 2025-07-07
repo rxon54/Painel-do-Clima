@@ -248,62 +248,36 @@ function renderIndentedList(container, root) {
     function buildList(node) {
         const li = document.createElement('li');
         li.className = 'indented-node';
-        // Node label and value container
-        const labelValueContainer = document.createElement('span');
-        labelValueContainer.className = 'label-value-container';
-        labelValueContainer.style.display = 'flex';
-        labelValueContainer.style.justifyContent = 'space-between';
-        labelValueContainer.style.alignItems = 'center';
-        labelValueContainer.style.width = '100%';
+        // --- GRID ROW ---
+        const row = document.createElement('span');
+        row.className = 'indicator-row-grid';
+        // Tree label (with toggle if needed)
+        const labelCell = document.createElement('span');
+        labelCell.className = 'tree-label-cell';
         // Node label
         const label = document.createElement('span');
         label.className = 'indented-label';
         label.innerHTML = `<strong>${node.id}</strong>: ${node.nome}`;
-        // Tooltip on hover
         label.title = (node.descricao ? node.descricao + '\n' : '') + `Nível: ${node.nivel}\nSetor: ${node.sector}`;
-        // Value badges container (for present, 2030, 2050)
-        const valuesContainer = document.createElement('span');
-        valuesContainer.className = 'indicator-values-multi';
-        valuesContainer.style.display = 'flex';
-        valuesContainer.style.gap = '30px'; // Increased gap for more spacing
-        // Present value
+        labelCell.appendChild(label);
+        // Value cells
         const valueSpanPresent = document.createElement('span');
         valueSpanPresent.className = 'indicator-value indicator-value-present';
         valueSpanPresent.setAttribute('data-indicator-id', node.id);
         valueSpanPresent.setAttribute('data-indicator-year', 'present');
-        valueSpanPresent.style.whiteSpace = 'nowrap';
-        valueSpanPresent.style.display = 'inline-block';
-        // 2030 placeholder
+        // 2030
         const valueSpan2030 = document.createElement('span');
         valueSpan2030.className = 'indicator-value indicator-value-2030';
         valueSpan2030.setAttribute('data-indicator-id', node.id);
         valueSpan2030.setAttribute('data-indicator-year', '2030');
-        valueSpan2030.style.whiteSpace = 'nowrap';
-        valueSpan2030.style.display = 'inline-block';
-        valueSpan2030.textContent = '2030';
-        valueSpan2030.style.background = '#eee';
-        valueSpan2030.style.color = '#aaa';
-        // 2050 placeholder
+        // 2050
         const valueSpan2050 = document.createElement('span');
         valueSpan2050.className = 'indicator-value indicator-value-2050';
         valueSpan2050.setAttribute('data-indicator-id', node.id);
         valueSpan2050.setAttribute('data-indicator-year', '2050');
-        valueSpan2050.style.whiteSpace = 'nowrap';
-        valueSpan2050.style.display = 'inline-block';
-        valueSpan2050.textContent = '2050';
-        valueSpan2050.style.background = '#eee';
-        valueSpan2050.style.color = '#aaa';
-        // Add all value spans to valuesContainer
-        valuesContainer.appendChild(valueSpanPresent);
-        valuesContainer.appendChild(valueSpan2030);
-        valuesContainer.appendChild(valueSpan2050);
-        // Add label and values to container
-        labelValueContainer.appendChild(label);
-        labelValueContainer.appendChild(valuesContainer);
-        // Children
+        // Add toggle if needed
         let ul = null;
         if (node.children && node.children.length > 0) {
-            // Toggle button if has children
             const toggle = document.createElement('span');
             toggle.className = 'toggle';
             toggle.textContent = '▼';
@@ -320,16 +294,14 @@ function renderIndentedList(container, root) {
                 ul.style.display = expanded ? '' : 'none';
                 toggle.textContent = expanded ? '▼' : '►';
             };
-            // Use flex to keep toggle and labelValueContainer inline
-            const flexRow = document.createElement('span');
-            flexRow.style.display = 'flex';
-            flexRow.style.alignItems = 'center';
-            flexRow.appendChild(toggle);
-            flexRow.appendChild(labelValueContainer);
-            li.appendChild(flexRow);
-        } else {
-            li.appendChild(labelValueContainer);
+            labelCell.insertBefore(toggle, labelCell.firstChild);
         }
+        // Assemble row
+        row.appendChild(labelCell);
+        row.appendChild(valueSpanPresent);
+        row.appendChild(valueSpan2030);
+        row.appendChild(valueSpan2050);
+        li.appendChild(row);
         if (ul) li.appendChild(ul);
         return li;
     }
@@ -346,23 +318,37 @@ function updateIndicatorValues(data) {
         // Present value
         const elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}']`);
         if (elPresent) {
-            elPresent.textContent = `${record.value} ${record.rangelabel || ''}`;
+            elPresent.textContent = `${record.value} ${record.rangelabel || record.valuelabel || ''}`;
             elPresent.style.background = record.valuecolor || '#eee';
             elPresent.style.color = '#222';
         }
-        // 2030 placeholder (future: update with real data)
+        // 2030 value (future trends)
         const el2030 = document.querySelector(`.indicator-value-2030[data-indicator-id='${record.indicator_id}']`);
         if (el2030) {
-            el2030.textContent = '2030';
-            el2030.style.background = '#eee';
-            el2030.style.color = '#aaa';
+            if (record.future_trends && record.future_trends["2030"]) {
+                const ft = record.future_trends["2030"];
+                el2030.textContent = `${ft.value}` + (ft.valuelabel ? ` ${ft.valuelabel}` : '');
+                el2030.style.background = ft.valuecolor || '#eee';
+                el2030.style.color = '#222';
+            } else {
+                el2030.textContent = '';
+                el2030.style.background = '#eee';
+                el2030.style.color = '#aaa';
+            }
         }
-        // 2050 placeholder (future: update with real data)
+        // 2050 value (future trends)
         const el2050 = document.querySelector(`.indicator-value-2050[data-indicator-id='${record.indicator_id}']`);
         if (el2050) {
-            el2050.textContent = '2050';
-            el2050.style.background = '#eee';
-            el2050.style.color = '#aaa';
+            if (record.future_trends && record.future_trends["2050"]) {
+                const ft = record.future_trends["2050"];
+                el2050.textContent = `${ft.value}` + (ft.valuelabel ? ` ${ft.valuelabel}` : '');
+                el2050.style.background = ft.valuecolor || '#eee';
+                el2050.style.color = '#222';
+            } else {
+                el2050.textContent = '';
+                el2050.style.background = '#eee';
+                el2050.style.color = '#aaa';
+            }
         }
     });
 }

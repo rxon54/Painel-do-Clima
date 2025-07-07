@@ -138,10 +138,30 @@ select, button, input {
     margin-left: 10px;
     padding: 2px 8px;
     border-radius: 12px;
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 12px;
     color: #333;
     background: #eee;
     vertical-align: middle;
     transition: background 0.2s;
+}
+.indicator-row-grid {
+  display: grid;
+  grid-template-columns: auto 90px 90px 90px;
+  align-items: center;
+  gap: 0 10px;
+  min-height: 16px;
+}
+.tree-label-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.indicator-value {
+  justify-self: end;
+  text-align: right;
+  min-width: 70px;
+  white-space: nowrap;
+  border-radius: 8px;
+  padding: 1px 6px;
+  font-size: 0.93em;
 }

@@ -38,7 +38,7 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-def load_config(path: str = "config.yaml") -> Dict[str, Any]:
+def load_config(path: str = "../config.yaml") -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -53,6 +53,17 @@ def fetch_indicators(state: str, indicator_id: str, year: int) -> Any:
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
+# fetch future trends for a given indicator_id in a state/year
+def fetch_future_trends(state: str, indicator_id: str, year: int) -> Any:
+    """
+    Fetches future trends for a given indicator_id in a state/year.
+    """
+    url = f"https://sistema.adaptabrasil.mcti.gov.br/api/total/{state}/municipio/{indicator_id}/null/{year}"
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
+
 
 
 def save_json(data: Any, path: str):
@@ -105,18 +116,8 @@ def main():
 
     ensure_dir(output_dir)
 
-    # Load indicator_id/year pairs from mapa-dados.txt
-    indicators = []  # list of (indicator_id, year)
-    with open("mapa-dados.txt", "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):  # skip comments/empty
-                continue
-            if "/" in line:
-                parts = line.split("/")
-                if len(parts) == 2:
-                    indicator_id, year = parts[0].strip(), parts[1].strip()
-                    indicators.append((indicator_id, int(year)))
+    # Load indicator_id/year pairs from mapa-dados.txt (present)
+    indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
 
     success, fail = 0, 0
     for indicator_id, year in indicators:
@@ -134,6 +135,33 @@ def main():
             fail += 1
         time.sleep(delay)
 
+    # Load indicator_id/year pairs from trends file (future trends)
+    trends_file = config.get("trends_file", "trends-2030-2050.txt")
+    try:
+        indicators = load_indicator_year_pairs(trends_file)
+    except FileNotFoundError:
+        logging.warning(f"Trends file '{trends_file}' not found. Skipping future trends batch.")
+        indicators = []
+
+    # Fetch future trends for each indicator
+    if indicators:
+        logging.info("=== Fetching Future Trends ===")
+        for indicator_id, year in indicators:
+            log_ctx = f"future trends request: state={state}, L2={indicator_id}, year={year}"
+            print(f"Fetching {log_ctx}")
+            future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, log_context=log_ctx)
+            if future_response is not None:
+                future_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}.json")
+                save_json(future_response, future_path)
+                if debug:
+                    debug_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}_raw.json")
+                    save_json(future_response, debug_path)
+                success += 1
+            else:
+                fail += 1
+            time.sleep(delay)
+    else:
+        logging.info("No future trends to process.")
     logging.info(f"=== Batch Ingestor Finished: {success} indicators processed with success, {fail} failures ===")
 
 if __name__ == "__main__":
