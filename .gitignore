@@ -20,6 +20,7 @@ venv/
 # Data & Output
 data/
 output/
+old/
 *.log
 *.bak
 *.tmp
