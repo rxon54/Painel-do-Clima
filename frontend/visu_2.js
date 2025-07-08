@@ -243,6 +243,64 @@ function isDescendant(ancestor, node) {
 }
 
 // --- Collapsible Indented List ---
+// --- Indicator Documentation Overlay Logic ---
+let docHtmlLoaded = false;
+let docHtmlContent = '';
+
+// Load indicators_doc.html only once
+async function showIndicatorDoc(indicatorId) {
+    ensureDocOverlay();
+    const overlay = document.getElementById('doc-overlay');
+    const content = document.getElementById('doc-overlay-content');
+    async function tryFetchDoc(paths) {
+        for (const path of paths) {
+            try {
+                const resp = await fetch(path, {cache: 'reload'});
+                if (resp.ok) return await resp.text();
+            } catch (e) {}
+        }
+        throw new Error('Não foi possível carregar a documentação.');
+    }
+    if (!window.docHtmlLoaded) {
+        try {
+            window.docHtmlContent = await tryFetchDoc([
+                'indicators_doc.html',
+                'frontend/indicators_doc.html',
+                'backend/indicators_doc.html'
+            ]);
+            window.docHtmlLoaded = true;
+        } catch (e) {
+            content.innerHTML = '<div style="color:red">Erro ao carregar documentação.</div>';
+            overlay.style.visibility = 'visible';
+            overlay.style.opacity = '1';
+            return;
+        }
+    }
+    content.innerHTML = window.docHtmlContent;
+    setTimeout(() => {
+        const section = content.querySelector(`#indicator${indicatorId}`);
+        if (section) {
+            section.scrollIntoView({behavior: 'auto', block: 'center'});
+            section.style.background = '#ffe';
+            setTimeout(() => { section.style.background = ''; }, 1200);
+        }
+    }, 50);
+    overlay.style.visibility = 'visible';
+    overlay.style.opacity = '1';
+    function escListener(ev) {
+        if (ev.key === 'Escape') {
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.visibility = 'hidden'; }, 200);
+            document.removeEventListener('keydown', escListener);
+        }
+    }
+    document.addEventListener('keydown', escListener);
+}
+
+// --- DEBUG: Add global click test ---
+window._testShowIndicatorDoc = showIndicatorDoc;
+
+// --- Collapsible Indented List ---
 function renderIndentedList(container, root) {
     // Recursive function to build the list
     function buildList(node) {
@@ -257,7 +315,20 @@ function renderIndentedList(container, root) {
         // Node label
         const label = document.createElement('span');
         label.className = 'indented-label';
-        label.innerHTML = `<strong>${node.id}</strong>: ${node.nome}`;
+        // --- Make ID clickable ---
+        const idSpan = document.createElement('span');
+        idSpan.className = 'indicator-id-link';
+        idSpan.textContent = node.id;
+        idSpan.title = 'Ver documentação do indicador';
+        idSpan.style.cursor = 'pointer';
+        // FIX: Call showIndicatorDoc directly, not via global
+        idSpan.addEventListener('click', function(e) {
+            e.stopPropagation();
+            showIndicatorDoc(node.id);
+        });
+        label.innerHTML = '';
+        label.appendChild(idSpan);
+        label.appendChild(document.createTextNode(`: ${node.nome}`));
         label.title = (node.descricao ? node.descricao + '\n' : '') + `Nível: ${node.nivel}\nSetor: ${node.sector}`;
         labelCell.appendChild(label);
         // Value cells
@@ -605,7 +676,8 @@ document.getElementById("json-file").addEventListener("change", function(event) 
 document.addEventListener('DOMContentLoaded', loadCityFileList);
 
 // Reload city list button
-document.getElementById("reload-city-list").addEventListener("click", populateCityDropdown);
+const reloadBtn = document.getElementById("reload-city-list");
+if (reloadBtn) reloadBtn.addEventListener("click", populateCityDropdown);
 
 // Populate on load
 document.addEventListener("DOMContentLoaded", populateCityDropdown);
@@ -660,3 +732,124 @@ function expandAllNodes() {
     });
     d3.selectAll(".node").style("display", null);
 }
+
+// --- Overlay for indicator documentation ---
+// Create overlay and style if not present
+function ensureDocOverlay() {
+    let overlay = document.getElementById('doc-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'doc-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.55)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '9999';
+        overlay.style.visibility = 'hidden';
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.2s';
+        // Container for doc
+        const container = document.createElement('div');
+        container.id = 'doc-overlay-container';
+        container.style.background = '#fff';
+        container.style.borderRadius = '12px';
+        container.style.boxShadow = '0 4px 32px rgba(0,0,0,0.25)';
+        container.style.maxWidth = '900px';
+        container.style.width = '90vw';
+        container.style.maxHeight = '80vh';
+        container.style.overflow = 'auto';
+        container.style.position = 'relative';
+        container.style.padding = '32px 24px 24px 24px';
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.title = 'Fechar';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '12px';
+        closeBtn.style.right = '18px';
+        closeBtn.style.fontSize = '2rem';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.color = '#444';
+        closeBtn.style.zIndex = '10';
+        closeBtn.onclick = function() {
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.visibility = 'hidden'; }, 200);
+        };
+        container.appendChild(closeBtn);
+        // Content area
+        const content = document.createElement('div');
+        content.id = 'doc-overlay-content';
+        content.style.overflowY = 'auto';
+        content.style.maxHeight = '70vh';
+        container.appendChild(content);
+        overlay.appendChild(container);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeBtn.onclick();
+        });
+        document.body.appendChild(overlay);
+    }
+}
+
+// Only one global for docHtmlLoaded/content
+if (typeof window.docHtmlLoaded === 'undefined') window.docHtmlLoaded = false;
+if (typeof window.docHtmlContent === 'undefined') window.docHtmlContent = '';
+
+// Main function to show indicator documentation overlay
+async function showIndicatorDoc(indicatorId) {
+    ensureDocOverlay();
+    const overlay = document.getElementById('doc-overlay');
+    const content = document.getElementById('doc-overlay-content');
+    async function tryFetchDoc(paths) {
+        for (const path of paths) {
+            try {
+                const resp = await fetch(path, {cache: 'reload'});
+                if (resp.ok) return await resp.text();
+            } catch (e) {}
+        }
+        throw new Error('Não foi possível carregar a documentação.');
+    }
+    if (!window.docHtmlLoaded) {
+        try {
+            window.docHtmlContent = await tryFetchDoc([
+                'indicators_doc.html',
+                'frontend/indicators_doc.html',
+                'backend/indicators_doc.html'
+            ]);
+            window.docHtmlLoaded = true;
+        } catch (e) {
+            content.innerHTML = '<div style="color:red">Erro ao carregar documentação.</div>';
+            overlay.style.visibility = 'visible';
+            overlay.style.opacity = '1';
+            return;
+        }
+    }
+    content.innerHTML = window.docHtmlContent;
+    setTimeout(() => {
+        const section = content.querySelector(`#indicator${indicatorId}`);
+        if (section) {
+            section.scrollIntoView({behavior: 'auto', block: 'center'});
+            section.style.background = '#ffe';
+            setTimeout(() => { section.style.background = ''; }, 1200);
+        }
+    }, 50);
+    overlay.style.visibility = 'visible';
+    overlay.style.opacity = '1';
+    function escListener(ev) {
+        if (ev.key === 'Escape') {
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.visibility = 'hidden'; }, 200);
+            document.removeEventListener('keydown', escListener);
+        }
+    }
+    document.addEventListener('keydown', escListener);
+}
+
+// --- DEBUG: Add global click test ---
+window._testShowIndicatorDoc = showIndicatorDoc;

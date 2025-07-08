@@ -16,6 +16,7 @@ venv/
 # VSCode
 .vscode/
 .history/
+alt_versions
 
 # Data & Output
 data/
@@ -38,6 +39,7 @@ config.yaml
 
 # Ignore large raw API dumps (if not needed in repo)
 *.txt
+*.swp
 
 # Frontend build artifacts (if any)
 dist/

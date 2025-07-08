@@ -165,3 +165,69 @@ select, button, input {
   padding: 1px 6px;
   font-size: 0.93em;
 }
+
+/* Overlay for indicator documentation */
+.indicator-doc-overlay, #doc-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.indicator-doc-modal, #doc-overlay-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+  max-width: 900px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow: auto;
+  position: relative;
+  padding: 32px 24px 24px 24px;
+  font-size: 1.08rem;
+  color: #222;
+}
+.indicator-doc-close, #doc-overlay-container button {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #444;
+  z-index: 10;
+  transition: color 0.15s;
+}
+.indicator-doc-close:hover, #doc-overlay-container button:hover {
+  color: #c00;
+}
+#doc-overlay-content {
+  overflow-y: auto;
+  max-height: 70vh;
+}
+.indicator-id-link {
+  color: #1976d2;
+  text-decoration: underline dotted;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 2px;
+  transition: color 0.15s;
+}
+.indicator-id-link:hover {
+  color: #c00;
+  text-decoration: underline;
+}
+/* Optional: highlight indicator section on scroll */
+.indicator-section:target, .indicator-section[style*='background'] {
+  animation: doc-highlight 1.2s;
+}
+@keyframes doc-highlight {
+  0% { background: #ffe; }
+  100% { background: none; }
+}
