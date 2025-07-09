@@ -17,7 +17,10 @@ It aims to make complex climate risk data accessible and actionable for local de
   Groups and cleans raw API data into per-city files, ready for visualization or further analysis.
 
 - **Interactive Visualization:**  
-  A modern web frontend (`visu_2.html`) lets you explore indicator hierarchies and see city-level values, with color-coded badges and collapsible lists.
+  A modern web frontend (`frontend/visu_2.html`) lets you explore indicator hierarchies and see city-level values, with color-coded badges and collapsible lists.
+
+- **Indicator Documentation Overlay:**  
+  Click any indicator ID in the tree to open a scrollable overlay with detailed documentation, loaded from `frontend/indicators_doc.html`.
 
 - **Easy Integration:**  
   Outputs structured JSON files for dashboards, newsrooms, or further data science.
@@ -31,11 +34,18 @@ adaptabrasil/
 ├── data/                  # Processed data files (gitignored)
 │   ├── PR/city_5310.json  # Example: all indicators for city 5310 (Abatiá/PR)
 │   └── city_filelist.json # Mapping of city codes to files/names/states
-├── adaptabrasil_batch_ingestor.py   # Batch API ingestor
-├── process_city_files.py            # Groups data into per-city files
-├── visu_2.html                      # Interactive frontend
-├── config.yaml                      # Your local config (not tracked)
-├── config.example.yaml              # Example config for new users
+├── backend/               # Python backend scripts and API access
+│   ├── adaptabrasil_batch_ingestor.py
+│   ├── process_city_files.py
+│   └── ...
+├── frontend/              # Frontend HTML, JS, CSS, and docs
+│   ├── visu_2.html        # Interactive frontend
+│   ├── visu_2.js          # Main JS logic
+│   ├── visu_2.css         # Styles
+│   └── indicators_doc.html # Indicator documentation (for overlay)
+├── config.yaml            # Your local config (not tracked)
+├── config.example.yaml    # Example config for new users
+├── serve.py               # Simple server (optional)
 ├── .gitignore
 └── README.md
 ```
@@ -70,13 +80,13 @@ cp config.example.yaml config.yaml
 ### 4. Run the batch ingestor
 
 ```bash
-python adaptabrasil_batch_ingestor.py
+python backend/adaptabrasil_batch_ingestor.py
 ```
 
 ### 5. Process city files
 
 ```bash
-python process_city_files.py
+python backend/process_city_files.py
 ```
 
 ### 6. Serve the frontend
@@ -86,7 +96,7 @@ python serve.py
 # or
 uvicorn serve:app --reload
 ```
-Then open [http://localhost:8000/visu_2.html](http://localhost:8000/visu_2.html) in your browser.
+Then open [http://localhost:8000/frontend/visu_2.html](http://localhost:8000/frontend/visu_2.html) in your browser.
 
 ---
 
@@ -96,6 +106,9 @@ Then open [http://localhost:8000/visu_2.html](http://localhost:8000/visu_2.html)
 - **Step 2:** Select a state and city.  
   All available indicators for that city will be loaded and visualized.
 - **Step 3:** Explore the collapsible indicator tree, with color-coded value badges.
+- **Step 4:** Click any indicator ID to view its documentation in a modal overlay.
+
+> **Note:** The indicator documentation is loaded from `frontend/indicators_doc.html`. Make sure this file is present and accessible by your web server.
 
 ---
 
@@ -126,4 +139,4 @@ MIT License (see `LICENSE` file).
 
 ---
 
-*Painel do Clima: Bringing climate risk data
+*Painel do Clima: Bringing climate risk data to everyone.*
