@@ -491,8 +491,8 @@ function renderHierarchy(hierarchyData) {
                     const rootContainer = flexRow.append('div')
                         .attr('class', 'root-container level2-flex-item level2-container')
                         .style('margin-bottom', '0')
-                        .style('flex-basis', '45%')
-                        .style('max-width', '45%');
+                        .style('flex-basis', '97%')
+                        .style('max-width', '97%');
                     // Add root title
                     const rootTitleRow = rootContainer.append('div')
                         .attr('class', 'root-title-row')
@@ -506,7 +506,7 @@ function renderHierarchy(hierarchyData) {
                     rootTitleRow.append('div')
                         .attr('class', 'indicator-years-header')
                         .style('display', 'flex')
-                        .style('gap', '30px') // Match the gap used in .indicator-values-multi
+                        .style('gap', '30px')
                         .style('min-width', '270px')
                         .selectAll('span')
                         .data(['Presente', '2030', '2050'])
@@ -518,6 +518,10 @@ function renderHierarchy(hierarchyData) {
                         .style('min-width', '70px')
                         .text(d => d);
                     renderIndentedList(rootContainer, root);
+                    // Insert a line break after each Level 2 tree
+                    flexRow.append('div')
+                        .style('flex-basis', '100%')
+                        .style('height', '0');
                 });
             }
             // Show other roots (not Level 2) as normal blocks
@@ -623,7 +627,16 @@ function populateCityDropdown() {
     const citySelect = document.getElementById('city-select');
     citySelect.innerHTML = '<option value="">Selecione uma cidade...</option>';
     if (!selectedState || !stateCityMap[selectedState]) return;
-    Object.entries(stateCityMap[selectedState]).forEach(([cityId, info]) => {
+    // Sort cities by name (case-insensitive) before populating
+    const sortedCities = Object.entries(stateCityMap[selectedState])
+        .sort((a, b) => {
+            const nameA = (a[1].name || '').toLowerCase();
+            const nameB = (b[1].name || '').toLowerCase();
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+        });
+    sortedCities.forEach(([cityId, info]) => {
         const opt = document.createElement('option');
         opt.value = cityId;
         opt.textContent = info.name || cityId;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Visualização de Hierarquia de Indicadores</title>
+    <title>Painel do Clima - Visualização de Hierarquia de Indicadores do AdaptaBrasil</title>
     <link rel="stylesheet" href="paineldoclima.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
@@ -26,10 +26,11 @@
             gap: 6px;
         }
         #structure-upload { margin-top: 0; }
+        #main-content { max-width: 1000px; }
     </style>
 </head>
 <body>
-    <h1>Visualização de Hierarquia de Indicadores</h1>
+    <h2>Painel do Clima - Visualização de Hierarquia de Indicadores do AdaptaBrasil</h2>
 
     <div class="controls-columns">
         <div class="col">
@@ -66,7 +67,9 @@
         </div>
     </div>
 
-    <div id="visualization"></div>
+    <div id="main-content">
+        <div id="visualization"></div>
+    </div>
 
     <script src="paineldoclima.js"></script>
     <script>

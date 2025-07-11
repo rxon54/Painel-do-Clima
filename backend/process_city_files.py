@@ -102,8 +102,21 @@ def main():
                 "file": f"{state_code}/city_{city_code}.json"
             }
 
+    # Sort city_filelist by city name (alphabetically, case-insensitive)
+    # sorted_city_filelist = dict(sorted(city_filelist.items(), key=lambda item: (item[1]["name"].lower(), item[0])))
     save_json(city_filelist, os.path.join(data_dir, "city_filelist.json"))
     print(f"Wrote city files to {data_dir}/<STATE>/city_<city_code>.json and city_filelist.json for {len(city_filelist)} cities, including future trends.")
+
+    # Move processed files to data/downloads
+    downloads_dir = os.path.join(data_dir, 'downloads')
+    os.makedirs(downloads_dir, exist_ok=True)
+    for f in indicator_files + future_trend_files:
+        try:
+            basename = os.path.basename(f)
+            dest = os.path.join(downloads_dir, basename)
+            os.rename(f, dest)
+        except Exception as e:
+            print(f"Warning: could not move {f} to downloads: {e}")
 
 if __name__ == "__main__":
     main()
