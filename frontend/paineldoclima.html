@@ -1,42 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Painel do Clima - Visualização de Hierarquia de Indicadores</title>
+    <title>Visualização de Hierarquia de Indicadores</title>
     <link rel="stylesheet" href="paineldoclima.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .controls-columns {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+            margin-bottom: 18px;
+        }
+        .controls-columns .col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 180px;
+        }
+        .controls-columns .col label {
+            font-weight: 500;
+        }
+        .controls-columns .col .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        #structure-upload { margin-top: 0; }
+    </style>
 </head>
 <body>
-    <h1>Painel do Clima - Visualização de Hierarquia de Indicadores</h1>
+    <h1>Visualização de Hierarquia de Indicadores</h1>
 
-    <div class="controls">
-        <label for="state-select">Estado:</label>
-        <select id="state-select">
-            <option value="">Selecione o estado...</option>
-        </select>
-        <label for="city-select">Cidade:</label>
-        <select id="city-select">
-            <option value="">Selecione uma cidade...</option>
-        </select>
-        <br><br>
-        <label for="json-file">Arquivo JSON com estrutura:</label>
-        <input type="file" id="json-file" accept=".json">
-        <div class="file-info" id="file-info">Nenhum arquivo selecionado</div>
-        <div style="margin-top: 15px;">
+    <div class="controls-columns">
+        <div class="col">
+            <label for="state-select">Estado:</label>
+            <select id="state-select">
+                <option value="">Selecione o estado...</option>
+            </select>
+            <label for="city-select">Cidade:</label>
+            <select id="city-select">
+                <option value="">Selecione uma cidade...</option>
+            </select>
+            <button id="reload-city-list" type="button">Recarregar lista de cidades</button>
+        </div>
+        <div class="col">
             <label for="sector-filter">Filtrar por Setor:</label>
-            <select id="sector-filter">
+            <select id="sector-filter" multiple size="7" style="min-width:160px;">
                 <option value="all">Todos os Setores</option>
             </select>
+        </div>
+        <div class="col">
             <label for="level-filter">Filtrar por Nível:</label>
             <select id="level-filter">
                 <option value="all">Todos os Níveis</option>
             </select>
-            <button id="collapse-all">Recolher Todos</button>
-            <button id="expand-all">Expandir Todos</button>
+            <div class="button-group">
+                <button id="collapse-all">Recolher Todos</button>
+                <button id="expand-all">Expandir Todos</button>
+            </div>
+        </div>
+        <div class="col" id="structure-upload" style="display:none; min-width:220px;">
+            <label for="json-file">Arquivo JSON com estrutura:</label>
+            <input type="file" id="json-file" accept=".json">
+            <div class="file-info" id="file-info">Nenhum arquivo selecionado</div>
         </div>
     </div>
 
     <div id="visualization"></div>
 
     <script src="paineldoclima.js"></script>
+    <script>
+    // Only hide the structure upload UI by default, show if auto-load fails
+    document.addEventListener('DOMContentLoaded', function() {
+        var uploadDiv = document.getElementById('structure-upload');
+        if (uploadDiv) uploadDiv.style.display = 'none';
+    });
+    </script>
 </body>
 </html>
