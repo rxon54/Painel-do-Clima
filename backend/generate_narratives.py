@@ -4,8 +4,8 @@ import re
 import yaml
 from typing import Dict, Any, Optional
 
-from backend.narrative_models import ClimateNarrative, NarrativeComponent, IndicatorData
-from backend.llm_prompts import (
+from narrative_models import ClimateNarrative, NarrativeComponent, IndicatorData
+from llm_prompts import (
     get_introduction_prompt,
     get_problem_statement_prompt,
     get_risk_driver_prompt,
@@ -14,10 +14,9 @@ from backend.llm_prompts import (
     get_solutions_prompt,
     get_conclusion_prompt,
 )
-from backend.render_html import render_narrative_to_html # Import the rendering function
+from render_html import render_narrative_to_html # Import the rendering function
 import litellm
 from litellm import completion
-from langfuse.decorators import observe, langfuse_context
 
 def load_config(config_path: str = "../config.yaml") -> Dict[str, Any]:
     """Load configuration from YAML file."""
@@ -31,30 +30,42 @@ def setup_llm_config(config: Dict[str, Any]) -> None:
     
     # Set LiteLLM configuration
     litellm.drop_params = True  # Automatically drop unsupported parameters
-    litellm.request_timeout = llm_config.get('timeout', 30)
-    litellm.num_retries = llm_config.get('max_retries', 3)
     
-    # Configure Langfuse if enabled
+    # Configure Langfuse OpenTelemetry integration if enabled
     if observability_config.get('enabled', False):
         # Set Langfuse environment variables if not already set
         if not os.getenv('LANGFUSE_PUBLIC_KEY'):
             print("Warning: LANGFUSE_PUBLIC_KEY not set. Langfuse observability will be disabled.")
+            return
         if not os.getenv('LANGFUSE_SECRET_KEY'):
             print("Warning: LANGFUSE_SECRET_KEY not set. Langfuse observability will be disabled.")
+            return
+        
+        # Set Langfuse host from config or use default
+        langfuse_host = observability_config.get('host', 'https://cloud.langfuse.com')
         if not os.getenv('LANGFUSE_HOST'):
-            os.environ['LANGFUSE_HOST'] = 'https://cloud.langfuse.com'
+            os.environ['LANGFUSE_HOST'] = langfuse_host
         
-        # Enable Langfuse integration
-        litellm.success_callback = ["langfuse"]
-        litellm.failure_callback = ["langfuse"]
-        
-        # Set project metadata
-        if observability_config.get('project_name'):
-            langfuse_context.configure(
-                session_id=f"painel-{observability_config.get('environment', 'dev')}"
-            )
+        try:
+            # Enable Langfuse OpenTelemetry integration
+            litellm.success_callback = ["langfuse_otel"]
+            litellm.failure_callback = ["langfuse_otel"]
+            
+            # Set project and environment metadata
+            if observability_config.get('project_name'):
+                os.environ['LANGFUSE_PROJECT'] = observability_config.get('project_name')
+            if observability_config.get('environment'):
+                os.environ['LANGFUSE_ENVIRONMENT'] = observability_config.get('environment')
+            
+            print(f"Langfuse observability enabled for project: {observability_config.get('project_name', 'default')}")
+            
+        except Exception as e:
+            print(f"Warning: Failed to initialize Langfuse observability: {e}")
+            print("LLM calls will proceed without observability tracing.")
+            # Reset callbacks to avoid errors
+            litellm.success_callback = []
+            litellm.failure_callback = []
 
-@observe(name="llm_narrative_generation")
 def generate_llm_response(prompt: str, config: Dict[str, Any], component_type: str = "narrative") -> Optional[Dict[str, Any]]:
     """
     Sends a prompt to the LLM using LiteLLM and returns the parsed JSON response.
@@ -62,36 +73,63 @@ def generate_llm_response(prompt: str, config: Dict[str, Any], component_type: s
     llm_config = config.get('llm', {})
     
     try:
-        # Add component type as metadata for observability
-        langfuse_context.update_current_observation(
-            metadata={
-                "component_type": component_type,
-                "model": llm_config.get('model', 'openai/gpt-4o-mini'),
-                "temperature": llm_config.get('temperature', 0.3)
-            }
-        )
+        # Temporarily disable callbacks if there are issues
+        original_success_callback = litellm.success_callback.copy() if litellm.success_callback else []
+        original_failure_callback = litellm.failure_callback.copy() if litellm.failure_callback else []
         
-        response = completion(
-            model=llm_config.get('model', 'openai/gpt-4o-mini'),
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that generates ONLY JSON. Do NOT include any markdown code blocks or extra text. Just the raw JSON object. Ensure the JSON is valid and directly parsable."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=llm_config.get('temperature', 0.3),
-            max_tokens=llm_config.get('max_tokens', 2000),
-        )
+        try:
+            response = completion(
+                model=llm_config.get('model', 'openai/gpt-4o-mini'),
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that generates ONLY JSON. Do NOT include any markdown code blocks or extra text. Just the raw JSON object. Ensure the JSON is valid and directly parsable."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=llm_config.get('temperature', 0.3),
+                max_tokens=llm_config.get('max_tokens', 2000),
+                # Add metadata for observability
+                metadata={
+                    "component_type": component_type,
+                    "city_processing": True,
+                    "painel_do_clima": True
+                },
+                # Add tags for better tracing
+                tags=["climate-narrative", component_type]
+            )
+        except Exception as callback_error:
+            # If there's a callback error, retry without observability
+            if "sdk_integration" in str(callback_error) or "langfuse" in str(callback_error).lower():
+                print(f"Warning: Langfuse callback error, retrying without observability: {callback_error}")
+                # Temporarily disable callbacks
+                litellm.success_callback = []
+                litellm.failure_callback = []
+                
+                response = completion(
+                    model=llm_config.get('model', 'openai/gpt-4o-mini'),
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant that generates ONLY JSON. Do NOT include any markdown code blocks or extra text. Just the raw JSON object. Ensure the JSON is valid and directly parsable."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=llm_config.get('temperature', 0.3),
+                    max_tokens=llm_config.get('max_tokens', 2000),
+                )
+                
+                # Restore original callbacks for next call
+                litellm.success_callback = original_success_callback
+                litellm.failure_callback = original_failure_callback
+            else:
+                raise callback_error
         
-        raw_content = response.choices[0].message.content
+        raw_content = response.choices[0].message.content  # type: ignore
+        if not raw_content:
+            print("LLM returned empty content")
+            return None
+            
         # print(f"Raw LLM response: {raw_content}") # Debugging line
         
         # Attempt to parse directly first
         try:
             parsed_json = json.loads(raw_content)
             # print(f"Directly parsed JSON: {parsed_json}")
-            langfuse_context.update_current_observation(
-                output=parsed_json,
-                metadata={"parsing_method": "direct"}
-            )
             return parsed_json
         except json.JSONDecodeError:
             # If direct parsing fails, try to extract from markdown code block (fallback)
@@ -100,51 +138,26 @@ def generate_llm_response(prompt: str, config: Dict[str, Any], component_type: s
                 json_string = match.group(1)
                 # print(f"Extracted JSON from markdown: {json_string}")
                 parsed_json = json.loads(json_string)
-                langfuse_context.update_current_observation(
-                    output=parsed_json,
-                    metadata={"parsing_method": "markdown_extraction"}
-                )
                 return parsed_json
             else:
                 print(f"Could not find JSON in markdown block or parse directly. Raw content: {raw_content}")
-                langfuse_context.update_current_observation(
-                    level="ERROR",
-                    status_message="Failed to parse JSON from LLM response"
-                )
                 return None
 
     except Exception as e:
         print(f"Error interacting with LLM: {e}")
-        langfuse_context.update_current_observation(
-            level="ERROR",
-            status_message=f"LLM interaction failed: {str(e)}"
-        )
         return None
 
-@observe(name="create_climate_narrative")
-def create_climate_narrative(city_id, city_name, problematic_indicators, config):
-    """
-    Generates a complete climate narrative by calling the LLM for each component.
-    """
-@observe(name="create_climate_narrative")
 def create_climate_narrative(city_id, city_name, problematic_indicators, config):
     """
     Generates a complete climate narrative by calling the LLM for each component.
     """
     narrative_components = []
-    
-    # Add trace metadata for observability
-    langfuse_context.update_current_observation(
-        input={
-            "city_id": city_id,
-            "city_name": city_name,
-            "problematic_indicators_count": len(problematic_indicators)
-        }
-    )
 
     # For simplicity, we will use placeholder risk values. In a real scenario, these would be calculated.
     current_risk = 0.35
     projected_risk = 0.55
+
+    print(f"Generating climate narrative for {city_name} (ID: {city_id}) with {len(problematic_indicators)} problematic indicators")
 
     # 1. Introduction
     intro_prompt = get_introduction_prompt(city_name, current_risk, projected_risk)
@@ -152,7 +165,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
     if intro_data:
         try:
             narrative_components.append(NarrativeComponent(**intro_data))
-            # print(f"Successfully added introduction component. Total components: {len(narrative_components)}")
+            print(f"Successfully added introduction component. Total components: {len(narrative_components)}")
         except Exception as e:
             print(f"Error parsing introduction component: {e} Data: {intro_data}")
 
@@ -162,7 +175,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
     if problem_data:
         try:
             narrative_components.append(NarrativeComponent(**problem_data))
-            # print(f"Successfully added problem statement component. Total components: {len(narrative_components)}")
+            print(f"Successfully added problem statement component. Total components: {len(narrative_components)}")
         except Exception as e:
             print(f"Error parsing problem statement component: {e} Data: {problem_data}")
 
@@ -175,7 +188,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
         if driver_data:
             try:
                 narrative_components.append(NarrativeComponent(**driver_data))
-                # print(f"Successfully added risk driver component: {driver_data.get(\'title\')}. Total components: {len(narrative_components)}")
+                print(f"Successfully added risk driver component: {driver_data.get('title')}. Total components: {len(narrative_components)}")
             except Exception as e:
                 print(f"Error parsing risk driver component: {e} Data: {driver_data}")
 
@@ -188,7 +201,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
         if impact_data:
             try:
                 narrative_components.append(NarrativeComponent(**impact_data))
-                # print(f"Successfully added impact item component: {impact_data.get(\'title\')}. Total components: {len(narrative_components)}")
+                print(f"Successfully added impact item component: {impact_data.get('title')}. Total components: {len(narrative_components)}")
             except Exception as e:
                 print(f"Error parsing impact item component: {e} Data: {impact_data}")
 
@@ -201,7 +214,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
         if implications_data:
             try:
                 narrative_components.append(NarrativeComponent(**implications_data))
-                # print(f"Successfully added daily implications component. Total components: {len(narrative_components)}")
+                print(f"Successfully added daily implications component. Total components: {len(narrative_components)}")
             except Exception as e:
                 print(f"Error parsing daily implications component: {e} Data: {implications_data}")
 
@@ -213,7 +226,7 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
         if solutions_data:
             try:
                 narrative_components.append(NarrativeComponent(**solutions_data))
-                # print(f"Successfully added solutions component. Total components: {len(narrative_components)}")
+                print(f"Successfully added solutions component. Total components: {len(narrative_components)}")
             except Exception as e:
                 print(f"Error parsing solutions component: {e} Data: {solutions_data}")
 
@@ -223,21 +236,12 @@ def create_climate_narrative(city_id, city_name, problematic_indicators, config)
     if conclusion_data:
         try:
             narrative_components.append(NarrativeComponent(**conclusion_data))
-            # print(f"Successfully added conclusion component. Total components: {len(narrative_components)}")
+            print(f"Successfully added conclusion component. Total components: {len(narrative_components)}")
         except Exception as e:
             print(f"Error parsing conclusion component: {e} Data: {conclusion_data}")
 
-    # print(f"Final number of narrative components before returning: {len(narrative_components)}")
+    print(f"Final number of narrative components before returning: {len(narrative_components)}")
     final_narrative = ClimateNarrative(city_id=str(city_id), city_name=city_name, narrative_components=narrative_components)
-    
-    # Update trace with output metadata
-    langfuse_context.update_current_observation(
-        output={
-            "narrative_components_count": len(narrative_components),
-            "city_id": city_id,
-            "city_name": city_name
-        }
-    )
     
     return final_narrative
 
@@ -290,7 +294,6 @@ def is_indicator_problematic(indicator_data):
 
     return False # It is currently good and does not worsen in the future
 
-@observe(name="generate_narratives_main")
 def generate_narratives(city_id, state_abbr, input_data_dir, output_data_dir):
     """
     Loads sector-based JSON files, filters indicators, and prepares data for LLM.
@@ -299,15 +302,7 @@ def generate_narratives(city_id, state_abbr, input_data_dir, output_data_dir):
     config = load_config()
     setup_llm_config(config)
     
-    # Add trace metadata
-    langfuse_context.update_current_observation(
-        input={
-            "city_id": city_id,
-            "state_abbr": state_abbr,
-            "input_data_dir": input_data_dir,
-            "output_data_dir": output_data_dir
-        }
-    )
+    print(f"Starting narrative generation for city {city_id} in state {state_abbr}")
     
     city_data_path = os.path.join(input_data_dir, state_abbr, str(city_id))
     output_city_data_path = os.path.join(output_data_dir, state_abbr, str(city_id))
@@ -332,6 +327,8 @@ def generate_narratives(city_id, state_abbr, input_data_dir, output_data_dir):
             if problematic_indicators:
                 all_problematic_indicators.extend(problematic_indicators)
 
+    print(f"Found {len(all_problematic_indicators)} problematic indicators for {city_name}")
+
     # Generate the full narrative using the LLM
     climate_narrative = create_climate_narrative(city_id, city_name, all_problematic_indicators, config)
 
@@ -347,15 +344,7 @@ def generate_narratives(city_id, state_abbr, input_data_dir, output_data_dir):
 
     print(f"Climate narrative saved to {output_filepath}")
     print(f"HTML narrative saved to {html_output_filepath}")
-    
-    # Update trace with output
-    langfuse_context.update_current_observation(
-        output={
-            "climate_narrative_path": output_filepath,
-            "html_narrative_path": html_output_filepath,
-            "problematic_indicators_count": len(all_problematic_indicators)
-        }
-    )
+    print(f"Generated narrative with {len(climate_narrative.narrative_components)} components")
 
 if __name__ == "__main__":
     import argparse

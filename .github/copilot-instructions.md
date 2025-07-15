@@ -113,6 +113,8 @@ templates/   # Jinja2 templates (auto-created)
 ## LLM Narrative Generation Patterns
 - **Data Filtering**: `is_indicator_problematic()` filters out "good" indicators based on `proporcao_direta` and `rangelabel`
 - **Structured Prompting**: Seven distinct narrative components with Brazilian Portuguese focus
+- **Multi-Provider Support**: LiteLLM enables OpenAI, Anthropic, Google, and 100+ other providers
+- **Observability**: Langfuse integration via OpenTelemetry for comprehensive LLM monitoring and debugging
 - **Robust Parsing**: JSON extraction with markdown fallback for LLM responses
 - **Template Rendering**: Jinja2-based system auto-creates HTML templates if missing
 
@@ -129,4 +131,5 @@ templates/   # Jinja2 templates (auto-created)
 - Compare `data/city_filelist.json` to ensure cities are processed
 - **LLM Issues**: Check Langfuse dashboard for failed generations, verify API keys are set
 - **Model Configuration**: Ensure `config.yaml` has valid model format (e.g., "openai/gpt-4o-mini")
+- **OpenTelemetry Observability**: LLM calls automatically traced via Langfuse OpenTelemetry integration
 - **JSON Parsing**: Enable debug prints in `generate_llm_response()` to see raw LLM outputs

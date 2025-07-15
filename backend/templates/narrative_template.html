@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Climático para {{ narrative.city_name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 20px; }
+        h1, h2, h3 { color: #0056b3; }
+        .component { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .component h3 { margin-top: 0; }
+        .impact-item { background-color: #f9f9f9; border-left: 5px solid #ffcc00; padding: 10px; margin-top: 10px; }
+        .solutions-list li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Relatório Climático para {{ narrative.city_name }}</h1>
+
+    {% for component in narrative.narrative_components %}
+        <div class="component {{ component.component_type }}">
+            <h3>{{ component.title }}</h3>
+            {% if component.body_text %}
+                <p>{{ component.body_text }}</p>
+            {% endif %}
+
+            {% if component.component_type == 'introduction' %}
+                <p>Índice de Impacto Climático Atual: <strong>{{ "%.2f"|format(component.current_value) }}</strong></p>
+                <p>Índice de Impacto Climático Projetado (2050): <strong>{{ "%.2f"|format(component.projected_value) }}</strong></p>
+            {% elif component.component_type == 'problem_statement' %}
+                <p>Índice de Impacto Climático Atual: <strong>{{ "%.2f"|format(component.current_value) }}</strong></p>
+                <p>Índice de Impacto Climático Projetado (2050): <strong>{{ "%.2f"|format(component.projected_value) }}</strong></p>
+            {% elif component.component_type == 'impact_item' %}
+                <p>Mudança: <strong>{{ component.stat_change }}</strong></p>
+            {% elif component.component_type == 'daily_implications' %}
+                <h4>Implicações no Dia a Dia:</h4>
+                <ul>
+                    {% for implication in component.implications %}
+                        <li>{{ implication }}</li>
+                    {% endfor %}
+                </ul>
+            {% elif component.component_type == 'solutions' %}
+                <h4>Soluções Propostas:</h4>
+                <ul class="solutions-list">
+                    {% for solution in component.solutions %}
+                        <li><strong>{{ solution.theme }}:</strong> {{ solution.explanation }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+</body>
+</html>
+        

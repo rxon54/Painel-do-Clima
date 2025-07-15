@@ -124,7 +124,7 @@ export ANTHROPIC_API_KEY="your_anthropic_key_here"  # For Claude models
 # OR 
 export GOOGLE_API_KEY="your_google_key_here"  # For Gemini models
 
-# Optional: Set up Langfuse for observability
+# Optional: Set up Langfuse for observability (OpenTelemetry-based)
 export LANGFUSE_PUBLIC_KEY="your_langfuse_public_key"
 export LANGFUSE_SECRET_KEY="your_langfuse_secret_key"
 export LANGFUSE_HOST="https://cloud.langfuse.com"  # or your self-hosted instance
@@ -152,7 +152,7 @@ The project includes an advanced AI-powered narrative generation system that tra
 - **Smart Filtering**: Only processes "problematic" indicators (poor current state or worsening trends)
 - **Structured Prompting**: Seven narrative components from introduction to solutions
 - **Multi-Provider Support**: Uses LiteLLM for compatibility with OpenAI, Anthropic, Google, and other providers
-- **Observability**: Integrated with Langfuse for comprehensive LLM monitoring and debugging
+- **Observability**: Integrated with Langfuse via OpenTelemetry for comprehensive LLM monitoring and debugging
 - **Flexible Rendering**: Jinja2 templates for HTML, extensible to other formats
 - **Portuguese Focus**: All outputs in Brazilian Portuguese with accessible tone
 
