@@ -60,34 +60,32 @@ def populate_template(template: Dict, city_data: Dict, indicator_lookup: Dict[in
                 
                 # Find matching indicator data for this ID
                 if indicator_id in indicator_lookup:
+                    # Get the most recent record for this indicator (should be only one per indicator_id)
                     indicator_years = indicator_lookup[indicator_id]
+                    latest_year = max(indicator_years.keys())
+                    city_indicator_data = indicator_years[latest_year]
                     
-                    # Find the most recent present year (not 2030 or 2050)
-                    present_years = [year for year in indicator_years.keys() if year not in [2030, 2050]]
-                    if present_years:
-                        latest_year = max(present_years)
-                        present_data = indicator_years[latest_year]
-                        
-                        # Populate present value
-                        indicator['value'] = present_data.get('value')
-                        indicator['rangelabel'] = present_data.get('rangelabel', '')
-                        
-                        # Add color info if available
-                        if 'valuecolor' in present_data:
-                            indicator['valuecolor'] = present_data['valuecolor']
+                    # Populate present value
+                    indicator['value'] = city_indicator_data.get('value')
+                    indicator['rangelabel'] = city_indicator_data.get('rangelabel', '')
                     
-                    # Populate future trends if available
-                    future_trends = indicator.get('future_trends', {})
+                    # Add color info if available
+                    if 'valuecolor' in city_indicator_data:
+                        indicator['valuecolor'] = city_indicator_data['valuecolor']
+                    
+                    # Populate future trends if available in the city data
+                    city_future_trends = city_indicator_data.get('future_trends', {})
+                    template_future_trends = indicator.get('future_trends', {})
+                    
                     for year in ['2030', '2050']:
-                        year_int = int(year)
-                        if year_int in indicator_years and year in future_trends:
-                            future_data = indicator_years[year_int]
-                            future_trends[year]['value'] = future_data.get('value')
-                            future_trends[year]['valuelabel'] = future_data.get('rangelabel', '')
+                        if year in city_future_trends and year in template_future_trends:
+                            city_year_data = city_future_trends[year]
+                            template_future_trends[year]['value'] = city_year_data.get('value')
+                            template_future_trends[year]['valuelabel'] = city_year_data.get('valuelabel', '')
                             
                             # Add color info if available
-                            if 'valuecolor' in future_data:
-                                future_trends[year]['valuecolor'] = future_data['valuecolor']
+                            if 'valuecolor' in city_year_data:
+                                template_future_trends[year]['valuecolor'] = city_year_data['valuecolor']
                             
             except (ValueError, TypeError):
                 # Skip if indicator_id is not a valid integer

@@ -12,8 +12,8 @@ def main(input_json='output.json', output_dir='../data/LLM'):
     for rec in records:
         setor = rec.get('setor_estrategico', 'Outro')
         indicator = {
-            'indicator_id': rec.get('indicator_id', ''),
-            'indicator_name:': rec.get('indicator_name', ''),
+            'indicator_id': rec.get('id', ''),
+            'indicator_name:': rec.get('nome', ''),
             'descricao_completa': rec.get('descricao_completa', ''),
             'proporcao_direta': rec.get('proporcao_direta', ''),
             'anos': rec.get('anos', ''),

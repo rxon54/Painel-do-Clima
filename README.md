@@ -25,6 +25,9 @@ It aims to make complex climate risk data accessible and actionable for local de
 - **Easy Integration:**  
   Outputs structured JSON files for dashboards, newsrooms, or further data science.
 
+- **LLM Data Preparation:**  
+  Scripts to generate and populate structured JSON files for large language model (LLM) processing, enabling advanced summarization and analysis workflows.
+
 ---
 
 ## 🏗️ Project Structure
@@ -33,10 +36,13 @@ It aims to make complex climate risk data accessible and actionable for local de
 adaptabrasil/
 ├── data/                  # Processed data files (gitignored)
 │   ├── PR/city_5310.json  # Example: all indicators for city 5310 (Abatiá/PR)
-│   └── city_filelist.json # Mapping of city codes to files/names/states
+│   ├── city_filelist.json # Mapping of city codes to files/names/states
+│   └── LLM/               # LLM input/output files (per city/sector)
 ├── backend/               # Python backend scripts and API access
 │   ├── adaptabrasil_batch_ingestor.py
 │   ├── process_city_files.py
+│   ├── generate_llm_inputs.py    # Generate sector-based LLM templates
+│   ├── populate_llm_inputs.py    # Populate LLM templates with city data
 │   └── ...
 ├── frontend/              # Frontend HTML, JS, CSS, and docs
 │   ├── visu_2.html        # Interactive frontend
@@ -98,17 +104,85 @@ uvicorn serve:app --reload
 ```
 Then open [http://localhost:8000/frontend/visu_2.html](http://localhost:8000/frontend/visu_2.html) in your browser.
 
+### 7. Generate LLM-Powered Climate Narratives
+
+To create structured, human-readable climate narratives using AI:
+
+```bash
+# 1. Generate sector-based LLM templates from the main output
+python backend/generate_llm_inputs.py
+
+# 2. Populate LLM templates with city-specific data (repeat for each city_id)
+python backend/populate_llm_inputs.py <city_id>
+# Example:
+python backend/populate_llm_inputs.py 5329
+
+# 3. Set up API keys for LLM and observability (choose your provider)
+export OPENAI_API_KEY="your_openai_key_here"  # For OpenAI models
+# OR
+export ANTHROPIC_API_KEY="your_anthropic_key_here"  # For Claude models
+# OR 
+export GOOGLE_API_KEY="your_google_key_here"  # For Gemini models
+
+# Optional: Set up Langfuse for observability
+export LANGFUSE_PUBLIC_KEY="your_langfuse_public_key"
+export LANGFUSE_SECRET_KEY="your_langfuse_secret_key"
+export LANGFUSE_HOST="https://cloud.langfuse.com"  # or your self-hosted instance
+
+# 4. Configure your preferred model in config.yaml (see LLM section)
+# Example models: "openai/gpt-4o-mini", "anthropic/claude-3-sonnet", "gemini/gemini-1.5-pro"
+
+# 5. Generate AI-powered narratives
+python backend/generate_narratives.py <city_id> <state_abbr> data/LLM data/LLM_processed
+# Example:
+python backend/generate_narratives.py 5329 PR data/LLM data/LLM_processed
+```
+
+This will create:
+- `data/LLM_processed/<STATE>/<CITY_ID>/climate_narrative.json` (structured narrative)
+- `data/LLM_processed/<STATE>/<CITY_ID>/climate_narrative.html` (rendered HTML report)
+
 ---
 
-## 🖥️ Frontend Usage
+## 🤖 LLM Narrative Generation
 
-- **Step 1:** Upload the indicator structure JSON (scaffolding).
-- **Step 2:** Select a state and city.  
-  All available indicators for that city will be loaded and visualized.
-- **Step 3:** Explore the collapsible indicator tree, with color-coded value badges.
-- **Step 4:** Click any indicator ID to view its documentation in a modal overlay.
+The project includes an advanced AI-powered narrative generation system that transforms raw climate data into compelling, localized stories:
 
-> **Note:** The indicator documentation is loaded from `frontend/indicators_doc.html`. Make sure this file is present and accessible by your web server.
+### Architecture
+- **Smart Filtering**: Only processes "problematic" indicators (poor current state or worsening trends)
+- **Structured Prompting**: Seven narrative components from introduction to solutions
+- **Multi-Provider Support**: Uses LiteLLM for compatibility with OpenAI, Anthropic, Google, and other providers
+- **Observability**: Integrated with Langfuse for comprehensive LLM monitoring and debugging
+- **Flexible Rendering**: Jinja2 templates for HTML, extensible to other formats
+- **Portuguese Focus**: All outputs in Brazilian Portuguese with accessible tone
+
+### Key Files
+- `backend/narrative_models.py` - Pydantic data models for validation
+- `backend/llm_prompts.py` - Modular prompt templates for each narrative section
+- `backend/generate_narratives.py` - Main orchestration with LiteLLM integration
+- `backend/render_html.py` - Template-based HTML rendering system
+
+### Supported LLM Providers
+Configure via `config.yaml` under the `llm.model` setting:
+- **OpenAI**: `openai/gpt-4o-mini`, `openai/gpt-4`, `openai/gpt-3.5-turbo`
+- **Anthropic**: `anthropic/claude-3-sonnet`, `anthropic/claude-3-haiku`
+- **Google**: `gemini/gemini-1.5-pro`, `gemini/gemini-1.5-flash`
+- **And 100+ other providers supported by LiteLLM**
+
+### Observability & Monitoring
+- **Langfuse Integration**: Automatic tracing of all LLM calls
+- **Component-Level Tracking**: Each narrative component tracked separately
+- **Error Handling**: Robust JSON parsing with fallback strategies
+- **Performance Metrics**: Token usage, latency, and success rates
+
+### Narrative Components Generated
+1. **Introduction** - City context and Climate Impact Index overview
+2. **Problem Statement** - Current vs. projected risk quantification
+3. **Risk Drivers** - Explanation of vulnerability and adaptation capacity
+4. **Specific Impacts** - Concrete climate phenomena and their changes
+5. **Daily Life Implications** - Tangible effects on citizens' everyday lives
+6. **Solutions** - Actionable preparation strategies and themes
+7. **Conclusion** - Empowering message encouraging action
 
 ---
 
