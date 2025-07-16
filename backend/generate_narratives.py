@@ -28,12 +28,29 @@ def setup_llm_config(config: Dict[str, Any]) -> None:
     llm_config = config.get('llm', {})
     observability_config = config.get('observability', {})
     
+    # Set API keys from config as environment variables
+    if config.get('OPENAI_API_KEY') and not os.getenv('OPENAI_API_KEY'):
+        os.environ['OPENAI_API_KEY'] = config['OPENAI_API_KEY']
+        print("OpenAI API key loaded from config file")
+    
+    if config.get('LANGFUSE_PUBLIC_KEY') and not os.getenv('LANGFUSE_PUBLIC_KEY'):
+        os.environ['LANGFUSE_PUBLIC_KEY'] = config['LANGFUSE_PUBLIC_KEY']
+        print("Langfuse public key loaded from config file")
+    
+    if config.get('LANGFUSE_SECRET_KEY') and not os.getenv('LANGFUSE_SECRET_KEY'):
+        os.environ['LANGFUSE_SECRET_KEY'] = config['LANGFUSE_SECRET_KEY']
+        print("Langfuse secret key loaded from config file")
+    
+    if config.get('LANGFUSE_HOST') and not os.getenv('LANGFUSE_HOST'):
+        os.environ['LANGFUSE_HOST'] = config['LANGFUSE_HOST']
+        print("Langfuse host loaded from config file")
+    
     # Set LiteLLM configuration
     litellm.drop_params = True  # Automatically drop unsupported parameters
     
     # Configure Langfuse OpenTelemetry integration if enabled
     if observability_config.get('enabled', False):
-        # Set Langfuse environment variables if not already set
+        # Check if required Langfuse environment variables are now set
         if not os.getenv('LANGFUSE_PUBLIC_KEY'):
             print("Warning: LANGFUSE_PUBLIC_KEY not set. Langfuse observability will be disabled.")
             return
@@ -44,7 +61,7 @@ def setup_llm_config(config: Dict[str, Any]) -> None:
         # Set Langfuse host from config or use default
         langfuse_host = observability_config.get('host', 'https://cloud.langfuse.com')
         if not os.getenv('LANGFUSE_HOST'):
-            os.environ['LANGFUSE_HOST'] = langfuse_host
+            os.environ['LANGFUSE_HOST'] = os.environ.get('LANGFUSE_HOST', langfuse_host)
         
         try:
             # Enable Langfuse OpenTelemetry integration
