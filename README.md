@@ -96,8 +96,11 @@ Generate human-readable climate summaries:
 python backend/generate_llm_inputs.py
 python backend/populate_llm_inputs.py <city_id>
 
-# Generate AI narratives
-python backend/generate_narratives.py <city_id> <state_abbr> data/LLM data/LLM_processed
+# Filter problematic indicators (run from backend directory)
+cd backend && python filter_problematic_indicators.py <state_abbr> <city_id> ../data/LLM
+
+# Generate AI narratives (run from backend directory)
+cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
 ```
 
 ## Configuration

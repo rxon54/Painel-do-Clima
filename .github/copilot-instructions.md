@@ -26,10 +26,13 @@ python backend/process_city_files.py
 python backend/generate_llm_inputs.py
 python backend/populate_llm_inputs.py <city_id>
 
-# 5. Generate AI-powered climate narratives (requires OpenAI API key)
-python backend/generate_narratives.py <city_id> <state_abbr> data/LLM data/LLM_processed
+# 5. Filter problematic indicators (NEW STEP - run from backend dir)
+cd backend && python filter_problematic_indicators.py <state_abbr> <city_id> ../data/LLM
 
-# 6. Serve frontend and data
+# 6. Generate AI-powered climate narratives (requires OpenAI API key - run from backend dir)
+cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
+
+# 7. Serve frontend and data
 python backend/serve.py
 ```
 
