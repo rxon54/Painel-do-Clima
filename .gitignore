@@ -22,6 +22,7 @@ alt_versions
 data/
 output/
 old/
+*.old
 *.log
 *.bak
 *.tmp
