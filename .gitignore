@@ -16,6 +16,7 @@ venv/
 # VSCode
 .vscode/
 .history/
+.github/
 alt_versions
 
 # Data & Output
