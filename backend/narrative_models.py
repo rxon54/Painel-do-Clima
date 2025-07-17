@@ -28,6 +28,7 @@ class NarrativeComponent(BaseModel):
     icon: Optional[str] = None # Emojis will be added by human-in-the-loop
     implications: Optional[List[str]] = None # Added for daily_implications component
     solutions: Optional[List[Dict[str, str]]] = None # Added for solutions component
+    supporting_indicators: Optional[List[Dict[str, Any]]] = None # NEW: Attach supporting indicator data
 
 class ClimateNarrative(BaseModel):
     city_id: str

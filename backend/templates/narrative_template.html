@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -17,20 +16,44 @@
 <body>
     <h1>Relatório Climático para {{ narrative.city_name }}</h1>
 
+    {% set last_sector = None %}
+    {% set last_level2 = None %}
     {% for component in narrative.narrative_components %}
+        {% set sector = component.supporting_indicators[0].setor_estrategico if component.supporting_indicators and component.supporting_indicators[0].setor_estrategico else '-' %}
+        {% set level2 = component.supporting_indicators[0].level2_indicator if component.supporting_indicators and component.supporting_indicators[0].level2_indicator else '-' %}
+        {% if sector != last_sector or level2 != last_level2 %}
+            <h2 style="margin-top:32px;">Setor: {{ sector }} | Nível 2: {{ level2 }}</h2>
+            {% set last_sector = sector %}
+            {% set last_level2 = level2 %}
+        {% endif %}
         <div class="component {{ component.component_type }}">
             <h3>{{ component.title }}</h3>
             {% if component.body_text %}
                 <p>{{ component.body_text }}</p>
             {% endif %}
-
-            {% if component.component_type == 'introduction' %}
-                <p>Índice de Impacto Climático Atual: <strong>{{ "%.2f"|format(component.current_value) }}</strong></p>
-                <p>Índice de Impacto Climático Projetado (2050): <strong>{{ "%.2f"|format(component.projected_value) }}</strong></p>
-            {% elif component.component_type == 'problem_statement' %}
-                <p>Índice de Impacto Climático Atual: <strong>{{ "%.2f"|format(component.current_value) }}</strong></p>
-                <p>Índice de Impacto Climático Projetado (2050): <strong>{{ "%.2f"|format(component.projected_value) }}</strong></p>
-            {% elif component.component_type == 'impact_item' %}
+            {% if component.component_type == 'risk_driver' or component.component_type == 'impact_item' %}
+                {% if component.supporting_indicators %}
+                <div style="margin-top:10px;">
+                    <h4>Indicadores de Suporte:</h4>
+                    <ul>
+                        {% for ind in component.supporting_indicators %}
+                            <li>
+                                <strong>Setor:</strong> {{ ind.setor_estrategico or ind["setor_estrategico"] or "-" }}<br>
+                                <strong>Nível 2:</strong> {{ ind.level2_indicator or ind["level2_indicator"] or "-" }}<br>
+                                <strong>Indicador:</strong> {{ ind.indicator_name or ind["indicator_name"] or "-" }}<br>
+                                <strong>Anos:</strong> {{ ind.anos or ind["anos"] or "-" }}<br>
+                                <strong>Valor:</strong> {{ ind.value or ind["value"] or "-" }}<br>
+                                <strong>Faixa:</strong> {{ ind.rangelabel or ind["rangelabel"] or "-" }}<br>
+                                {% if ind.future_trends %}
+                                    <strong>Tendências Futuras:</strong> {{ ind.future_trends|tojson }}<br>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endif %}
+            {% if component.component_type == 'impact_item' %}
                 <p>Mudança: <strong>{{ component.stat_change }}</strong></p>
             {% elif component.component_type == 'daily_implications' %}
                 <h4>Implicações no Dia a Dia:</h4>
@@ -52,4 +75,3 @@
 
 </body>
 </html>
-        

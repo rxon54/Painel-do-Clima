@@ -1,3 +1,33 @@
+"""
+Logic & Data Workflow:
+1. Configuration & Environment Setup
+- Loads configuration from config.yaml using load_config().
+- Sets up environment variables for OpenAI and Langfuse (observability) via setup_llm_config().
+2. Input Data Handling
+- Expects pre-filtered indicator data (problematic indicators only) in a directory structure like:
+input_data_dir/<state_abbr>/<city_id>/problematic_indicators_only/
+- Reads all JSON files in this directory, each representing a sector’s problematic indicators for the city.
+- Aggregates all problematic indicators across sectors for the city.
+3. LLM Narrative Generation
+- Calls create_climate_narrative() with the city info and all problematic indicators.
+- This function orchestrates the generation of seven narrative components (introduction, problem statement, 
+risk drivers, impacts, daily implications, solutions, conclusion) by prompting the LLM (via LiteLLM).
+- Each component is generated as a structured JSON, parsed, and appended to the narrative.
+4. Output Generation
+- Saves the complete narrative as a JSON file:
+output_data_dir/<state_abbr>/<city_id>/climate_narrative.json
+- Renders the narrative to HTML using Jinja2 templates and saves as:
+output_data_dir/<state_abbr>/<city_id>/climate_narrative.html
+5. CLI Interface
+- The script is executable from the command line, requiring four arguments:
+city_id, state_abbr, input_data_dir, output_data_dir.
+
+Summary:
+This script takes pre-filtered, city-specific climate indicator data, 
+generates a multi-part narrative using an LLM, and outputs both JSON and HTML reports for each city. 
+It is designed to be run after the filtering step and expects the data to be organized by city and sector. 
+All LLM calls are observable via Langfuse if enabled.
+"""
 import json
 import os
 import re
@@ -96,7 +126,7 @@ def generate_llm_response(prompt: str, config: Dict[str, Any], component_type: s
         
         try:
             response = completion(
-                model=llm_config.get('model', 'openai/gpt-4o-mini'),
+                model=llm_config.get('model', 'openai/gpt-4.1'),
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that generates ONLY JSON. Do NOT include any markdown code blocks or extra text. Just the raw JSON object. Ensure the JSON is valid and directly parsable."},
                     {"role": "user", "content": prompt}
@@ -167,99 +197,125 @@ def generate_llm_response(prompt: str, config: Dict[str, Any], component_type: s
 def create_climate_narrative(city_id, city_name, problematic_indicators, config):
     """
     Generates a complete climate narrative by calling the LLM for each component.
+    Now groups components by sector and true Level 2 name from the hierarchy.
     """
-    narrative_components = []
+    from collections import defaultdict
+    # Load indicator metadata for parent chain lookup
+    with open(os.path.join(os.path.dirname(__file__), "output.json"), "r", encoding="utf-8") as f:
+        indicator_metadata = {str(rec["id"]): rec for rec in json.load(f)}
 
-    # For simplicity, we will use placeholder risk values. In a real scenario, these would be calculated.
+    def get_true_level2(indicator):
+        cur = indicator_metadata.get(str(indicator.get("indicator_id")))
+        while cur:
+            if cur.get("nivel") == "2":
+                return cur.get("nome")
+            parent_id = cur.get("indicador_pai")
+            if not parent_id or parent_id == cur["id"] or parent_id not in indicator_metadata:
+                break
+            cur = indicator_metadata.get(str(parent_id))
+        return "-"
+
+    grouped = defaultdict(list)
+    for ind in problematic_indicators:
+        sector = ind.get("setor_estrategico", "-")
+        level2 = get_true_level2(ind)
+        grouped[(sector, level2)].append(ind)
+
+    narrative_groups = []
     current_risk = 0.35
     projected_risk = 0.55
+    print(f"Generating grouped climate narrative for {city_name} (ID: {city_id}) with {len(problematic_indicators)} problematic indicators")
 
-    print(f"Generating climate narrative for {city_name} (ID: {city_id}) with {len(problematic_indicators)} problematic indicators")
+    for (sector, level2), indicators in grouped.items():
+        group_components = []
+        # Risk Drivers
+        risk_drivers_to_process = [ind for ind in indicators if "vulnerabilidade" in ind["indicator_name:"].lower() or "capacidade adaptativa" in ind["indicator_name:"].lower()]
+        for indicator in risk_drivers_to_process:
+            driver_prompt = get_risk_driver_prompt(indicator)
+            driver_data = generate_llm_response(driver_prompt, config, "risk_driver")
+            if driver_data:
+                try:
+                    comp = NarrativeComponent(**driver_data)
+                    comp.supporting_indicators = [
+                        {
+                            "indicator_id": indicator.get("indicator_id"),
+                            "indicator_name": indicator.get("indicator_name:"),
+                            "setor_estrategico": indicator.get("setor_estrategico"),
+                            "level2_indicator": level2,
+                            "anos": indicator.get("anos"),
+                            "rangelabel": indicator.get("rangelabel"),
+                            "value": indicator.get("value"),
+                            "future_trends": indicator.get("future_trends", {})
+                        }
+                    ]
+                    group_components.append(comp)
+                    print(f"Added risk driver component: {driver_data.get('title')} for sector {sector}, level2 {level2}")
+                except Exception as e:
+                    print(f"Error parsing risk driver component: {e} Data: {driver_data}")
+        # Impacts
+        impacts_to_process = [ind for ind in indicators if "seca" in ind["indicator_name:"].lower() or "precipitação" in ind["indicator_name:"].lower()]
+        for indicator in impacts_to_process:
+            impact_prompt = get_impact_item_prompt(indicator)
+            impact_data = generate_llm_response(impact_prompt, config, "impact_item")
+            if impact_data:
+                try:
+                    comp = NarrativeComponent(**impact_data)
+                    comp.supporting_indicators = [
+                        {
+                            "indicator_id": indicator.get("indicator_id"),
+                            "indicator_name": indicator.get("indicator_name:"),
+                            "setor_estrategico": indicator.get("setor_estrategico"),
+                            "level2_indicator": level2,
+                            "anos": indicator.get("anos"),
+                            "rangelabel": indicator.get("rangelabel"),
+                            "value": indicator.get("value"),
+                            "future_trends": indicator.get("future_trends", {})
+                        }
+                    ]
+                    group_components.append(comp)
+                    print(f"Added impact item component: {impact_data.get('title')} for sector {sector}, level2 {level2}")
+                except Exception as e:
+                    print(f"Error parsing impact item component: {e} Data: {impact_data}")
+        # Only add group if it has components
+        if group_components:
+            narrative_groups.append({
+                "setor_estrategico": sector,
+                "level2_indicator": level2,
+                "components": group_components
+            })
 
-    # 1. Introduction
-    intro_prompt = get_introduction_prompt(city_name, current_risk, projected_risk)
-    intro_data = generate_llm_response(intro_prompt, config, "introduction")
-    if intro_data:
-        try:
-            narrative_components.append(NarrativeComponent(**intro_data))
-            print(f"Successfully added introduction component. Total components: {len(narrative_components)}")
-        except Exception as e:
-            print(f"Error parsing introduction component: {e} Data: {intro_data}")
+    # Daily Life Implications (global, not grouped)
+    narrative_components = []
+    for group in narrative_groups:
+        narrative_components.extend(group["components"])
 
-    # 2. Problem Statement
-    problem_prompt = get_problem_statement_prompt(city_name, current_risk, projected_risk)
-    problem_data = generate_llm_response(problem_prompt, config, "problem_statement")
-    if problem_data:
-        try:
-            narrative_components.append(NarrativeComponent(**problem_data))
-            print(f"Successfully added problem statement component. Total components: {len(narrative_components)}")
-        except Exception as e:
-            print(f"Error parsing problem statement component: {e} Data: {problem_data}")
-
-    # 3. Risk Drivers
-    # Filter problematic_indicators for risk drivers
-    risk_drivers_to_process = [ind for ind in problematic_indicators if "vulnerabilidade" in ind["indicator_name:"].lower() or "capacidade adaptativa" in ind["indicator_name:"].lower()]
-    for indicator in risk_drivers_to_process:
-        driver_prompt = get_risk_driver_prompt(indicator)
-        driver_data = generate_llm_response(driver_prompt, config, "risk_driver")
-        if driver_data:
-            try:
-                narrative_components.append(NarrativeComponent(**driver_data))
-                print(f"Successfully added risk driver component: {driver_data.get('title')}. Total components: {len(narrative_components)}")
-            except Exception as e:
-                print(f"Error parsing risk driver component: {e} Data: {driver_data}")
-
-    # 4. Specific Impacts
-    # Filter problematic_indicators for specific impacts
-    impacts_to_process = [ind for ind in problematic_indicators if "seca" in ind["indicator_name:"].lower() or "precipitação" in ind["indicator_name:"].lower()]
-    for indicator in impacts_to_process:
-        impact_prompt = get_impact_item_prompt(indicator)
-        impact_data = generate_llm_response(impact_prompt, config, "impact_item")
-        if impact_data:
-            try:
-                narrative_components.append(NarrativeComponent(**impact_data))
-                print(f"Successfully added impact item component: {impact_data.get('title')}. Total components: {len(narrative_components)}")
-            except Exception as e:
-                print(f"Error parsing impact item component: {e} Data: {impact_data}")
-
-    # 5. Daily Life Implications
-    # Only generate if there are problematic indicators to summarize
     if problematic_indicators:
-        implications_summary = ", ".join([ind["indicator_name:"].replace("\n", " ") for ind in problematic_indicators]) # Clean up newlines
+        implications_summary = ", ".join([ind["indicator_name:"].replace("\n", " ") for ind in problematic_indicators])
         implications_prompt = get_daily_implications_prompt(implications_summary)
         implications_data = generate_llm_response(implications_prompt, config, "daily_implications")
         if implications_data:
             try:
-                narrative_components.append(NarrativeComponent(**implications_data))
-                print(f"Successfully added daily implications component. Total components: {len(narrative_components)}")
+                comp = NarrativeComponent(**implications_data)
+                # Do not add supporting_indicators for daily_implications
+                narrative_components.append(comp)
+                print(f"Added daily implications component.")
             except Exception as e:
                 print(f"Error parsing daily implications component: {e} Data: {implications_data}")
-
-    # 6. Solutions
-    # Only generate if there are problematic indicators to summarize
+    # Solutions (global, not grouped)
     if problematic_indicators:
         solutions_prompt = get_solutions_prompt(implications_summary)
         solutions_data = generate_llm_response(solutions_prompt, config, "solutions")
         if solutions_data:
             try:
-                narrative_components.append(NarrativeComponent(**solutions_data))
-                print(f"Successfully added solutions component. Total components: {len(narrative_components)}")
+                comp = NarrativeComponent(**solutions_data)
+                # Do not add supporting_indicators for solutions
+                narrative_components.append(comp)
+                print(f"Added solutions component.")
             except Exception as e:
                 print(f"Error parsing solutions component: {e} Data: {solutions_data}")
-
-    # 7. Conclusion
-    conclusion_prompt = get_conclusion_prompt()
-    conclusion_data = generate_llm_response(conclusion_prompt, config, "conclusion")
-    if conclusion_data:
-        try:
-            narrative_components.append(NarrativeComponent(**conclusion_data))
-            print(f"Successfully added conclusion component. Total components: {len(narrative_components)}")
-        except Exception as e:
-            print(f"Error parsing conclusion component: {e} Data: {conclusion_data}")
-
+    # Conclusion (optional, not requested)
     print(f"Final number of narrative components before returning: {len(narrative_components)}")
     final_narrative = ClimateNarrative(city_id=str(city_id), city_name=city_name, narrative_components=narrative_components)
-    
     return final_narrative
 
 # --- Existing code from generate_narratives.py ---

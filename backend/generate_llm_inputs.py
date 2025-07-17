@@ -129,18 +129,29 @@ def create_template_files(output_dir="../data/LLM", hierarchy_path="../data/LLM/
             # Build the template for this Level 2 tree
             indicators = []
             for ind in flatten_tree(level2):
+                anos_str = ind.get('anos', '')
+                anos_list = [a.strip() for a in anos_str.split(',') if a.strip()]
+                # If more than one year, treat all except the first as future years
+                future_trends = {}
+                if len(anos_list) > 1:
+                    for year in anos_list[1:]:
+                        future_trends[year] = {
+                            "value": None,
+                            "valuelabel": "",
+                            "valuecolor": ""
+                        }
                 indicators.append({
                     "indicator_id": ind['id'],
                     "indicator_name:": ind['nome'],
                     "indicador_pai": ind.get('indicador_pai'),
                     "setor_estrategico": ind.get('setor_estrategico', sector_name),
                     "descricao_simples": ind.get('descricao_simples', ''),
-                    "descricao_completa": ind.get('descricao_completa', ''),
+                    #"descricao_completa": ind.get('descricao_completa', ''), #removed for now to use less tokens
                     "proporcao_direta": ind.get('proporcao_direta', ''),
                     "anos": ind.get('anos', ''),
                     "value": None,
                     "rangelabel": None,
-                    "future_trends": {}
+                    "future_trends": future_trends
                 })
             # Clean filename
             fname = f"template_{sector_name.replace(' ', '_')}--{level2['nome'].replace(' ', '_')}.json"
@@ -192,6 +203,7 @@ def generate_hierarchy_file(input_json, output_path='../data/LLM/indicators_hier
             'indicador_pai': get_parent_name(node.get('indicador_pai')),
             'setor_estrategico': node.get('setor_estrategico', ''),
             'descricao_simples': node.get('descricao_simples', ''),
+            'anos': node.get('anos', ''),
             'nivel': node.get('nivel', ''),
             'children': [simplify_node(child) for child in node.get('children', [])]
         }
@@ -217,6 +229,7 @@ def generate_hierarchy_file(input_json, output_path='../data/LLM/indicators_hier
             'indicador_pai': None,
             'setor_estrategico': sector_name,
             'descricao_simples': '',
+            'anos': '',
             'nivel': '',
             'children': children
         }
