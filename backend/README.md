@@ -4,8 +4,15 @@ This folder contains all backend Python code for the Painel do Clima project.
 
 ## Core Components
 
+### Data Source Generation
+- **`extract_indicator_years_pairs.py`** - Generates indicator/year pairs from AdaptaBrasil structure
+  - Creates `mapa-dados.txt` (current data pairs)
+  - Creates `trends-2030-2050.txt` (future projection pairs)
+
 ### Data Ingestion & Processing
 - **`adaptabrasil_batch_ingestor.py`** - Fetches data from AdaptaBrasil API with rate limiting and retry logic
+  - **Multi-state support**: Process single state (`PR`) or multiple states (`RS, SP, RJ`)
+  - Uses indicator/year pairs from generated text files
 - **`process_city_files.py`** - Converts raw API responses to city-specific JSON files
 - **`generate_llm_inputs.py`** - Creates structured templates for LLM processing
 - **`populate_llm_inputs.py`** - Populates templates with city-specific data
@@ -20,6 +27,13 @@ This folder contains all backend Python code for the Painel do Clima project.
 
 ### Web Server
 - **`serve.py`** - FastAPI server providing both data APIs and static file serving
+  - Health check endpoint: `/health`
+  - Data API: `/data`
+  - Frontend serving: `/`
+
+### Utility Scripts
+- **`csv2json.py`** - Converts CSV files to JSON with BOM handling
+- **Server Management**: Use `../server.sh` for easy server control (`start`, `dev`, `stop`, `status`)
 
 ## Key Features
 - **Multi-Provider LLM Support**: OpenAI, Anthropic, Google, and 100+ others via LiteLLM
@@ -29,6 +43,34 @@ This folder contains all backend Python code for the Painel do Clima project.
 - **Brazilian Portuguese**: Specialized prompts for Brazilian climate context
 
 ## Usage Patterns
+
+### Complete Data Pipeline
+```bash
+# 1. Generate indicator/year pairs
+python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .
+
+# 2. Fetch data (supports multi-state configuration)
+python adaptabrasil_batch_ingestor.py
+
+# 3. Process city files
+python process_city_files.py
+
+# 4. Start web server
+python serve.py
+# OR use management script from project root
+cd .. && ./server.sh start
+```
+
+### Multi-State Configuration
+Configure in `../config.yaml`:
+```yaml
+# Single state
+state: PR
+
+# Multiple states
+state: "RS, SP, RJ"
+```
+
 All scripts should be run from the backend directory for proper relative path resolution:
 ```bash
 cd backend

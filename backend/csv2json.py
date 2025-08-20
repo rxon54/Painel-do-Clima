@@ -1,7 +1,7 @@
 import csv
 import json
 
-def csv_to_json(csv_file_path='adaptaBrasilAPIEstrutura.csv', json_file_path='output.json'):
+def csv_to_json(csv_file_path='adaptaBrasilAPIEstrutura.csv', json_file_path='adaptaBrasilAPIEstrutura.json'):
     """
     Convert a CSV file with pipe delimiter to a JSON file.
 
@@ -10,7 +10,7 @@ def csv_to_json(csv_file_path='adaptaBrasilAPIEstrutura.csv', json_file_path='ou
         json_file_path (str): Path to the output JSON file.
     """
     try:
-        with open(csv_file_path, 'r', encoding='utf-8') as csvfile:
+        with open(csv_file_path, 'r', encoding='utf-8-sig') as csvfile:
             reader = csv.reader(csvfile, delimiter='|')
             headers = next(reader)  # Read the header line
             data = []

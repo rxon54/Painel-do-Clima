@@ -6,20 +6,22 @@ Fetches climate indicator data for Brazilian municipalities from the AdaptaBrasi
 Usage:
     python adaptabrasil_batch_ingestor.py
 
-- Reads parameters from config.yaml (state, year, cities, L2 indicators, delay, output dir, debug).
-- For each city and each Level 2 indicator, fetches all sublevel indicator values and saves as one file per city per L2 indicator (including all sublevels).
-- Adds a delay between requests (default: 1s, configurable).
+- Reads parameters from config.yaml (states, delay, output dir, debug).
+- Supports single state (state: "PR") or multiple states (state: "RS, SP, RJ").
+- For each state and each indicator/year pair, fetches data from both mapa-dados and future trends APIs.
+- Adds a delay between requests (configurable via delay_seconds).
 - Optionally saves full API responses for debugging.
-- Output: JSON files in the specified output directory.
+- Output: JSON files in the specified output directory with state-specific naming.
 
 Expected config.yaml structure:
-    state: "PR"
-    year: 2022
-    cities: ["4106902", "4104808"]
-    l2_indicators: ["6000", "7000"]
-    delay: 1.0
-    output_dir: "output/"
-    debug: false
+    state: "PR"  # Single state
+    # OR
+    state: "RS, SP, RJ"  # Multiple states (comma-separated)
+    delay_seconds: 2.0
+    output_dir: "../data/"
+    save_full_response: true
+    mapa_dados_file: "mapa-dados.txt"
+    trends_file: "trends-2030-2050.txt"
 
 """
 import os
@@ -90,6 +92,27 @@ def fetch_with_retries(fetch_fn, *args, max_retries=3, backoff=2, log_context=No
     logging.error(fail_msg)
     return None
 
+def parse_states(state_config: str) -> List[str]:
+    """
+    Parse state configuration to handle both single state and comma-separated states.
+    
+    Args:
+        state_config: State configuration from config.yaml (e.g., "PR" or "RS, SP, RJ")
+        
+    Returns:
+        List of state codes
+    """
+    if isinstance(state_config, str):
+        # Handle comma-separated states
+        states = [state.strip().upper() for state in state_config.split(',')]
+        return [state for state in states if state]  # Filter out empty strings
+    elif isinstance(state_config, list):
+        # Handle list format
+        return [str(state).strip().upper() for state in state_config]
+    else:
+        # Single state
+        return [str(state_config).strip().upper()]
+
 def load_indicator_year_pairs(path: str = "mapa-dados.txt"):
     """
     Loads indicator_id/year pairs from mapa-dados.txt, skipping comments and blank lines.
@@ -109,60 +132,77 @@ def load_indicator_year_pairs(path: str = "mapa-dados.txt"):
 def main():
     logging.info("=== Batch Ingestor Started ===")
     config = load_config()
-    state = config["state"]
-    delay = float(config.get("delay", 1.0))
+    states = parse_states(config["state"])
+    delay = float(config.get("delay_seconds", config.get("delay", 1.0)))  # Support both delay_seconds and delay
     output_dir = config.get("output_dir", "output/")
-    debug = config.get("debug", False)
+    debug = config.get("save_full_response", config.get("debug", False))  # Support both save_full_response and debug
 
     ensure_dir(output_dir)
+    logging.info(f"Processing {len(states)} state(s): {', '.join(states)}")
 
-    # Load indicator_id/year pairs from mapa-dados.txt (present)
-    indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
+    total_success, total_fail = 0, 0
 
-    success, fail = 0, 0
-    for indicator_id, year in indicators:
-        log_ctx = f"mapa-dados request: state={state}, L2={indicator_id}, year={year}"
-        print(f"Fetching {log_ctx}")
-        ab_response = fetch_with_retries(fetch_indicators, state, indicator_id, year, log_context=log_ctx)
-        if ab_response is not None:
-            summary_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}.json")
-            save_json(ab_response, summary_path)
-            if debug:
-                debug_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}_raw.json")
-                save_json(ab_response, debug_path)
-            success += 1
-        else:
-            fail += 1
-        time.sleep(delay)
-
-    # Load indicator_id/year pairs from trends file (future trends)
-    trends_file = config.get("trends_file", "trends-2030-2050.txt")
-    try:
-        indicators = load_indicator_year_pairs(trends_file)
-    except FileNotFoundError:
-        logging.warning(f"Trends file '{trends_file}' not found. Skipping future trends batch.")
-        indicators = []
-
-    # Fetch future trends for each indicator
-    if indicators:
-        logging.info("=== Fetching Future Trends ===")
+    # Process each state
+    for state in states:
+        logging.info(f"=== Processing State: {state} ===")
+        print(f"\n=== Processing State: {state} ===")
+        
+        # Load indicator_id/year pairs from mapa-dados.txt (present)
+        indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
+        
+        success, fail = 0, 0
         for indicator_id, year in indicators:
-            log_ctx = f"future trends request: state={state}, L2={indicator_id}, year={year}"
+            log_ctx = f"mapa-dados request: state={state}, L2={indicator_id}, year={year}"
             print(f"Fetching {log_ctx}")
-            future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, log_context=log_ctx)
-            if future_response is not None:
-                future_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}.json")
-                save_json(future_response, future_path)
+            ab_response = fetch_with_retries(fetch_indicators, state, indicator_id, year, log_context=log_ctx)
+            if ab_response is not None:
+                summary_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}.json")
+                save_json(ab_response, summary_path)
                 if debug:
-                    debug_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}_raw.json")
-                    save_json(future_response, debug_path)
+                    debug_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}_raw.json")
+                    save_json(ab_response, debug_path)
                 success += 1
             else:
                 fail += 1
             time.sleep(delay)
-    else:
-        logging.info("No future trends to process.")
-    logging.info(f"=== Batch Ingestor Finished: {success} indicators processed with success, {fail} failures ===")
+
+        # Load indicator_id/year pairs from trends file (future trends)
+        trends_file = config.get("trends_file", "trends-2030-2050.txt")
+        try:
+            trends_indicators = load_indicator_year_pairs(trends_file)
+        except FileNotFoundError:
+            logging.warning(f"Trends file '{trends_file}' not found. Skipping future trends batch for state {state}.")
+            trends_indicators = []
+
+        # Fetch future trends for each indicator
+        if trends_indicators:
+            logging.info(f"=== Fetching Future Trends for State: {state} ===")
+            for indicator_id, year in trends_indicators:
+                log_ctx = f"future trends request: state={state}, L2={indicator_id}, year={year}"
+                print(f"Fetching {log_ctx}")
+                future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, log_context=log_ctx)
+                if future_response is not None:
+                    future_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}.json")
+                    save_json(future_response, future_path)
+                    if debug:
+                        debug_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}_raw.json")
+                        save_json(future_response, debug_path)
+                    success += 1
+                else:
+                    fail += 1
+                time.sleep(delay)
+        else:
+            logging.info(f"No future trends to process for state {state}.")
+        
+        logging.info(f"=== State {state} Finished: {success} indicators processed with success, {fail} failures ===")
+        total_success += success
+        total_fail += fail
+
+    logging.info(f"=== Batch Ingestor Finished: {total_success} total indicators processed with success, {total_fail} total failures across {len(states)} state(s) ===")
+    print(f"\n=== Final Summary ===")
+    print(f"States processed: {', '.join(states)}")
+    print(f"Total success: {total_success}")
+    print(f"Total failures: {total_fail}")
 
 if __name__ == "__main__":
     main()

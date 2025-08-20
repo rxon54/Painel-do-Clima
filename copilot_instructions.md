@@ -9,31 +9,40 @@
 
 ### 1. Data Pipeline (Backend)
 ```bash
-# 1. Configure target state and indicators in config.yaml
-# 2. Fetch raw data from AdaptaBrasil API
-python backend/adaptabrasil_batch_ingestor.py
+# 1. Configure target state(s) and indicators in config.yaml
+# Single state: state: PR
+# Multiple states: state: "RS, SP, RJ"
 
-# 3. Process into per-city JSON files
-python backend/process_city_files.py
+# 2. Generate indicator/year pairs from AdaptaBrasil structure
+cd backend
+python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .
 
-# 4. Generate LLM input templates and populate with city data
-python backend/generate_llm_inputs.py
-python backend/populate_llm_inputs.py <city_id>
+# 3. Fetch raw data from AdaptaBrasil API (supports multi-state)
+python adaptabrasil_batch_ingestor.py
 
-# 5. Filter problematic indicators (NEW STEP - run from backend dir)
+# 4. Process into per-city JSON files
+python process_city_files.py
+
+# 5. Generate LLM input templates and populate with city data
+python generate_llm_inputs.py
+python populate_llm_inputs.py <city_id>
+
+# 6. Filter problematic indicators (NEW STEP - run from backend dir)
 cd backend && python filter_problematic_indicators.py <state_abbr> <city_id> ../data/LLM
 
-# 6. Generate AI-powered climate narratives (requires OpenAI API key - run from backend dir)
+# 7. Generate AI-powered climate narratives (requires OpenAI API key - run from backend dir)
 cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
 
-# 7. Generate final HTML report (optional - run from backend dir)
+# 8. Generate final HTML report (optional - run from backend dir)
 cd backend && python generate_PdC.py ../data/LLM_processed/<state_abbr>/<city_id>/climate_narrative.json
 
-# 8. Serve frontend and data
+# 9. Serve frontend and data
 python backend/serve.py
+# OR use management script: ./server.sh start
 ```
 
 ### 2. API Integration Patterns
+- **Multi-State Support**: Configure single state (`state: PR`) or multiple states (`state: "RS, SP, RJ"`) in config.yaml
 - **Rate Limiting**: Always use configurable delays (`config.yaml: delay_seconds`)
 - **Retry Logic**: All API calls use `fetch_with_retries()` with exponential backoff
 - **Two API Types**:
@@ -41,8 +50,9 @@ python backend/serve.py
   - `/api/total/` - Future trends (2030/2050) by scenario
 
 ### 3. Data Structure Conventions
+- **Input Generation**: Use `extract_indicator_years_pairs.py` to create input files from AdaptaBrasil structure
 - **Input Sources**: Text files like `mapa-dados.txt` (format: `indicator_id/year` per line)
-- **Raw Output**: `data/mapa-dados_PR_6000_2022.json`
+- **Raw Output**: `data/mapa-dados_PR_6000_2022.json` (state-specific naming for multi-state support)
 - **Processed Output**: `data/PR/city_5310.json` (all indicators for one city)
 - **City Catalog**: `data/city_filelist.json` (maps city codes to names/files)
 
@@ -95,10 +105,17 @@ templates/   # Jinja2 templates (auto-created)
 ## Development Guidelines
 
 ### Adding New Indicators
-1. Update text files (`mapa-dados.txt`, `trends-2030-2050.txt`)
-2. Run batch ingestor to fetch new data
-3. Re-run processor to update city files
-4. Frontend automatically picks up new indicators
+1. Update AdaptaBrasil structure file (`adaptaBrasilAPIEstrutura.json`)
+2. Regenerate indicator/year pairs: `python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .`
+3. Run batch ingestor to fetch new data
+4. Re-run processor to update city files
+5. Frontend automatically picks up new indicators
+
+### Multi-State Processing
+- Configure states in `config.yaml`: `state: "RS, SP, RJ"`
+- Batch ingestor processes all states automatically
+- Files are organized by state: `data/mapa-dados_RS_2_2020.json`
+- Use management script for easy server control: `./server.sh {start|dev|stop|status}`
 
 ### API Extensions
 - Follow the `fetch_with_retries()` pattern for all new API calls

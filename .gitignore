@@ -17,6 +17,7 @@ venv/
 .vscode/
 .history/
 .github/
+.gitignore
 contexts/
 alt_versions
 
@@ -29,6 +30,8 @@ old/
 *.bak
 *.tmp
 *.md
+*.json
+*.csv
 
 # OS
 .DS_Store
