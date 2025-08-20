@@ -101,6 +101,13 @@ cd backend && python filter_problematic_indicators.py <state_abbr> <city_id> ../
 
 # Generate AI narratives (run from backend directory)
 cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
+
+# Generate final HTML report (optional)
+cd backend && python generate_PdC.py ../data/LLM_processed/<state_abbr>/<city_id>/climate_narrative.json
+```
+
+# Generate AI narratives (run from backend directory)
+cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
 ```
 
 ## Configuration
