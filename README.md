@@ -228,3 +228,14 @@ This project is designed for public benefit and climate adaptation research in B
 ---
 
 **Built for climate resilience in Brazilian municipalities** 🇧🇷
+
+## July 2025 Update: Narrative & Summary HTML Generation
+
+- **No More Duplicates:** Fixed a bug in the AI narrative HTML generation (`generate_PdC.py`) that caused narrative sections to be duplicated before the summary sections. Narrative sections are now inserted only once after the header, and summary sections ("Implicações Cotidianas" and "Soluções e Recomendações") are always placed at the end, before the closing `.container` div.
+- **Robust Section Placement:** The script now splits the template after the header and inserts narrative sections, ensuring no repeated content and that summary sections are never nested inside narrative blocks.
+- **Output Structure:** The HTML output is now robust, visually clean, and structurally correct for all cities. This ensures a seamless end-to-end workflow for generating climate summaries and recommendations.
+- **How to Use:**
+  - Run: `python backend/generate_PdC.py <climate_narrative.json> [output.html]`
+  - The output HTML will be in `data/LLM_processed/<STATE>/<CITY_ID>/climate_narrative_PdC.html`.
+
+See also the in-code changelog in `backend/generate_PdC.py` for technical details.

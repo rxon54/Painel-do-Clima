@@ -17,6 +17,7 @@ venv/
 .vscode/
 .history/
 .github/
+contexts/
 alt_versions
 
 # Data & Output
@@ -27,6 +28,7 @@ old/
 *.log
 *.bak
 *.tmp
+*.md
 
 # OS
 .DS_Store
