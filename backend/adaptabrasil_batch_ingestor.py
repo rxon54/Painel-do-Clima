@@ -32,6 +32,15 @@ import requests
 import logging
 from typing import List, Dict, Any
 
+def print_progress_bar(current: int, total: int, length: int = 50, prefix: str = "Progress"):
+    """Print a progress bar to console"""
+    if total == 0:
+        return
+    percent = current / total
+    filled_length = int(length * percent)
+    bar = '█' * filled_length + '░' * (length - filled_length)
+    print(f'\r{prefix}: |{bar}| {current}/{total} ({percent:.1%})', end='', flush=True)
+
 # Setup logging
 logging.basicConfig(
     filename="batch_ingestor.log",
@@ -138,22 +147,57 @@ def main():
     debug = config.get("save_full_response", config.get("debug", False))  # Support both save_full_response and debug
 
     ensure_dir(output_dir)
+    
+    # Calculate total workload for progress tracking
+    mapa_dados_indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
+    try:
+        trends_indicators = load_indicator_year_pairs(config.get("trends_file", "trends-2030-2050.txt"))
+    except FileNotFoundError:
+        trends_indicators = []
+    
+    indicators_per_state = len(mapa_dados_indicators) + len(trends_indicators)
+    total_requests = len(states) * indicators_per_state
+    
+    print(f"\n🌍 AdaptaBrasil Batch Ingestor")
+    print(f"═" * 50)
+    print(f"📍 States to process: {len(states)} ({', '.join(states)})")
+    print(f"📊 Present indicators per state: {len(mapa_dados_indicators)}")
+    print(f"🔮 Future trend indicators per state: {len(trends_indicators)}")
+    print(f"📈 Total indicators per state: {indicators_per_state}")
+    print(f"🎯 Total API requests: {total_requests}")
+    print(f"⏱️  Estimated time: ~{(total_requests * delay) / 60:.1f} minutes")
+    print(f"═" * 50)
+    
     logging.info(f"Processing {len(states)} state(s): {', '.join(states)}")
+    logging.info(f"Total requests to be made: {total_requests}")
 
     total_success, total_fail = 0, 0
+    global_progress = 0
 
     # Process each state
-    for state in states:
+    for state_idx, state in enumerate(states):
         logging.info(f"=== Processing State: {state} ===")
-        print(f"\n=== Processing State: {state} ===")
+        print(f"\n\n🏛️  State {state_idx + 1}/{len(states)}: {state}")
+        print(f"─" * 30)
         
         # Load indicator_id/year pairs from mapa-dados.txt (present)
         indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
         
         success, fail = 0, 0
-        for indicator_id, year in indicators:
+        state_progress = 0
+        state_total = len(indicators)
+        
+        print(f"📊 Processing {len(indicators)} present indicators...")
+        for i, (indicator_id, year) in enumerate(indicators):
             log_ctx = f"mapa-dados request: state={state}, L2={indicator_id}, year={year}"
-            print(f"Fetching {log_ctx}")
+            
+            # Update progress bars
+            state_progress += 1
+            global_progress += 1
+            print_progress_bar(state_progress, indicators_per_state, prefix=f"  State {state}")
+            print(f" | {indicator_id}/{year}")
+            print_progress_bar(global_progress, total_requests, prefix="  Overall")
+            
             ab_response = fetch_with_retries(fetch_indicators, state, indicator_id, year, log_context=log_ctx)
             if ab_response is not None:
                 summary_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}.json")
@@ -176,10 +220,18 @@ def main():
 
         # Fetch future trends for each indicator
         if trends_indicators:
+            print(f"\n🔮 Processing {len(trends_indicators)} future trend indicators...")
             logging.info(f"=== Fetching Future Trends for State: {state} ===")
-            for indicator_id, year in trends_indicators:
+            for i, (indicator_id, year) in enumerate(trends_indicators):
                 log_ctx = f"future trends request: state={state}, L2={indicator_id}, year={year}"
-                print(f"Fetching {log_ctx}")
+                
+                # Update progress bars
+                state_progress += 1
+                global_progress += 1
+                print_progress_bar(state_progress, indicators_per_state, prefix=f"  State {state}")
+                print(f" | {indicator_id}/{year}")
+                print_progress_bar(global_progress, total_requests, prefix="  Overall")
+                
                 future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, log_context=log_ctx)
                 if future_response is not None:
                     future_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}.json")
@@ -194,10 +246,22 @@ def main():
         else:
             logging.info(f"No future trends to process for state {state}.")
         
+        # State completion summary
+        print(f"\n✅ State {state} completed: {success} success, {fail} failures")
         logging.info(f"=== State {state} Finished: {success} indicators processed with success, {fail} failures ===")
         total_success += success
         total_fail += fail
 
+    # Final summary
+    print(f"\n\n🎉 BATCH PROCESSING COMPLETE!")
+    print(f"═" * 50)
+    print(f"🌍 States processed: {len(states)} ({', '.join(states)})")
+    print(f"✅ Total successful requests: {total_success}")
+    print(f"❌ Total failed requests: {total_fail}")
+    print(f"📊 Success rate: {(total_success / (total_success + total_fail) * 100):.1f}%" if (total_success + total_fail) > 0 else "No requests made")
+    print(f"⏱️  Total requests made: {total_success + total_fail}")
+    print(f"═" * 50)
+    
     logging.info(f"=== Batch Ingestor Finished: {total_success} total indicators processed with success, {total_fail} total failures across {len(states)} state(s) ===")
     print(f"\n=== Final Summary ===")
     print(f"States processed: {', '.join(states)}")
