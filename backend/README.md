@@ -52,8 +52,9 @@ This folder contains all backend Python code for the Painel do Clima project.
 ```bash
 # 0. Prepare indicator structure (one-time setup after CSV updates)
 python csv2json.py  # Convert CSV to JSON with proper UTF-8 encoding
-python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .  # Generate data source files
 python filter_infra_out.py adaptaBrasilAPIEstrutura.json adaptaBrasilAPIEstrutura_filtered.json  # Remove infrastructure indicators
+python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .  # Generate data source files
+
 cp adaptaBrasilAPIEstrutura_filtered.json ../frontend/ab_structure.json  # Update frontend
 
 # 1. Fetch data (supports multi-state configuration)

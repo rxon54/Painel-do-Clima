@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 
-def generate_html_from_json(json_file='output.json', html_file='indicators_doc.html'):
+def generate_html_from_json(json_file='adaptaBrasilAPIEstrutura_filtered.json', html_file='../frontend/indicators_doc.html'):
     with open(json_file, 'r', encoding='utf-8') as f:
         indicators = json.load(f)
 
