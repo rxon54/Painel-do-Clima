@@ -178,6 +178,45 @@ observability:
 ```
 ├── backend/                 # Python scripts and API access
 │   ├── adaptabrasil_batch_ingestor.py  # Main data ingestion
+│   ├── data_api_service.py             # NEW: FastAPI data service
+│   ├── process_city_files.py           # Data processing
+│   ├── generate_narratives.py          # AI narrative generation
+│   ├── serve.py                        # FastAPI web server
+│   └── ...
+├── frontend/                # Web interface
+│   ├── paineldoclima.html              # Main interface
+│   ├── paineldoclima.js                # D3.js visualization
+│   ├── painel_data_api_integration.js  # NEW: API integration
+│   └── ab_structure.json               # Indicator hierarchy
+├── data/                    # Generated data (gitignored)
+│   ├── PR/                             # State-specific city files
+│   ├── LLM/                            # AI input templates
+│   └── LLM_processed/                  # Generated narratives
+├── config.yaml             # Configuration file
+├── data_api.sh             # NEW: Data API service management
+└── server.sh               # Main web server management
+```
+
+## Services
+
+### Main Application (Port 8000)
+```bash
+./server.sh start    # Start main visualization app
+```
+
+### Data API Service (Port 8001) - NEW!
+```bash
+./data_api.sh start  # Start structured data API
+./data_api.sh test   # Test API endpoints
+```
+
+**API Documentation**: http://localhost:8001/docs
+
+**Key Endpoints**:
+- `GET /api/v1/indicadores/estrutura/{id}` - Get indicator details
+- `GET /api/v1/indicadores/count` - Total indicators count  
+- `GET /api/v1/indicadores/setores` - Available sectors
+- `GET /health` - Service health check
 │   ├── process_city_files.py           # Data processing
 │   ├── generate_narratives.py          # AI narrative generation
 │   ├── serve.py                        # FastAPI web server
