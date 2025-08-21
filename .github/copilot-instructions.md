@@ -15,24 +15,29 @@
 
 ### 1. Data Pipeline (Backend)
 ```bash
-# 1. Configure target state and indicators in config.yaml
-# 2. Fetch raw data from AdaptaBrasil API
+# 0. Prepare indicator structure (one-time setup)
+python backend/csv2json.py  # Convert CSV to JSON with UTF-8 BOM handling
+python backend/extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json  # Generate mapa-dados.txt and trends-2030-2050.txt
+python backend/filter_infra_out.py adaptaBrasilAPIEstrutura.json adaptaBrasilAPIEstrutura_filtered.json  # Remove infrastructure indicators
+cp adaptaBrasilAPIEstrutura_filtered.json frontend/ab_structure.json  # Update frontend structure
+
+# 1. Fetch raw data from AdaptaBrasil API
 python backend/adaptabrasil_batch_ingestor.py
 
-# 3. Process into per-city JSON files
+# 2. Process into per-city JSON files
 python backend/process_city_files.py
 
-# 4. Generate LLM input templates and populate with city data
+# 3. Generate LLM input templates and populate with city data
 python backend/generate_llm_inputs.py
 python backend/populate_llm_inputs.py <city_id>
 
-# 5. Filter problematic indicators (NEW STEP - run from backend dir)
+# 4. Filter problematic indicators (run from backend dir)
 cd backend && python filter_problematic_indicators.py <state_abbr> <city_id> ../data/LLM
 
-# 6. Generate AI-powered climate narratives (requires OpenAI API key - run from backend dir)
+# 5. Generate AI-powered climate narratives (requires OpenAI API key - run from backend dir)
 cd backend && python generate_narratives.py <city_id> <state_abbr> ../data/LLM ../data/LLM_processed
 
-# 7. Serve frontend and data
+# 6. Serve frontend and data
 python backend/serve.py
 ```
 
@@ -73,6 +78,11 @@ renderVisualization()
 ### Configuration Management
 - `config.yaml` - Single source of truth for API parameters, file paths, delays
 - Never hardcode API endpoints or delays in scripts
+
+### Data Preparation & Filtering
+- `csv2json.py` - Handles UTF-8 BOM encoding when converting CSV to JSON
+- `filter_infra_out.py` - Removes infrastructure indicators (40000, 70000, 80000) that return null data
+- Always update frontend structure: `cp adaptaBrasilAPIEstrutura_filtered.json frontend/ab_structure.json`
 
 ### Error Handling & Logging
 - All batch operations log to `batch_ingestor.log`
