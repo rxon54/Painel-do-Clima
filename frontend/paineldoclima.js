@@ -306,6 +306,7 @@ function renderIndentedList(container, root) {
     function buildList(node) {
         const li = document.createElement('li');
         li.className = 'indented-node';
+        li.setAttribute('data-level', node.nivel);
         // --- GRID ROW ---
         const row = document.createElement('span');
         row.className = 'indicator-row-grid';
@@ -554,11 +555,21 @@ function renderHierarchy(hierarchyData) {
     levelFilter.on("change", function() {
         const selectedLevel = this.value;
         if (selectedLevel === "all") {
-            d3.selectAll(".node").style("display", null);
+            // Show all indented nodes
+            document.querySelectorAll(".indented-node").forEach(node => {
+                node.style.display = "";
+            });
         } else {
-            d3.selectAll(".node").style("display", function() {
-                const nodeData = d3.select(this).datum();
-                return (nodeData.data.nivel === selectedLevel) ? null : "none";
+            // Hierarchical depth filtering: show levels 2 through selected level
+            const maxLevel = parseInt(selectedLevel);
+            document.querySelectorAll(".indented-node").forEach(node => {
+                const nodeLevel = parseInt(node.getAttribute('data-level'));
+                // Show if level is 2 or higher AND level is <= selected max level
+                if (nodeLevel >= 2 && nodeLevel <= maxLevel) {
+                    node.style.display = "";
+                } else {
+                    node.style.display = "none";
+                }
             });
         }
     });
