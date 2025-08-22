@@ -166,6 +166,113 @@ class ErrorResponse(BaseModel):
             }
         }
 
+class PanoramaIndicator(BaseModel):
+    """Indicator data for city panorama"""
+    indicator_id: str = Field(description="Climate indicator ID")
+    indicator_name: str = Field(description="Climate indicator name")
+    level: str = Field(description="Indicator hierarchy level")
+    present_data: List[IndicatorValue] = Field(description="Current/present data points")
+    future_trends: List[FutureTrend] = Field(description="Future projection data")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "indicator_id": "2",
+                "indicator_name": "Risco de estresse hídrico",
+                "level": "2",
+                "present_data": [
+                    {
+                        "year": 2020,
+                        "value": 0.42,
+                        "valuecolor": "#FFCD00",
+                        "rangelabel": "Médio"
+                    }
+                ],
+                "future_trends": [
+                    {
+                        "year": 2030,
+                        "scenario": "RCP4.5",
+                        "value": 0.55,
+                        "valuecolor": "#FF8C00",
+                        "rangelabel": "Alto"
+                    }
+                ]
+            }
+        }
+
+class PanoramaSector(BaseModel):
+    """Sector with its level 2 indicators"""
+    sector_name: str = Field(description="Strategic sector name")
+    indicators: List[PanoramaIndicator] = Field(description="Level 2 indicators in this sector")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "sector_name": "Recursos Hídricos",
+                "indicators": [
+                    {
+                        "indicator_id": "2",
+                        "indicator_name": "Risco de estresse hídrico",
+                        "level": "2"
+                    }
+                ]
+            }
+        }
+
+class PanoramaSummary(BaseModel):
+    """Summary statistics for the panorama"""
+    total_sectors: int = Field(description="Number of sectors with level 2 indicators")
+    total_indicators: int = Field(description="Total number of level 2 indicators")
+    indicators_with_present_data: int = Field(description="Indicators with present data")
+    indicators_with_future_trends: int = Field(description="Indicators with future projections")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "total_sectors": 6,
+                "total_indicators": 12,
+                "indicators_with_present_data": 12,
+                "indicators_with_future_trends": 8
+            }
+        }
+
+class PanoramaResponse(BaseModel):
+    """City climate indicators panorama response"""
+    geocod_ibge: str = Field(description="IBGE code of the municipality")
+    city_name: str = Field(description="Municipality name")
+    state: str = Field(description="State abbreviation")
+    sectors: List[PanoramaSector] = Field(description="Sectors with their level 2 indicators")
+    summary: PanoramaSummary = Field(description="Summary statistics")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "geocod_ibge": "4119905",
+                "city_name": "Ponta Grossa/PR",
+                "state": "PR",
+                "sectors": [
+                    {
+                        "sector_name": "Recursos Hídricos",
+                        "indicators": [
+                            {
+                                "indicator_id": "2",
+                                "indicator_name": "Risco de estresse hídrico",
+                                "level": "2",
+                                "present_data": [],
+                                "future_trends": []
+                            }
+                        ]
+                    }
+                ],
+                "summary": {
+                    "total_sectors": 6,
+                    "total_indicators": 12,
+                    "indicators_with_present_data": 12,
+                    "indicators_with_future_trends": 8
+                }
+            }
+        }
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Painel do Clima Data API",
@@ -661,6 +768,244 @@ async def get_available_sectors():
         )
 
 @app.get(
+    "/api/v1/indicadores/dados/{estado}/{cidade_ou_geocod}/panorama",
+    response_model=PanoramaResponse,
+    responses={
+        200: {
+            "description": "City climate indicators panorama retrieved successfully",
+            "model": PanoramaResponse
+        },
+        404: {
+            "description": "City or state not found",
+            "model": ErrorResponse
+        },
+        500: {
+            "description": "Internal server error",
+            "model": ErrorResponse
+        }
+    },
+    tags=["indicators"],
+    summary="Get city climate indicators panorama",
+    description="Retrieve complete panorama of all level 2 climate indicators for a city, organized by strategic sectors"
+)
+async def get_city_panorama(
+    estado: str = PathParam(
+        ...,
+        description="State abbreviation (e.g., 'PR', 'SP', 'RJ')",
+        examples=["PR"],
+        pattern=r"^[A-Z]{2}$"
+    ),
+    cidade_ou_geocod: str = PathParam(
+        ...,
+        description="City ID or IBGE geocode (7-digit IBGE code)",
+        examples=["5387", "4119905"],
+        pattern=r"^[0-9]+$"
+    )
+) -> PanoramaResponse:
+    """
+    Get complete panorama of climate indicators for a specific city.
+    
+    This endpoint retrieves all level 2 climate indicators for a city, organized by
+    strategic sectors (setores estratégicos). Each indicator includes:
+    - Present data points with values, colors, and range labels
+    - Future climate projections (2030, 2050) with scenarios
+    - Summary statistics for data availability
+    
+    Perfect for:
+    - City-wide climate risk assessment dashboards
+    - LLM agents generating comprehensive climate narratives
+    - Municipal planning and adaptation strategies
+    - Climate vulnerability overviews
+    
+    Args:
+        estado: Two-letter state abbreviation (BR state codes)
+        cidade_ou_geocod: City ID or 7-digit IBGE geocode
+        
+    Returns:
+        PanoramaResponse: Complete city climate indicators organized by sectors
+        
+    Raises:
+        HTTPException: 404 if city not found, 500 for server errors
+    """
+    logger.info(f"Requesting panorama - Estado: {estado}, Cidade/Geocod: {cidade_ou_geocod}")
+    
+    try:
+        # Load city filelist to resolve city ID from geocod_ibge if needed
+        city_filelist = load_city_filelist()
+        
+        # Try to resolve city ID (could be city ID or geocod_ibge)
+        cidade = find_city_by_geocod_ibge(city_filelist, cidade_ou_geocod)
+        if cidade is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City not found for {estado}/{cidade_ou_geocod} (tried both city ID and IBGE geocode)"
+            )
+        
+        # Load city data
+        city_data = load_city_data(estado, cidade)
+        if city_data is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City data not found for {estado}/{cidade}"
+            )
+        
+        # Get city info from filelist
+        city_info = city_filelist.get(cidade)
+        if city_info is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City metadata not found for city {cidade}"
+            )
+        
+        # Load indicators data to get level 2 indicators and their sectors
+        indicators_data = load_indicators_data()
+        
+        # Get all level 2 indicators grouped by sector
+        level2_indicators_by_sector = {}
+        for indicator_id, indicator_info in indicators_data.items():
+            if indicator_info.get('nivel') == '2':
+                sector = indicator_info.get('setor_estrategico', 'Unknown')
+                if sector not in level2_indicators_by_sector:
+                    level2_indicators_by_sector[sector] = []
+                level2_indicators_by_sector[sector].append({
+                    'id': indicator_id,
+                    'info': indicator_info
+                })
+        
+        # Process each sector and its indicators
+        sectors = []
+        total_indicators = 0
+        indicators_with_present = 0
+        indicators_with_future = 0
+        
+        for sector_name, sector_indicators in level2_indicators_by_sector.items():
+            panorama_indicators = []
+            
+            for indicator_data in sector_indicators:
+                indicator_id = indicator_data['id']
+                indicator_info = indicator_data['info']
+                total_indicators += 1
+                
+                # Process data for this indicator (reuse logic from single indicator endpoint)
+                present_data_points = []
+                future_trends_data = []
+                present_seen = set()
+                future_seen = set()
+                
+                indicators_list = city_data.get("indicators", [])
+                
+                for data_point in indicators_list:
+                    if str(data_point.get("indicator_id")) == indicator_id:
+                        year = data_point.get("year")
+                        scenario_id = data_point.get("scenario_id")
+                        value = data_point.get("value")
+                        
+                        if year and year <= 2020:
+                            # Present data
+                            present_key = (year, value, data_point.get("valuecolor"), data_point.get("rangelabel"))
+                            if present_key not in present_seen:
+                                present_seen.add(present_key)
+                                present_data_points.append(IndicatorValue(
+                                    year=year,
+                                    value=float(value or 0),
+                                    valuecolor=data_point.get("valuecolor", "#cccccc"),
+                                    rangelabel=data_point.get("rangelabel", "N/A")
+                                ))
+                        elif year and year > 2020:
+                            # Future projections
+                            scenario = "RCP4.5"
+                            if scenario_id:
+                                scenario = f"Scenario_{scenario_id}"
+                            
+                            future_key = (year, scenario_id, value, data_point.get("valuecolor"), data_point.get("rangelabel"))
+                            if future_key not in future_seen:
+                                future_seen.add(future_key)
+                                future_trends_data.append(FutureTrend(
+                                    year=year,
+                                    scenario=scenario,
+                                    value=float(value or 0),
+                                    valuecolor=data_point.get("valuecolor", "#cccccc"),
+                                    rangelabel=data_point.get("rangelabel", "N/A")
+                                ))
+                
+                # Check for dedicated future_trends structure
+                processed_future_trends = set()
+                for data_point in indicators_list:
+                    if str(data_point.get("indicator_id")) == indicator_id:
+                        future_trends_obj = data_point.get('future_trends', {})
+                        if future_trends_obj:
+                            trends_key = str(sorted(future_trends_obj.items()))
+                            if trends_key not in processed_future_trends:
+                                processed_future_trends.add(trends_key)
+                                
+                                for year_str, trend_data in future_trends_obj.items():
+                                    try:
+                                        year = int(year_str)
+                                        future_trends_data.append(FutureTrend(
+                                            year=year,
+                                            scenario="RCP4.5",
+                                            value=float(trend_data.get('value', 0)),
+                                            valuecolor=trend_data.get('valuecolor', '#000000'),
+                                            rangelabel=trend_data.get('valuelabel', trend_data.get('rangelabel', ''))
+                                        ))
+                                    except (ValueError, TypeError):
+                                        continue
+                
+                # Sort data by year
+                present_data_points.sort(key=lambda x: x.year)
+                future_trends_data.sort(key=lambda x: x.year)
+                
+                # Update counters
+                if present_data_points:
+                    indicators_with_present += 1
+                if future_trends_data:
+                    indicators_with_future += 1
+                
+                # Create panorama indicator
+                panorama_indicators.append(PanoramaIndicator(
+                    indicator_id=indicator_id,
+                    indicator_name=indicator_info.get('nome', 'Unknown'),
+                    level=indicator_info.get('nivel', '2'),
+                    present_data=present_data_points,
+                    future_trends=future_trends_data
+                ))
+            
+            # Only add sectors that have indicators
+            if panorama_indicators:
+                sectors.append(PanoramaSector(
+                    sector_name=sector_name,
+                    indicators=panorama_indicators
+                ))
+        
+        # Create summary
+        summary = PanoramaSummary(
+            total_sectors=len(sectors),
+            total_indicators=total_indicators,
+            indicators_with_present_data=indicators_with_present,
+            indicators_with_future_trends=indicators_with_future
+        )
+        
+        logger.info(f"Successfully retrieved panorama: {total_indicators} indicators across {len(sectors)} sectors")
+        
+        return PanoramaResponse(
+            geocod_ibge=city_data.get("indicators", [{}])[0].get("geocod_ibge", cidade_ou_geocod) if city_data.get("indicators") else cidade_ou_geocod,
+            city_name=city_info.get("name", city_data.get("name", "Unknown")),
+            state=estado,
+            sectors=sectors,
+            summary=summary
+        )
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error retrieving panorama for {estado}/{cidade_ou_geocod}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error while retrieving panorama data"
+        )
+
+@app.get(
     "/api/v1/indicadores/dados/{estado}/{cidade_ou_geocod}/{indicador_id}",
     response_model=IndicatorDataResponse,
     responses={
@@ -690,7 +1035,7 @@ async def get_indicator_data(
     ),
     cidade_ou_geocod: str = PathParam(
         ...,
-        description="City ID or IBGE geocode (7-digit IBGE code)",
+        description="City ID from Adapta Brasil structure or IBGE geocode (7-digit IBGE code)",
         examples=["5387", "4119905"],
         pattern=r"^[0-9]+$"
     ),
