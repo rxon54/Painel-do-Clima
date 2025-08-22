@@ -12,6 +12,63 @@ class PainelDataAPI {
     }
 
     /**
+     * Get all indicators with optional filtering
+     * @param {Object} options - Filtering options
+     * @param {string} options.setor - Filter by sector
+     * @param {string} options.nivel - Filter by level
+     * @param {string} options.search - Search term
+     * @param {number} options.limit - Maximum results (default: 100)
+     * @param {number} options.offset - Pagination offset (default: 0)
+     * @returns {Promise<Object>} List of indicators with metadata
+     */
+    async getAllIndicators(options = {}) {
+        const {
+            setor,
+            nivel,
+            search,
+            limit = 100,
+            offset = 0
+        } = options;
+
+        // Build query parameters
+        const params = new URLSearchParams();
+        if (setor) params.append('setor', setor);
+        if (nivel) params.append('nivel', nivel);
+        if (search) params.append('search', search);
+        if (limit) params.append('limit', limit.toString());
+        if (offset) params.append('offset', offset.toString());
+
+        const cacheKey = `indicators_all_${params.toString()}`;
+        
+        // Check cache first
+        if (this.cache.has(cacheKey)) {
+            console.log(`Cache hit for indicators list: ${params.toString()}`);
+            return this.cache.get(cacheKey);
+        }
+
+        try {
+            const url = `${this.baseUrl}/api/v1/indicadores/estrutura?${params}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            
+            // Cache successful responses
+            this.cache.set(cacheKey, data);
+            console.log(`Fetched ${data.indicators.length} indicators (total: ${data.total_count})`);
+            
+            return data;
+            
+        } catch (error) {
+            console.error('Error fetching all indicators:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Get indicator structure by ID with caching
      * @param {string} indicatorId - Numeric indicator ID
      * @returns {Promise<Object>} Indicator data structure
@@ -150,6 +207,134 @@ async function showIndicatorDetails(indicatorId) {
         return indicator;
     } catch (error) {
         console.error(`Failed to show indicator ${indicatorId}:`, error);
+    }
+}
+
+// Example 2: Enhanced sector browser with filtering
+async function initializeSectorBrowser() {
+    try {
+        // Get all indicators grouped by sector
+        const allData = await painelAPI.getAllIndicators({ limit: 1000 });
+        
+        console.log(`Dashboard data loaded:`);
+        console.log(`- ${allData.total_count} total indicators`);
+        console.log(`- ${allData.sectors.length} sectors available`);
+        
+        // Group indicators by sector for navigation
+        const sectorGroups = {};
+        allData.indicators.forEach(indicator => {
+            const sector = indicator.setor_estrategico;
+            if (!sectorGroups[sector]) {
+                sectorGroups[sector] = [];
+            }
+            sectorGroups[sector].push(indicator);
+        });
+        
+        // Create sector navigation
+        const nav = document.getElementById('sector-navigation');
+        if (nav) {
+            nav.innerHTML = '';
+            Object.entries(sectorGroups).forEach(([sector, indicators]) => {
+                const sectorBtn = document.createElement('button');
+                sectorBtn.textContent = `${sector} (${indicators.length})`;
+                sectorBtn.onclick = () => loadSectorIndicators(sector);
+                nav.appendChild(sectorBtn);
+            });
+        }
+        
+        return sectorGroups;
+    } catch (error) {
+        console.error('Failed to initialize sector browser:', error);
+    }
+}
+
+// Example 3: Search functionality
+async function searchIndicators(searchTerm) {
+    try {
+        const results = await painelAPI.getAllIndicators({
+            search: searchTerm,
+            limit: 50
+        });
+        
+        console.log(`Search "${searchTerm}": ${results.indicators.length} results`);
+        
+        // Update search results UI
+        const resultsContainer = document.getElementById('search-results');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+            
+            if (results.indicators.length === 0) {
+                resultsContainer.innerHTML = `<p>Nenhum indicador encontrado para "${searchTerm}"</p>`;
+                return;
+            }
+            
+            results.indicators.forEach(indicator => {
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.innerHTML = `
+                    <h4>${indicator.nome}</h4>
+                    <p><strong>Setor:</strong> ${indicator.setor_estrategico}</p>
+                    <p><strong>Nível:</strong> ${indicator.nivel}</p>
+                    <p>${indicator.descricao_simples}</p>
+                `;
+                item.onclick = () => handleIndicatorClick(indicator.id, item);
+                resultsContainer.appendChild(item);
+            });
+        }
+        
+        return results;
+    } catch (error) {
+        console.error('Search failed:', error);
+    }
+}
+
+// Example 4: Paginated indicator browser
+async function loadSectorIndicators(sector, page = 0, pageSize = 20) {
+    try {
+        const offset = page * pageSize;
+        const results = await painelAPI.getAllIndicators({
+            setor: sector,
+            limit: pageSize,
+            offset: offset
+        });
+        
+        console.log(`Loaded ${sector} indicators (page ${page + 1})`);
+        
+        // Update indicator list
+        const listContainer = document.getElementById('indicator-list');
+        if (listContainer) {
+            if (page === 0) listContainer.innerHTML = ''; // Clear on first page
+            
+            results.indicators.forEach(indicator => {
+                const item = document.createElement('div');
+                item.className = 'indicator-item';
+                item.innerHTML = `
+                    <div class="indicator-header">
+                        <span class="indicator-name">${indicator.nome}</span>
+                        <span class="indicator-level">Nível ${indicator.nivel}</span>
+                    </div>
+                    <p class="indicator-description">${indicator.descricao_simples}</p>
+                `;
+                item.onclick = () => handleIndicatorClick(indicator.id, item);
+                listContainer.appendChild(item);
+            });
+            
+            // Add pagination if needed
+            const hasMore = offset + pageSize < results.total_count;
+            if (hasMore) {
+                const loadMoreBtn = document.createElement('button');
+                loadMoreBtn.textContent = `Carregar mais (${results.total_count - offset - pageSize} restantes)`;
+                loadMoreBtn.onclick = () => {
+                    loadMoreBtn.remove();
+                    loadSectorIndicators(sector, page + 1, pageSize);
+                };
+                listContainer.appendChild(loadMoreBtn);
+            }
+        }
+        
+        return results;
+    } catch (error) {
+        console.error(`Failed to load ${sector} indicators:`, error);
     }
 }
 

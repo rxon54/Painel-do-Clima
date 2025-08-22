@@ -81,6 +81,10 @@ case "$1" in
         curl -s http://localhost:8001/health | python -m json.tool
         echo -e "\nIndicator count:"
         curl -s http://localhost:8001/api/v1/indicadores/count | python -m json.tool
+        echo -e "\nAll indicators (first 3):"
+        curl -s "http://localhost:8001/api/v1/indicadores/estrutura?limit=3" | python -m json.tool
+        echo -e "\nFiltered by sector (Saúde, first 2):"
+        curl -s "http://localhost:8001/api/v1/indicadores/estrutura?setor=Sa%C3%BAde&limit=2" | python -m json.tool
         echo -e "\nSample indicator (ID 2):"
         curl -s http://localhost:8001/api/v1/indicadores/estrutura/2 | python -m json.tool
         ;;
