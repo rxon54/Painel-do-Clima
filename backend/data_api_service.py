@@ -410,8 +410,92 @@ class HierarchyResponse(BaseModel):
             }
         }
 
-# Forward reference resolution for self-referencing model
+class HierarchicalIndicatorWithData(BaseModel):
+    """Single indicator with its hierarchical information, data, and children"""
+    id: str = Field(description="Indicator ID")
+    nome: str = Field(description="Indicator name") 
+    nivel: str = Field(description="Indicator level (2, 3, 4, 5, 6)")
+    setor_estrategico: Optional[str] = Field(description="Strategic sector (only for root indicator)", default=None)
+    present_data: List[IndicatorValue] = Field(description="Current/present data points", default_factory=list)
+    future_trends: List[FutureTrend] = Field(description="Future projection data", default_factory=list)
+    children: List['HierarchicalIndicatorWithData'] = Field(description="Child indicators with data", default_factory=list)
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "50001",
+                "nome": "Malária",
+                "nivel": "2",
+                "setor_estrategico": "Saúde",
+                "present_data": [
+                    {
+                        "year": 2020,
+                        "value": 3.5,
+                        "valuecolor": "#ff6b6b",
+                        "rangelabel": "Alto risco"
+                    }
+                ],
+                "future_trends": [
+                    {
+                        "year": 2030,
+                        "scenario": "RCP4.5",
+                        "value": 4.2,
+                        "valuecolor": "#ff4444",
+                        "rangelabel": "Risco muito alto"
+                    }
+                ],
+                "children": [
+                    {
+                        "id": "50002", 
+                        "nome": "Vulnerabilidade",
+                        "nivel": "3",
+                        "present_data": [],
+                        "future_trends": [],
+                        "children": []
+                    }
+                ]
+            }
+        }
+
+class HierarchicalDataResponse(BaseModel):
+    """Response containing hierarchical indicator data with location context"""
+    geocod_ibge: str = Field(description="IBGE code of the municipality")
+    city_name: str = Field(description="Municipality name")
+    state: str = Field(description="State abbreviation")
+    indicator: HierarchicalIndicatorWithData = Field(description="Root indicator with nested children and data")
+    total_indicators: int = Field(description="Total number of indicators in the hierarchy")
+    depth_levels: List[str] = Field(description="Unique levels present in the hierarchy")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "geocod_ibge": "4119905",
+                "city_name": "Paranaguá",
+                "state": "PR",
+                "indicator": {
+                    "id": "50001",
+                    "nome": "Malária",
+                    "nivel": "2",
+                    "setor_estrategico": "Saúde",
+                    "present_data": [
+                        {
+                            "year": 2020,
+                            "value": 3.5,
+                            "valuecolor": "#ff6b6b",
+                            "rangelabel": "Alto risco"
+                        }
+                    ],
+                    "future_trends": [],
+                    "children": []
+                },
+                "total_indicators": 3,
+                "depth_levels": ["2", "3", "6"]
+            }
+        }
+
+# Forward reference resolution for self-referencing models
 HierarchicalIndicator.model_rebuild()
+HierarchicalIndicatorWithData.model_rebuild()
 
 # Initialize FastAPI app
 app_description = """
@@ -448,16 +532,20 @@ app = FastAPI(
     redoc_url="/redoc",
     openapi_tags=[
         {
-            "name": "indicators",
-            "description": "Climate indicators data endpoints"
-        },
-        {
             "name": "health",
-            "description": "Service health monitoring"
+            "description": "🟢 Service health monitoring"
         },
         {
             "name": "auth",
-            "description": "Authentication information"
+            "description": "🔐 Authentication information"
+        },
+        {
+            "name": "indicator-structure",
+            "description": "🗂️ Climate indicator metadata and hierarchy structure"
+        },
+        {
+            "name": "indicator-data", 
+            "description": "📊 Climate indicator actual data values and projections"
         }
     ]
 )
@@ -774,6 +862,240 @@ def get_hierarchy_levels(indicator: HierarchicalIndicator, levels: Optional[set]
     
     return sorted(list(levels))
 
+# Data Hierarchy Helper Functions
+def extract_indicator_data_from_city(city_data: Dict[str, Any], indicator_id: str) -> tuple[List[IndicatorValue], List[FutureTrend]]:
+    """
+    Extract present_data and future_trends for a specific indicator from city data.
+    
+    Args:
+        city_data: Complete city climate data
+        indicator_id: ID of the indicator to extract data for
+        
+    Returns:
+        Tuple of (present_data, future_trends) lists, both empty if indicator not found
+    """
+    present_data = []
+    future_trends = []
+    
+    # Track unique combinations to avoid duplicates
+    present_seen = set()
+    future_seen = set()
+    
+    # City data structure: {"indicators": [{"indicator_id": ..., "year": ..., etc}]}
+    indicators_list = city_data.get("indicators", [])
+    
+    for data_point in indicators_list:
+        if str(data_point.get("indicator_id")) == indicator_id:
+            # Check if this is present data or future trend
+            year = data_point.get("year")
+            scenario_id = data_point.get("scenario_id")
+            value = data_point.get("value")
+            
+            if year and year <= 2020:
+                # Present data - create unique key for deduplication
+                present_key = (year, value, data_point.get("valuecolor"), data_point.get("rangelabel"))
+                if present_key not in present_seen:
+                    present_seen.add(present_key)
+                    present_data.append(IndicatorValue(
+                        year=year,
+                        value=float(value or 0),
+                        valuecolor=data_point.get("valuecolor", "#cccccc"),
+                        rangelabel=data_point.get("rangelabel", "N/A")
+                    ))
+            elif year and year > 2020:
+                # Future projections - check for scenario information
+                scenario = "RCP4.5"  # Default scenario
+                if scenario_id:
+                    # Map scenario IDs to scenario names if needed
+                    scenario = f"Scenario_{scenario_id}"
+                
+                # Create unique key for future trends deduplication
+                future_key = (year, scenario_id, value, data_point.get("valuecolor"), data_point.get("rangelabel"))
+                if future_key not in future_seen:
+                    future_seen.add(future_key)
+                    future_trends.append(FutureTrend(
+                        year=year,
+                        scenario=scenario,
+                        value=float(value or 0),
+                        valuecolor=data_point.get("valuecolor", "#cccccc"),
+                        rangelabel=data_point.get("rangelabel", "N/A")
+                    ))
+    
+    # Also check for dedicated future_trends structure (process only once)
+    processed_future_trends = set()
+    for data_point in indicators_list:
+        if str(data_point.get("indicator_id")) == indicator_id:
+            future_trends_obj = data_point.get('future_trends', {})
+            if future_trends_obj:
+                # Use a unique key to avoid processing the same future_trends multiple times
+                trends_key = str(sorted(future_trends_obj.items()))
+                if trends_key not in processed_future_trends:
+                    processed_future_trends.add(trends_key)
+                    
+                    # future_trends is a dictionary keyed by year (2030, 2050)
+                    for year_str, trend_data in future_trends_obj.items():
+                        try:
+                            year = int(year_str)
+                            future_trends.append(FutureTrend(
+                                year=year,
+                                scenario="RCP4.5",  # Default scenario
+                                value=float(trend_data.get('value', 0)),
+                                valuecolor=trend_data.get('valuecolor', '#000000'),
+                                rangelabel=trend_data.get('valuelabel', trend_data.get('rangelabel', ''))
+                            ))
+                        except (ValueError, TypeError):
+                            continue
+    
+    # Sort data by year
+    present_data.sort(key=lambda x: x.year)
+    future_trends.sort(key=lambda x: x.year)
+    
+    return present_data, future_trends
+
+def build_hierarchical_indicator_with_data(
+    indicator_id: str, 
+    indicators_data: Dict[str, Any], 
+    city_data: Dict[str, Any],
+    is_root: bool = True,
+    processed: Optional[set] = None
+) -> Optional[HierarchicalIndicatorWithData]:
+    """
+    Build a hierarchical indicator structure with data for all its children.
+    
+    Args:
+        indicator_id: The ID of the indicator to build hierarchy for
+        indicators_data: Dictionary of all indicators metadata
+        city_data: City climate data containing actual values
+        is_root: Whether this is the root indicator (includes setor_estrategico)
+        processed: Set of processed indicator IDs to avoid circular references
+        
+    Returns:
+        HierarchicalIndicatorWithData with nested children and data or None if not found
+    """
+    if processed is None:
+        processed = set()
+        
+    # Avoid circular references
+    if indicator_id in processed:
+        logger.warning(f"Circular reference detected for indicator {indicator_id}")
+        return None
+        
+    # Get indicator metadata
+    indicator_info = indicators_data.get(indicator_id)
+    if not indicator_info:
+        logger.warning(f"Indicator {indicator_id} not found in indicators data")
+        return None
+        
+    processed.add(indicator_id)
+    
+    # Extract data for this indicator
+    present_data, future_trends = extract_indicator_data_from_city(city_data, indicator_id)
+    
+    # Create the base indicator with data
+    hierarchical_indicator = HierarchicalIndicatorWithData(
+        id=indicator_info.get('id', indicator_id),
+        nome=indicator_info.get('nome', 'Unknown'),
+        nivel=indicator_info.get('nivel', 'Unknown'),
+        setor_estrategico=indicator_info.get('setor_estrategico') if is_root else None,
+        present_data=present_data,
+        future_trends=future_trends,
+        children=[]
+    )
+    
+    # Find all children of this indicator
+    children = []
+    for child_id, child_info in indicators_data.items():
+        if child_info.get('indicador_pai') == indicator_id and child_id not in processed:
+            child_hierarchy = build_hierarchical_indicator_with_data(
+                child_id, indicators_data, city_data, is_root=False, processed=processed.copy()
+            )
+            if child_hierarchy:
+                children.append(child_hierarchy)
+    
+    # Sort children by ID for consistent ordering
+    children.sort(key=lambda x: x.id)
+    hierarchical_indicator.children = children
+    
+    return hierarchical_indicator
+
+def build_direct_children_with_data(
+    indicator_id: str, 
+    indicators_data: Dict[str, Any], 
+    city_data: Dict[str, Any]
+) -> Optional[HierarchicalIndicatorWithData]:
+    """
+    Build a hierarchical indicator structure with data for only direct children (one level down).
+    
+    Args:
+        indicator_id: The ID of the indicator to build hierarchy for
+        indicators_data: Dictionary of all indicators metadata
+        city_data: City climate data containing actual values
+        
+    Returns:
+        HierarchicalIndicatorWithData with only direct children and data or None if not found
+    """
+    # Get indicator metadata
+    indicator_info = indicators_data.get(indicator_id)
+    if not indicator_info:
+        logger.warning(f"Indicator {indicator_id} not found in indicators data")
+        return None
+    
+    # Extract data for root indicator
+    present_data, future_trends = extract_indicator_data_from_city(city_data, indicator_id)
+    
+    # Create the base indicator with data
+    hierarchical_indicator = HierarchicalIndicatorWithData(
+        id=indicator_info.get('id', indicator_id),
+        nome=indicator_info.get('nome', 'Unknown'),
+        nivel=indicator_info.get('nivel', 'Unknown'),
+        setor_estrategico=indicator_info.get('setor_estrategico'),
+        present_data=present_data,
+        future_trends=future_trends,
+        children=[]
+    )
+    
+    # Find direct children only
+    direct_children = []
+    for child_id, child_info in indicators_data.items():
+        if child_info.get('indicador_pai') == indicator_id:
+            # Extract data for child
+            child_present_data, child_future_trends = extract_indicator_data_from_city(city_data, child_id)
+            
+            child_indicator = HierarchicalIndicatorWithData(
+                id=child_info.get('id', child_id),
+                nome=child_info.get('nome', 'Unknown'),
+                nivel=child_info.get('nivel', 'Unknown'),
+                setor_estrategico=None,  # Only root has setor_estrategico
+                present_data=child_present_data,
+                future_trends=child_future_trends,
+                children=[]  # No grandchildren for direct children endpoint
+            )
+            direct_children.append(child_indicator)
+    
+    # Sort children by ID for consistent ordering
+    direct_children.sort(key=lambda x: x.id)
+    hierarchical_indicator.children = direct_children
+    
+    return hierarchical_indicator
+
+def count_hierarchy_indicators_with_data(indicator: HierarchicalIndicatorWithData) -> int:
+    """Count total indicators in a hierarchical structure with data"""
+    count = 1  # Count the current indicator
+    for child in indicator.children:
+        count += count_hierarchy_indicators_with_data(child)
+    return count
+
+def get_hierarchy_levels_with_data(indicator: HierarchicalIndicatorWithData, levels: Optional[set] = None) -> List[str]:
+    """Get all unique levels in a hierarchical structure with data"""
+    if levels is None:
+        levels = set()
+    
+    levels.add(indicator.nivel)
+    for child in indicator.children:
+        get_hierarchy_levels_with_data(child, levels)
+    
+    return sorted(list(levels))
+
 # Middleware for request logging
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -853,7 +1175,7 @@ async def auth_status(authenticated: bool = Depends(verify_api_key)):
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get all indicators structure",
     description="Retrieve complete list of all climate indicators with optional filtering by sector, level, or search term"
 )
@@ -982,7 +1304,7 @@ async def get_all_indicators(
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get indicator structure by ID",
     description="Retrieve detailed climate indicator information by its unique identifier from the AdaptaBrasil filtered structure"
 )
@@ -1044,7 +1366,7 @@ async def get_indicator_structure(
 
 @app.get(
     "/api/v1/indicadores/count",
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get total indicators count",
     description="Returns the total number of available indicators in the system"
 )
@@ -1065,7 +1387,7 @@ async def get_indicators_count(authenticated: bool = Depends(verify_api_key)):
 
 @app.get(
     "/api/v1/indicadores/setores",
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get available sectors",
     description="Returns a list of all available strategic sectors (setores estratégicos)"
 )
@@ -1107,7 +1429,7 @@ async def get_available_sectors(authenticated: bool = Depends(verify_api_key)):
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-data"],
     summary="Get city climate indicators panorama",
     description="Retrieve complete panorama of all level 2 climate indicators for a city, organized by strategic sectors"
 )
@@ -1346,7 +1668,7 @@ async def get_city_panorama(
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-data"],
     summary="Get indicator data values",
     description="Retrieve actual climate indicator data values for a specific city using either city ID or IBGE geocode, including present data and future projections"
 )
@@ -1557,7 +1879,7 @@ async def get_indicator_data(
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get complete indicator hierarchy tree",
     description="Retrieve the complete hierarchical structure of an indicator including ALL descendants at any level"
 )
@@ -1644,7 +1966,7 @@ async def get_complete_indicator_hierarchy(
             "model": ErrorResponse
         }
     },
-    tags=["indicators"],
+    tags=["indicator-structure"],
     summary="Get direct children of indicator",
     description="Retrieve indicator with only its direct children (one level down)"
 )
@@ -1712,6 +2034,292 @@ async def get_indicator_direct_children(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal server error while building indicator hierarchy"
+        )
+
+@app.get(
+    "/api/v1/indicadores/dados/{estado}/{cidade_ou_geocod}/{indicador_id}/arvore-completa",
+    response_model=HierarchicalDataResponse,
+    responses={
+        200: {
+            "description": "Complete hierarchical indicator data retrieved successfully",
+            "model": HierarchicalDataResponse
+        },
+        404: {
+            "description": "City or indicator not found",
+            "model": ErrorResponse
+        },
+        500: {
+            "description": "Internal server error",
+            "model": ErrorResponse
+        }
+    },
+    tags=["indicator-data"],
+    summary="Get complete hierarchical indicator data tree",
+    description="Retrieve the complete hierarchical data structure for an indicator including ALL descendants at any level with actual climate data values"
+)
+async def get_complete_indicator_data_hierarchy(
+    authenticated: bool = Depends(verify_api_key),
+    estado: str = PathParam(
+        ...,
+        description="State abbreviation (e.g., 'PR', 'SP', 'RJ')",
+        examples=["PR"],
+        pattern=r"^[A-Z]{2}$"
+    ),
+    cidade_ou_geocod: str = PathParam(
+        ...,
+        description="City ID from Adapta Brasil structure or IBGE geocode (7-digit IBGE code)",
+        examples=["5387", "4119905"],
+        pattern=r"^[0-9]+$"
+    ),
+    indicador_id: str = PathParam(
+        ...,
+        description="Climate indicator ID to get complete data hierarchy for",
+        examples=["50001", "2"],
+        pattern=r"^[0-9]+$"
+    )
+) -> HierarchicalDataResponse:
+    """
+    Get complete hierarchical data tree for a climate indicator.
+    
+    Returns the indicator plus ALL its descendants at any level with actual climate data,
+    creating a complete tree structure with nested data. Perfect for comprehensive 
+    analysis and visualization of complex indicator relationships with full data context.
+    
+    Features:
+    - Complete nested tree structure with all descendants
+    - Present data values with colors and labels for visualization
+    - Future projections (2030, 2050) for all indicators in the hierarchy
+    - Empty data arrays for indicators without data (no exclusions)
+    - Location context (city name, state, IBGE code)
+    - Hierarchy metadata (total indicators, depth levels)
+    
+    Examples:
+    - indicador_id=50001: Returns 50001 (L2) + all L3, L4, L5, L6 descendants with data
+    - All nested relationships preserved with actual climate values
+    
+    Args:
+        estado: Two-letter state abbreviation (BR state codes)
+        cidade_ou_geocod: City ID or 7-digit IBGE geocode  
+        indicador_id: Root indicator ID for complete hierarchy
+        
+    Returns:
+        HierarchicalDataResponse: Complete nested indicator data tree
+        
+    Raises:
+        HTTPException: 404 if city/indicator not found, 500 for server errors
+    """
+    logger.info(f"Requesting complete data hierarchy - Estado: {estado}, Cidade: {cidade_ou_geocod}, Indicator: {indicador_id}")
+    
+    try:
+        # Load city filelist to resolve city ID from geocod_ibge if needed
+        city_filelist = load_city_filelist()
+        
+        # Try to resolve city ID (could be city ID or geocod_ibge)
+        cidade = find_city_by_geocod_ibge(city_filelist, cidade_ou_geocod)
+        if cidade is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City not found for {estado}/{cidade_ou_geocod} (tried both city ID and IBGE geocode)"
+            )
+        
+        # Load city climate data
+        city_data = load_city_data(estado, cidade)
+        if not city_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City data not found for {cidade} in {estado}"
+            )
+        
+        # Load indicators metadata
+        indicators_data = load_indicators_data()
+        
+        # Get city info from filelist
+        city_info = city_filelist.get(cidade)
+        if city_info is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City metadata not found for city {cidade}"
+            )
+        
+        # Build complete hierarchy with data
+        hierarchy = build_hierarchical_indicator_with_data(indicador_id, indicators_data, city_data)
+        
+        if hierarchy is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Indicator {indicador_id} not found"
+            )
+        
+        # Get city metadata for response
+        geocod_ibge = city_data.get("indicators", [{}])[0].get("geocod_ibge", cidade_ou_geocod) if city_data.get("indicators") else cidade_ou_geocod
+        city_name = city_info.get("name", city_data.get("name", "Unknown"))
+        
+        # Calculate metadata
+        total_indicators = count_hierarchy_indicators_with_data(hierarchy)
+        depth_levels = get_hierarchy_levels_with_data(hierarchy)
+        
+        logger.info(f"Successfully built complete data hierarchy for {indicador_id}: {total_indicators} indicators across {len(depth_levels)} levels")
+        
+        return HierarchicalDataResponse(
+            geocod_ibge=geocod_ibge,
+            city_name=city_name,
+            state=estado.upper(),
+            indicator=hierarchy,
+            total_indicators=total_indicators,
+            depth_levels=depth_levels
+        )
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error building complete data hierarchy for {indicador_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error while building indicator data hierarchy"
+        )
+
+@app.get(
+    "/api/v1/indicadores/dados/{estado}/{cidade_ou_geocod}/{indicador_id}/filhos",
+    response_model=HierarchicalDataResponse,
+    responses={
+        200: {
+            "description": "Direct children hierarchical indicator data retrieved successfully", 
+            "model": HierarchicalDataResponse
+        },
+        404: {
+            "description": "City or indicator not found",
+            "model": ErrorResponse
+        },
+        500: {
+            "description": "Internal server error",
+            "model": ErrorResponse
+        }
+    },
+    tags=["indicator-data"],
+    summary="Get direct children indicator data",
+    description="Retrieve indicator with actual climate data for only its direct children (one level down)"
+)
+async def get_indicator_direct_children_data(
+    authenticated: bool = Depends(verify_api_key),
+    estado: str = PathParam(
+        ...,
+        description="State abbreviation (e.g., 'PR', 'SP', 'RJ')",
+        examples=["PR"],
+        pattern=r"^[A-Z]{2}$"
+    ),
+    cidade_ou_geocod: str = PathParam(
+        ...,
+        description="City ID from Adapta Brasil structure or IBGE geocode (7-digit IBGE code)",
+        examples=["5387", "4119905"],
+        pattern=r"^[0-9]+$"
+    ),
+    indicador_id: str = PathParam(
+        ...,
+        description="Climate indicator ID to get direct children data for",
+        examples=["50001", "2"],
+        pattern=r"^[0-9]+$"
+    )
+) -> HierarchicalDataResponse:
+    """
+    Get direct children hierarchical data for a climate indicator.
+    
+    Returns the indicator plus only its direct children (one level down) with actual
+    climate data values. Perfect for exploring indicator data structure level by level
+    without overwhelming detail from deeper hierarchies.
+    
+    Features:
+    - Parent indicator with full climate data
+    - Direct children (one level down) with their climate data
+    - Present data values with colors and labels for visualization
+    - Future projections (2030, 2050) for parent and children
+    - Empty data arrays for indicators without data (no exclusions)
+    - Location context (city name, state, IBGE code)
+    
+    Examples:
+    - indicador_id=50001: Returns 50001 (L2) + direct L3 children with data
+    - No grandchildren or deeper levels included
+    
+    Args:
+        estado: Two-letter state abbreviation (BR state codes)
+        cidade_ou_geocod: City ID or 7-digit IBGE geocode  
+        indicador_id: Parent indicator ID for direct children
+        
+    Returns:
+        HierarchicalDataResponse: Parent indicator with direct children data only
+        
+    Raises:
+        HTTPException: 404 if city/indicator not found, 500 for server errors
+    """
+    logger.info(f"Requesting direct children data - Estado: {estado}, Cidade: {cidade_ou_geocod}, Indicator: {indicador_id}")
+    
+    try:
+        # Load city filelist to resolve city ID from geocod_ibge if needed
+        city_filelist = load_city_filelist()
+        
+        # Try to resolve city ID (could be city ID or geocod_ibge)
+        cidade = find_city_by_geocod_ibge(city_filelist, cidade_ou_geocod)
+        if cidade is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City not found for {estado}/{cidade_ou_geocod} (tried both city ID and IBGE geocode)"
+            )
+        
+        # Load city climate data
+        city_data = load_city_data(estado, cidade)
+        if not city_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City data not found for {cidade} in {estado}"
+            )
+        
+        # Load indicators metadata
+        indicators_data = load_indicators_data()
+        
+        # Get city info from filelist
+        city_info = city_filelist.get(cidade)
+        if city_info is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"City metadata not found for city {cidade}"
+            )
+        
+        # Build direct children hierarchy with data
+        hierarchy = build_direct_children_with_data(indicador_id, indicators_data, city_data)
+        
+        if hierarchy is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Indicator {indicador_id} not found"
+            )
+        
+        # Get city metadata for response
+        geocod_ibge = city_data.get("indicators", [{}])[0].get("geocod_ibge", cidade_ou_geocod) if city_data.get("indicators") else cidade_ou_geocod
+        city_name = city_info.get("name", city_data.get("name", "Unknown"))
+        
+        # Calculate metadata
+        total_indicators = count_hierarchy_indicators_with_data(hierarchy)
+        depth_levels = get_hierarchy_levels_with_data(hierarchy)
+        
+        logger.info(f"Successfully built direct children data hierarchy for {indicador_id}: {total_indicators} indicators across {len(depth_levels)} levels")
+        
+        return HierarchicalDataResponse(
+            geocod_ibge=geocod_ibge,
+            city_name=city_name,
+            state=estado.upper(),
+            indicator=hierarchy,
+            total_indicators=total_indicators,
+            depth_levels=depth_levels
+        )
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error building direct children data hierarchy for {indicador_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error while building indicator data hierarchy"
         )
 
 if __name__ == "__main__":
