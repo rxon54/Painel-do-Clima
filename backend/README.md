@@ -1,8 +1,36 @@
 # Backend: Painel do Clima
 
-This folder contains all backend Python code for the Painel do Clima project.
+This folder contains all backend Python code for the Painel do Clima project, including the modern FastAPI data service and AI-powered climate narrative generation.
 
-## Core Components
+## 🚀 Core Services
+
+### Data API Service (`data_api_service.py`)
+**Modern FastAPI service with comprehensive climate data access**
+- **Port**: 8001
+- **Authentication**: API key-based security
+- **Documentation**: http://localhost:8001/docs
+- **Features**:
+  - 🔐 Multi-key authentication system
+  - 📊 City climate panoramas (all Level 2 indicators)
+  - 🏛️ Hierarchical indicator navigation (complete trees + direct children)
+  - 📈 Present data + future climate projections
+  - 🌐 OpenAPI documentation with examples
+  - 📝 Request logging and monitoring
+
+**Key Endpoints**:
+- `GET /api/v1/indicadores/dados/{estado}/{cidade}/panorama` - Complete city overview
+- `GET /api/v1/indicadores/estrutura/{id}/arvore-completa` - Full hierarchy tree  
+- `GET /api/v1/indicadores/estrutura/{id}/filhos` - Direct children only
+- `GET /api/v1/indicadores/count` - Total indicators available
+- `GET /auth/status` - Authentication testing
+
+### Frontend Service (`serve.py`)
+**Static file server for web interface**
+- **Port**: 8000
+- **Purpose**: Serves the interactive web visualization
+- **CORS**: Enabled for local development
+
+## 📡 Data Components
 
 ### Data Source Generation
 - **`csv2json.py`** - Converts CSV indicator structure to JSON (handles UTF-8 BOM encoding)
@@ -21,7 +49,9 @@ This folder contains all backend Python code for the Painel do Clima project.
 - **`generate_llm_inputs.py`** - Creates structured templates for LLM processing
 - **`populate_llm_inputs.py`** - Populates templates with city-specific data
 
-### AI/LLM Integration
+## 🤖 AI/LLM Integration
+
+### Narrative Generation
 - **`filter_problematic_indicators.py`** - Filters indicators to focus on problematic areas
 - **`generate_narratives.py`** - Orchestrates LLM narrative generation using multiple providers
 - **`llm_prompts.py`** - Modular prompt templates for Brazilian Portuguese narratives
@@ -29,15 +59,44 @@ This folder contains all backend Python code for the Painel do Clima project.
 - **`render_html.py`** - Jinja2-based HTML report generation
 - **`generate_PdC.py`** - Final HTML report generation with embedded narratives
 
-### Web Server
-- **`serve.py`** - FastAPI server providing both data APIs and static file serving
-  - Health check endpoint: `/health`
-  - Data API: `/data`
-  - Frontend serving: `/`
+## 🔧 Service Management
 
-### Utility Scripts
-- **`csv2json.py`** - Converts CSV files to JSON with BOM handling
-- **Server Management**: Use `../server.sh` for easy server control (`start`, `dev`, `stop`, `status`)
+### Data API Service (Primary)
+```bash
+# From project root
+./data_api.sh start     # Start API service (port 8001)
+./data_api.sh status    # Check service status
+./data_api.sh logs      # View service logs
+./data_api.sh restart   # Restart service
+```
+
+### Frontend Service
+```bash
+# From project root  
+./server.sh start       # Start frontend (port 8000)
+./server.sh dev         # Development mode with auto-reload
+./server.sh status      # Check status
+```
+
+## 🔐 Authentication
+
+The Data API service requires API keys for protected endpoints:
+
+```bash
+# Test authentication
+curl -H "X-API-Key: painel-clima-frontend-2025" \
+     http://localhost:8001/auth/status
+
+# Access protected data  
+curl -H "X-API-Key: painel-clima-llm-2025" \
+     http://localhost:8001/api/v1/indicadores/count
+```
+
+**API Keys** (configured in `../config.yaml`):
+- `master` - Full administrative access
+- `frontend` - Frontend client access
+- `llm` - LLM agent access  
+- `admin` - Administrative operations
 
 ## Key Features
 - **Multi-Provider LLM Support**: OpenAI, Anthropic, Google, and 100+ others via LiteLLM

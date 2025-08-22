@@ -8,14 +8,16 @@ Serves filtered climate indicators with efficient caching and proper error handl
 
 import json
 import logging
+import yaml
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from functools import lru_cache
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, Path as PathParam, Query, Request, status
+from fastapi import FastAPI, HTTPException, Path as PathParam, Query, Request, status, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
 
 # Configure logging
@@ -24,6 +26,86 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Load configuration
+def load_config() -> Dict[str, Any]:
+    """Load configuration from config.yaml"""
+    config_path = Path(__file__).parent.parent / "config.yaml"
+    try:
+        with open(config_path, 'r', encoding='utf-8') as file:
+            config = yaml.safe_load(file)
+        logger.info(f"Configuration loaded from {config_path}")
+        return config
+    except Exception as e:
+        logger.warning(f"Could not load config.yaml: {e}")
+        return {}
+
+# Global configuration
+_config = load_config()
+
+# Authentication configuration
+class AuthConfig:
+    """Authentication configuration class"""
+    def __init__(self, config: Dict[str, Any]):
+        api_security = config.get('api_security', {})
+        self.enabled = api_security.get('enabled', False)
+        self.valid_keys = set(api_security.get('keys', {}).values()) if self.enabled else set()
+        self.public_endpoints = set(api_security.get('public_endpoints', []))
+        
+        if self.enabled:
+            logger.info(f"API Security enabled with {len(self.valid_keys)} keys")
+            logger.info(f"Public endpoints: {', '.join(self.public_endpoints)}")
+        else:
+            logger.info("API Security disabled")
+
+auth_config = AuthConfig(_config)
+
+# Authentication dependency
+async def verify_api_key(
+    request: Request,
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key")
+) -> bool:
+    """
+    Verify API key from X-API-Key header.
+    
+    Args:
+        request: FastAPI request object
+        x_api_key: API key from X-API-Key header
+        
+    Returns:
+        bool: True if authenticated or endpoint is public
+        
+    Raises:
+        HTTPException: 401 if authentication required but invalid/missing key
+    """
+    # Skip authentication if disabled
+    if not auth_config.enabled:
+        return True
+        
+    # Allow public endpoints
+    if request.url.path in auth_config.public_endpoints:
+        return True
+        
+    # Check API key
+    if not x_api_key:
+        logger.warning(f"Missing API key for {request.url.path} from {request.client.host if request.client else 'unknown'}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="API key required. Include X-API-Key header.",
+            headers={"WWW-Authenticate": "ApiKey"}
+        )
+        
+    if x_api_key not in auth_config.valid_keys:
+        logger.warning(f"Invalid API key attempted for {request.url.path} from {request.client.host if request.client else 'unknown'}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid API key",
+            headers={"WWW-Authenticate": "ApiKey"}
+        )
+        
+    # Log successful authentication (without exposing the key)
+    logger.debug(f"Valid API key used for {request.url.path}")
+    return True
 
 # Response models for OpenAPI documentation
 class IndicatorResponse(BaseModel):
@@ -273,10 +355,94 @@ class PanoramaResponse(BaseModel):
             }
         }
 
+# Hierarchical Indicator Models
+class HierarchicalIndicator(BaseModel):
+    """Single indicator with its hierarchical information and children"""
+    id: str = Field(description="Indicator ID")
+    nome: str = Field(description="Indicator name") 
+    nivel: str = Field(description="Indicator level (2, 3, 4, 5, 6)")
+    setor_estrategico: str = Field(description="Strategic sector")
+    indicador_pai: Optional[str] = Field(description="Parent indicator ID", default=None)
+    descricao_simples: Optional[str] = Field(description="Simple description", default=None)
+    descricao_completa: Optional[str] = Field(description="Complete description", default=None)
+    anos: Optional[str] = Field(description="Available years as JSON string", default=None)
+    unidade_medida: Optional[str] = Field(description="Unit of measurement", default=None)
+    children: List['HierarchicalIndicator'] = Field(description="Child indicators", default_factory=list)
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "50001",
+                "nome": "Malária",
+                "nivel": "2",
+                "setor_estrategico": "Saúde",
+                "indicador_pai": "50000",
+                "descricao_simples": "Risco de impacto das mudanças climáticas...",
+                "children": [
+                    {
+                        "id": "50002", 
+                        "nome": "Vulnerabilidade",
+                        "nivel": "3",
+                        "children": []
+                    }
+                ]
+            }
+        }
+
+class HierarchyResponse(BaseModel):
+    """Response containing hierarchical indicator structure"""
+    indicator: HierarchicalIndicator = Field(description="Root indicator with nested children")
+    total_indicators: int = Field(description="Total number of indicators in the hierarchy")
+    depth_levels: List[str] = Field(description="Unique levels present in the hierarchy")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "indicator": {
+                    "id": "50001",
+                    "nome": "Malária", 
+                    "nivel": "2",
+                    "setor_estrategico": "Saúde",
+                    "children": []
+                },
+                "total_indicators": 5,
+                "depth_levels": ["2", "3", "6"]
+            }
+        }
+
+# Forward reference resolution for self-referencing model
+HierarchicalIndicator.model_rebuild()
+
 # Initialize FastAPI app
+app_description = """
+Climate indicator data API for Brazilian municipalities based on AdaptaBrasil structure.
+
+## Authentication
+"""
+
+if auth_config.enabled:
+    app_description += """
+**API Key Required**: Include `X-API-Key` header with your API key.
+
+**Example:**
+```bash
+curl -H "X-API-Key: your-api-key-here" \\
+     http://localhost:8001/api/v1/indicadores/count
+```
+
+**Public Endpoints** (no authentication required):
+- `/health` - Service health check
+- `/docs` - API documentation
+- `/redoc` - Alternative API documentation
+"""
+else:
+    app_description += """
+**No Authentication**: All endpoints are publicly accessible.
+"""
+
 app = FastAPI(
     title="Painel do Clima Data API",
-    description="Climate indicator data API for Brazilian municipalities based on AdaptaBrasil structure",
+    description=app_description,
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -288,6 +454,10 @@ app = FastAPI(
         {
             "name": "health",
             "description": "Service health monitoring"
+        },
+        {
+            "name": "auth",
+            "description": "Authentication information"
         }
     ]
 )
@@ -474,6 +644,136 @@ def load_indicators_data() -> Dict[str, Any]:
     
     return _indicators_data
 
+# Hierarchy Helper Functions
+def build_hierarchical_indicator(indicator_id: str, indicators_data: Dict[str, Any], processed: Optional[set] = None) -> Optional[HierarchicalIndicator]:
+    """
+    Build a hierarchical indicator structure with all its children.
+    
+    Args:
+        indicator_id: The ID of the indicator to build hierarchy for
+        indicators_data: Dictionary of all indicators
+        processed: Set of processed indicator IDs to avoid circular references
+        
+    Returns:
+        HierarchicalIndicator with nested children or None if not found
+    """
+    if processed is None:
+        processed = set()
+        
+    # Avoid circular references
+    if indicator_id in processed:
+        logger.warning(f"Circular reference detected for indicator {indicator_id}")
+        return None
+        
+    # Get indicator data
+    indicator_info = indicators_data.get(indicator_id)
+    if not indicator_info:
+        logger.warning(f"Indicator {indicator_id} not found in data")
+        return None
+        
+    processed.add(indicator_id)
+    
+    # Create the base indicator
+    hierarchical_indicator = HierarchicalIndicator(
+        id=indicator_info.get('id', indicator_id),
+        nome=indicator_info.get('nome', 'Unknown'),
+        nivel=indicator_info.get('nivel', 'Unknown'),
+        setor_estrategico=indicator_info.get('setor_estrategico', 'Unknown'),
+        indicador_pai=indicator_info.get('indicador_pai'),
+        descricao_simples=indicator_info.get('descricao_simples'),
+        descricao_completa=indicator_info.get('descricao_completa'),
+        anos=indicator_info.get('anos'),
+        unidade_medida=indicator_info.get('unidade_medida'),
+        children=[]
+    )
+    
+    # Find all children of this indicator
+    children = []
+    for child_id, child_info in indicators_data.items():
+        if child_info.get('indicador_pai') == indicator_id and child_id not in processed:
+            child_hierarchy = build_hierarchical_indicator(child_id, indicators_data, processed.copy())
+            if child_hierarchy:
+                children.append(child_hierarchy)
+    
+    # Sort children by ID for consistent ordering
+    children.sort(key=lambda x: x.id)
+    hierarchical_indicator.children = children
+    
+    return hierarchical_indicator
+
+def build_direct_children_only(indicator_id: str, indicators_data: Dict[str, Any]) -> Optional[HierarchicalIndicator]:
+    """
+    Build a hierarchical indicator structure with only direct children (one level down).
+    
+    Args:
+        indicator_id: The ID of the indicator to build hierarchy for
+        indicators_data: Dictionary of all indicators
+        
+    Returns:
+        HierarchicalIndicator with only direct children or None if not found
+    """
+    # Get indicator data
+    indicator_info = indicators_data.get(indicator_id)
+    if not indicator_info:
+        logger.warning(f"Indicator {indicator_id} not found in data")
+        return None
+    
+    # Create the base indicator
+    hierarchical_indicator = HierarchicalIndicator(
+        id=indicator_info.get('id', indicator_id),
+        nome=indicator_info.get('nome', 'Unknown'),
+        nivel=indicator_info.get('nivel', 'Unknown'),
+        setor_estrategico=indicator_info.get('setor_estrategico', 'Unknown'),
+        indicador_pai=indicator_info.get('indicador_pai'),
+        descricao_simples=indicator_info.get('descricao_simples'),
+        descricao_completa=indicator_info.get('descricao_completa'),
+        anos=indicator_info.get('anos'),
+        unidade_medida=indicator_info.get('unidade_medida'),
+        children=[]
+    )
+    
+    # Find direct children only
+    direct_children = []
+    for child_id, child_info in indicators_data.items():
+        if child_info.get('indicador_pai') == indicator_id:
+            child_indicator = HierarchicalIndicator(
+                id=child_info.get('id', child_id),
+                nome=child_info.get('nome', 'Unknown'),
+                nivel=child_info.get('nivel', 'Unknown'),
+                setor_estrategico=child_info.get('setor_estrategico', 'Unknown'),
+                indicador_pai=child_info.get('indicador_pai'),
+                descricao_simples=child_info.get('descricao_simples'),
+                descricao_completa=child_info.get('descricao_completa'),
+                anos=child_info.get('anos'),
+                unidade_medida=child_info.get('unidade_medida'),
+                children=[]  # No grandchildren for direct children endpoint
+            )
+            direct_children.append(child_indicator)
+    
+    # Sort children by ID for consistent ordering
+    direct_children.sort(key=lambda x: x.id)
+    hierarchical_indicator.children = direct_children
+    
+    return hierarchical_indicator
+
+def count_hierarchy_indicators(indicator: HierarchicalIndicator) -> int:
+    """Count total indicators in a hierarchical structure"""
+    count = 1  # Count the current indicator
+    for child in indicator.children:
+        count += count_hierarchy_indicators(child)
+    return count
+
+def get_hierarchy_levels(indicator: HierarchicalIndicator, levels: Optional[set] = None) -> List[str]:
+    """Get all unique levels in a hierarchical structure"""
+    if levels is None:
+        levels = set()
+    
+    levels.add(indicator.nivel)
+    for child in indicator.children:
+        get_hierarchy_levels(child, levels)
+    
+    return sorted(list(levels))
+
 # Middleware for request logging
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -520,6 +820,27 @@ async def health_check():
         )
 
 @app.get(
+    "/auth/status",
+    tags=["auth"],
+    summary="Authentication status",
+    description="Check authentication configuration and test API key"
+)
+async def auth_status(authenticated: bool = Depends(verify_api_key)):
+    """
+    Get authentication status and configuration information.
+    
+    Returns information about the current authentication setup and validates
+    the provided API key if authentication is enabled.
+    """
+    return {
+        "authentication_enabled": auth_config.enabled,
+        "authenticated": authenticated,
+        "public_endpoints": list(auth_config.public_endpoints),
+        "total_valid_keys": len(auth_config.valid_keys) if auth_config.enabled else 0,
+        "message": "Authentication successful" if authenticated else "No authentication required"
+    }
+
+@app.get(
     "/api/v1/indicadores/estrutura",
     response_model=IndicatorListResponse,
     responses={
@@ -537,6 +858,7 @@ async def health_check():
     description="Retrieve complete list of all climate indicators with optional filtering by sector, level, or search term"
 )
 async def get_all_indicators(
+    authenticated: bool = Depends(verify_api_key),
     setor: Optional[str] = Query(
         None, 
         description="Filter by strategic sector (e.g., 'Recursos Hídricos', 'Saúde')",
@@ -665,6 +987,7 @@ async def get_all_indicators(
     description="Retrieve detailed climate indicator information by its unique identifier from the AdaptaBrasil filtered structure"
 )
 async def get_indicator_structure(
+    authenticated: bool = Depends(verify_api_key),
     indicador_id: str = PathParam(
         ...,
         description="Unique identifier of the climate indicator",
@@ -725,7 +1048,7 @@ async def get_indicator_structure(
     summary="Get total indicators count",
     description="Returns the total number of available indicators in the system"
 )
-async def get_indicators_count():
+async def get_indicators_count(authenticated: bool = Depends(verify_api_key)):
     """Get the total count of available indicators"""
     try:
         data = load_indicators_data()
@@ -746,7 +1069,7 @@ async def get_indicators_count():
     summary="Get available sectors",
     description="Returns a list of all available strategic sectors (setores estratégicos)"
 )
-async def get_available_sectors():
+async def get_available_sectors(authenticated: bool = Depends(verify_api_key)):
     """Get list of all unique strategic sectors"""
     try:
         data = load_indicators_data()
@@ -789,6 +1112,7 @@ async def get_available_sectors():
     description="Retrieve complete panorama of all level 2 climate indicators for a city, organized by strategic sectors"
 )
 async def get_city_panorama(
+    authenticated: bool = Depends(verify_api_key),
     estado: str = PathParam(
         ...,
         description="State abbreviation (e.g., 'PR', 'SP', 'RJ')",
@@ -1027,6 +1351,7 @@ async def get_city_panorama(
     description="Retrieve actual climate indicator data values for a specific city using either city ID or IBGE geocode, including present data and future projections"
 )
 async def get_indicator_data(
+    authenticated: bool = Depends(verify_api_key),
     estado: str = PathParam(
         ...,
         description="State abbreviation (e.g., 'PR', 'SP', 'RJ')",
@@ -1213,6 +1538,180 @@ async def get_indicator_data(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal server error while retrieving indicator data"
+        )
+
+@app.get(
+    "/api/v1/indicadores/estrutura/{indicator_id}/arvore-completa",
+    response_model=HierarchyResponse,
+    responses={
+        200: {
+            "description": "Complete indicator hierarchy retrieved successfully",
+            "model": HierarchyResponse
+        },
+        404: {
+            "description": "Indicator not found",
+            "model": ErrorResponse
+        },
+        500: {
+            "description": "Internal server error",
+            "model": ErrorResponse
+        }
+    },
+    tags=["indicators"],
+    summary="Get complete indicator hierarchy tree",
+    description="Retrieve the complete hierarchical structure of an indicator including ALL descendants at any level"
+)
+async def get_complete_indicator_hierarchy(
+    authenticated: bool = Depends(verify_api_key),
+    indicator_id: str = PathParam(
+        ...,
+        description="Climate indicator ID to get complete hierarchy for",
+        examples=["50001", "50004"],
+        pattern=r"^[0-9]+$"
+    )
+) -> HierarchyResponse:
+    """
+    Get complete hierarchical tree for a climate indicator.
+    
+    Returns the indicator plus ALL its descendants at any level, creating a complete
+    tree structure. Perfect for comprehensive analysis and visualization of complex
+    indicator relationships.
+    
+    Examples:
+    - indicator_id=50001: Returns 50001 + all children, grandchildren, etc.
+    - indicator_id=50004: Returns 50004 + 50027 + 50028 + 50029 + any deeper levels
+    
+    Args:
+        indicator_id: The ID of the root indicator
+        
+    Returns:
+        HierarchyResponse: Complete nested hierarchy with metadata
+        
+    Raises:
+        HTTPException: 404 if indicator not found, 500 for server errors
+    """
+    logger.info(f"Requesting complete hierarchy for indicator: {indicator_id}")
+    
+    try:
+        # Load indicators data
+        indicators_data = load_indicators_data()
+        
+        # Build complete hierarchy
+        hierarchy = build_hierarchical_indicator(indicator_id, indicators_data)
+        
+        if hierarchy is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Indicator {indicator_id} not found"
+            )
+        
+        # Calculate metadata
+        total_indicators = count_hierarchy_indicators(hierarchy)
+        depth_levels = get_hierarchy_levels(hierarchy)
+        
+        logger.info(f"Successfully built complete hierarchy for {indicator_id}: {total_indicators} indicators across {len(depth_levels)} levels")
+        
+        return HierarchyResponse(
+            indicator=hierarchy,
+            total_indicators=total_indicators,
+            depth_levels=depth_levels
+        )
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error building complete hierarchy for {indicator_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error while building indicator hierarchy"
+        )
+
+@app.get(
+    "/api/v1/indicadores/estrutura/{indicator_id}/filhos",
+    response_model=HierarchyResponse,
+    responses={
+        200: {
+            "description": "Direct children hierarchy retrieved successfully",
+            "model": HierarchyResponse
+        },
+        404: {
+            "description": "Indicator not found",
+            "model": ErrorResponse
+        },
+        500: {
+            "description": "Internal server error",
+            "model": ErrorResponse
+        }
+    },
+    tags=["indicators"],
+    summary="Get direct children of indicator",
+    description="Retrieve indicator with only its direct children (one level down)"
+)
+async def get_indicator_direct_children(
+    authenticated: bool = Depends(verify_api_key),
+    indicator_id: str = PathParam(
+        ...,
+        description="Climate indicator ID to get direct children for",
+        examples=["50001", "50004"],
+        pattern=r"^[0-9]+$"
+    )
+) -> HierarchyResponse:
+    """
+    Get direct children hierarchy for a climate indicator.
+    
+    Returns the indicator plus only its direct children (one level down).
+    Perfect for exploring indicator structure level by level without overwhelming
+    detail from deeper hierarchies.
+    
+    Examples:
+    - indicator_id=50001: Returns 50001 (L2) + 50002 (L3) + 50003 (L3) + 50004 (L3)
+    - No grandchildren or deeper levels included
+    
+    Args:
+        indicator_id: The ID of the parent indicator
+        
+    Returns:
+        HierarchyResponse: Indicator with direct children only
+        
+    Raises:
+        HTTPException: 404 if indicator not found, 500 for server errors
+    """
+    logger.info(f"Requesting direct children for indicator: {indicator_id}")
+    
+    try:
+        # Load indicators data
+        indicators_data = load_indicators_data()
+        
+        # Build direct children hierarchy
+        hierarchy = build_direct_children_only(indicator_id, indicators_data)
+        
+        if hierarchy is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Indicator {indicator_id} not found"
+            )
+        
+        # Calculate metadata
+        total_indicators = count_hierarchy_indicators(hierarchy)
+        depth_levels = get_hierarchy_levels(hierarchy)
+        
+        logger.info(f"Successfully built direct children hierarchy for {indicator_id}: {total_indicators} indicators across {len(depth_levels)} levels")
+        
+        return HierarchyResponse(
+            indicator=hierarchy,
+            total_indicators=total_indicators,
+            depth_levels=depth_levels
+        )
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error building direct children hierarchy for {indicator_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error while building indicator hierarchy"
         )
 
 if __name__ == "__main__":

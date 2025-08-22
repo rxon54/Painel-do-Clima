@@ -70,11 +70,37 @@ cd backend && python generate_PdC.py ../data/LLM_processed/<state_abbr>/<city_id
 ./data_api.sh status
 ```
 
+**Authentication** (REQUIRED for protected endpoints):
+- **API Key Authentication**: Include `X-API-Key` header with valid key
+- **Available Keys** (configured in config.yaml):
+  - `master`: painel-clima-master-2024 (full access)
+  - `frontend`: painel-clima-frontend-2024 (frontend client)
+  - `llm`: painel-clima-llm-2024 (LLM agents)
+  - `admin`: painel-clima-admin-2024 (administrative tasks)
+- **Public Endpoints** (no authentication required):
+  - `/health` - Service health check
+  - `/docs`, `/redoc` - API documentation
+  - `/auth/status` - Authentication status (requires key to test)
+
+**Example Usage**:
+```bash
+# Test authentication status
+curl -H "X-API-Key: painel-clima-frontend-2024" \
+     http://localhost:8001/auth/status
+
+# Access protected endpoint
+curl -H "X-API-Key: painel-clima-llm-2024" \
+     http://localhost:8001/api/v1/indicadores/count
+```
+
 **Key Endpoints** (Standard for all API work):
 - `GET /api/v1/indicadores/estrutura/{id}` - Get indicator structure by ID
 - `GET /api/v1/indicadores/count` - Total indicators count
 - `GET /api/v1/indicadores/setores` - Available sectors list
-- `GET /health` - Service health monitoring
+- `GET /api/v1/indicadores/dados/{estado}/{cidade}/panorama` - City overview
+- `GET /api/v1/indicadores/estrutura/{id}/arvore-completa` - Complete hierarchy
+- `GET /api/v1/indicadores/estrutura/{id}/filhos` - Direct children
+- `GET /health` - Service health monitoring (public)
 
 **API Documentation**: Always available at http://localhost:8001/docs
 

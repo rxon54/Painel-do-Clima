@@ -4,21 +4,31 @@ A comprehensive climate risk data visualization tool for Brazilian municipalitie
 
 ## Overview
 
-Painel do Clima transforms complex climate risk data into accessible, actionable insights for Brazilian municipalities. The tool fetches data from the AdaptaBrasil API, processes it into city-specific files, and provides an interactive web interface for exploring over 9,000 climate indicators across multiple sectors.
+Painel do Clima transforms complex climate risk data into accessible, actionable insights for Brazilian municipalities. The tool consists of two main services: a modern FastAPI data service and a web visualization frontend, working together to provide comprehensive climate indicator analysis.
 
-**Core Architecture**: `API Ingestion → Data Processing → Web Visualization → AI Narratives`
+**Architecture**: `AdaptaBrasil API → Data Processing → FastAPI Service + Web Visualization → AI Narratives`
 
-## Features
+## 🏗️ System Architecture
 
-- 🌡️ **Comprehensive Climate Data**: Access to thousands of climate indicators from AdaptaBrasil
-- 🗺️ **Municipal Focus**: City-specific climate risk assessments for Brazilian municipalities
+### Dual Service Architecture
+- **Frontend Service** (Port 8000): Web interface and static file serving
+- **Data API Service** (Port 8001): FastAPI-based RESTful API with authentication
+- **Data Processing**: Automated ingestion and city-specific data organization
+
+## ✨ Features
+
+- 🌡️ **Comprehensive Climate Data**: Access to 378+ climate indicators from AdaptaBrasil
+- 🗺️ **Municipal Focus**: City-specific climate risk assessments for all Brazilian municipalities
+- 🔐 **API Authentication**: Secure API access with key-based authentication
 - 🤖 **AI-Powered Narratives**: LLM-generated climate summaries in Brazilian Portuguese
 - 📊 **Interactive Visualization**: D3.js-powered hierarchical data exploration
 - 🔄 **Batch Processing**: Automated data ingestion with rate limiting and retry logic
 - 📈 **Future Projections**: Climate trends for 2030 and 2050 scenarios
-- 🌐 **Web Interface**: Clean, accessible frontend for data exploration
+- 🌐 **RESTful API**: Modern FastAPI service with OpenAPI documentation
+- 🏛️ **Hierarchical Structure**: Complete indicator hierarchy navigation
+- 📋 **City Panoramas**: Comprehensive city-wide climate overviews
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 
@@ -28,57 +38,114 @@ Painel do Clima transforms complex climate risk data into accessible, actionable
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone and Setup**:
 ```bash
-git clone <repository-url>
+git clone https://github.com/rxon54/Painel-do-Clima.git
 cd adaptabrasil
-```
-
-2. Install dependencies:
-```bash
 pip install -r requirements.txt
 ```
 
-3. Configure the project:
+2. **Configure the Project**:
 ```bash
 cp config.yaml.example config.yaml
-# Edit config.yaml with your settings
+# Edit config.yaml with your API keys and settings
 ```
 
-4. Set up environment variables for AI features:
+3. **Start Services**:
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+# Start Data API service (port 8001)
+./data_api.sh start
+
+# Start Frontend service (port 8000) 
+./server.sh start
+
+# Verify both services
+./data_api.sh status && ./server.sh status
 ```
 
-### Running the Application
+4. **Access the Application**:
+- **Web Interface**: http://localhost:8000
+- **API Documentation**: http://localhost:8001/docs
+- **API Health Check**: http://localhost:8001/health
 
-1. **Generate Indicator Lists**:
+## 🔐 API Authentication
+
+The Data API service uses key-based authentication for secure access:
+
+### API Keys
+Configure in `config.yaml` under `api_security.keys`:
+- **master**: Full administrative access
+- **frontend**: Frontend client access  
+- **llm**: LLM agent access
+- **admin**: Administrative operations
+
+### Usage Examples
+```bash
+# Test authentication status
+curl -H "X-API-Key: your-api-key-here" \
+     http://localhost:8001/auth/status
+
+# Get city climate panorama
+curl -H "X-API-Key: your-frontend-key" \
+     http://localhost:8001/api/v1/indicadores/dados/PR/4119905/panorama
+
+# Get indicator hierarchy
+curl -H "X-API-Key: your-llm-key" \
+     http://localhost:8001/api/v1/indicadores/estrutura/50001/arvore-completa
+```
+
+### Public Endpoints (No Authentication)
+- `/health` - Service health check
+- `/docs`, `/redoc` - API documentation
+- `/openapi.json` - OpenAPI specification
+
+## 📡 API Endpoints
+
+### Core Data Endpoints
+- `GET /api/v1/indicadores/estrutura` - List all indicators
+- `GET /api/v1/indicadores/estrutura/{id}` - Get indicator by ID
+- `GET /api/v1/indicadores/count` - Total indicators count
+- `GET /api/v1/indicadores/setores` - Available sectors
+
+### City Data Endpoints  
+- `GET /api/v1/indicadores/dados/{estado}/{cidade}/panorama` - City climate overview
+- `GET /api/v1/indicadores/dados/{estado}/{cidade}/{indicator_id}` - Specific indicator data
+
+### Hierarchy Endpoints
+- `GET /api/v1/indicadores/estrutura/{id}/arvore-completa` - Complete indicator tree
+- `GET /api/v1/indicadores/estrutura/{id}/filhos` - Direct children only
+
+### Authentication Endpoints
+- `GET /auth/status` - Authentication configuration and status
+
+## 🛠️ Data Processing Workflow
+
+### 1. Initial Setup
 ```bash
 # Generate indicator/year pairs from AdaptaBrasil structure
 cd backend
 python extract_indicator_years_pairs.py adaptaBrasilAPIEstrutura.json .
 ```
 
-2. **Fetch Climate Data**:
+### 2. Data Ingestion
 ```bash
+# Fetch climate data for all configured states
 python backend/adaptabrasil_batch_ingestor.py
 ```
 
-3. **Process City Files**:
+### 3. Data Processing
 ```bash
+# Process and organize city files
 python backend/process_city_files.py
 ```
 
-4. **Start the Web Server**:
+### 4. AI Narratives (Optional)
 ```bash
-# Option 1: Direct Python
-python backend/serve.py
+# Filter problematic indicators
+python backend/filter_problematic_indicators.py PR 5238 ../data/LLM
 
-# Option 2: Using management script
-./server.sh start
-
-# Option 3: Development mode with auto-reload
-./server.sh dev
+# Generate climate narratives with AI
+python backend/generate_narratives.py 5238 PR ../data/LLM ../data/LLM_processed
 ```
 
 5. **Access the Interface**:
@@ -311,8 +378,177 @@ Follow the established patterns:
 ### Common Issues
 - **API Failures**: Check rate limiting and network connectivity
 - **Missing Data**: Verify `config.yaml` state/indicator settings
-- **LLM Issues**: Check API keys and Langfuse dashboard
+- **LLM Issues**: Check API keys and Langfuse dashboard  
 - **Frontend Problems**: Inspect `data/city_filelist.json` for processed cities
+
+## ⚙️ Configuration Guide
+
+### Environment Setup
+```bash
+# 1. Copy example configuration
+cp config.yaml.example config.yaml
+
+# 2. Edit with your API keys and settings
+nano config.yaml  # or your preferred editor
+```
+
+### Key Configuration Sections
+
+#### API Security Settings
+```yaml
+api_security:
+  enabled: true  # Set to false to disable authentication
+  keys:
+    master: "your-secure-master-key-2025"
+    frontend: "your-frontend-key-2025"  
+    llm: "your-llm-agent-key-2025"
+    admin: "your-admin-key-2025"
+  public_endpoints:
+    - "/health"
+    - "/docs"
+    - "/redoc"
+    - "/openapi.json"
+```
+
+#### LLM Integration
+```yaml
+llm:
+  model: "openai/gpt-4o-mini"  # Any LiteLLM-supported model
+  temperature: 0.3
+  max_tokens: 10000
+  timeout: 30
+  max_retries: 3
+
+# Required API key
+OPENAI_API_KEY: "your-openai-api-key-here"
+```
+
+#### Data Processing
+```yaml
+# States to process (comma-separated for multiple)
+state: "PR, SC, RS, SP, RJ, MG, ES, BA"
+
+# Processing settings
+delay_seconds: 1  # Rate limiting between API calls
+output_dir: "../data/"
+save_full_response: true  # Keep raw responses for debugging
+```
+
+## 📁 Updated Project Structure
+
+```
+adaptabrasil/
+├── 🔧 Service Management
+│   ├── data_api.sh           # Data API service (port 8001)
+│   └── server.sh             # Frontend service (port 8000)
+├── ⚙️ Configuration  
+│   ├── config.yaml           # Main configuration (create from example)
+│   └── config.yaml.example   # Configuration template (NEW)
+├── 📁 backend/               # Core processing and API
+│   ├── 🚀 data_api_service.py     # FastAPI service with authentication
+│   ├── 🌐 serve.py                # Frontend static file server
+│   ├── 📡 adaptabrasil_batch_ingestor.py  # Data ingestion from API
+│   ├── 🔄 process_city_files.py   # Data processing and organization
+│   ├── 🤖 generate_narratives.py  # AI narrative generation
+│   └── 🏗️ generate_PdC.py         # HTML report generation
+├── 📁 frontend/              # Web visualization interface
+│   ├── 🌐 paineldoclima.html      # Main interactive interface
+│   ├── 🎨 paineldoclima.css       # Styling and layout
+│   ├── ⚡ paineldoclima.js        # D3.js visualization logic
+│   └── 📊 ab_structure.json      # Indicator hierarchy structure
+├── 📁 data/                  # Processed climate data
+│   ├── 📁 PR/, SC/, RS/...        # State-organized city data
+│   ├── 📁 LLM/                    # AI processing workspace
+│   └── 📁 LLM_processed/          # Generated narratives and reports
+├── 📁 context/               # Project documentation and context
+└── 📋 requirements.txt        # Python dependencies
+```
+
+## 🔄 Service Management Guide
+
+### Dual Service Architecture
+The system runs two complementary services:
+
+#### Data API Service (Port 8001) - **Primary API**
+```bash
+./data_api.sh start    # Start FastAPI service
+./data_api.sh stop     # Stop service
+./data_api.sh restart  # Restart service  
+./data_api.sh status   # Check service status
+./data_api.sh logs     # View service logs
+```
+
+**Features:**
+- 🔐 Key-based authentication
+- 📡 RESTful API with OpenAPI documentation
+- 🏛️ Hierarchical indicator navigation  
+- 📊 City climate panoramas
+- 📈 Present data + future projections
+
+#### Frontend Service (Port 8000) - **Web Interface**
+```bash
+./server.sh start     # Start static file server
+./server.sh dev       # Development mode with auto-reload
+./server.sh stop      # Stop server
+./server.sh status    # Check server status
+```
+
+**Features:**
+- 🌐 Interactive climate data visualization
+- 📱 Responsive web interface
+- 🎨 D3.js-powered hierarchical browsing
+- 🔍 City search and filtering
+
+### Service Access Points
+- **Web Interface**: http://localhost:8000
+- **API Documentation**: http://localhost:8001/docs
+- **API Health Check**: http://localhost:8001/health  
+- **Authentication Test**: http://localhost:8001/auth/status
+
+## 🧪 Development & Testing
+
+### API Testing Examples
+```bash
+# Test public endpoints (no auth required)
+curl http://localhost:8001/health
+
+# Test authentication status
+curl -H "X-API-Key: painel-clima-frontend-2025" \
+     http://localhost:8001/auth/status
+
+# Get total indicators count
+curl -H "X-API-Key: painel-clima-llm-2025" \
+     http://localhost:8001/api/v1/indicadores/count
+
+# Get city climate panorama (comprehensive overview)
+curl -H "X-API-Key: painel-clima-admin-2025" \
+     "http://localhost:8001/api/v1/indicadores/dados/PR/4119905/panorama" | jq .summary
+
+# Get complete indicator hierarchy
+curl -H "X-API-Key: painel-clima-master-2025" \
+     "http://localhost:8001/api/v1/indicadores/estrutura/50001/arvore-completa" | jq
+
+# Get direct children only
+curl -H "X-API-Key: painel-clima-frontend-2025" \
+     "http://localhost:8001/api/v1/indicadores/estrutura/50001/filhos" | jq '.indicator.children[].nome'
+```
+
+### Data Processing Testing
+```bash
+# Test single city data fetch
+cd backend
+python adaptabrasil_simple_query.py PR 5238
+
+# Validate indicator data loading
+python -c "
+from data_api_service import load_indicators_data
+data = load_indicators_data()  
+print(f'✅ Loaded {len(data)} climate indicators')
+"
+
+# Test AI narrative generation (requires OpenAI key)
+python generate_narratives.py 5238 PR ../data/LLM ../data/LLM_processed
+```
 
 ## Dependencies
 
