@@ -56,21 +56,21 @@ def load_config(path: str = "../config.yaml") -> Dict[str, Any]:
 def ensure_dir(path: str):
     os.makedirs(path, exist_ok=True)
 
-def fetch_indicators(state: str, indicator_id: str, year: int) -> Any:   
+def fetch_indicators(state: str, indicator_id: str, year: int, resolution: str = "municipio") -> Any:
     """
-    Fetches all cities' values for a given indicator_id in a state/year.
+    Fetches all entities' values for a given indicator_id in a state/year for specified resolution.
     """
-    url = f"https://sistema.adaptabrasil.mcti.gov.br/api/mapa-dados/{state}/municipio/{indicator_id}/{year}/null/adaptabrasil"
+    url = f"https://sistema.adaptabrasil.mcti.gov.br/api/mapa-dados/{state}/{resolution}/{indicator_id}/{year}/null/adaptabrasil"
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
 
 # fetch future trends for a given indicator_id in a state/year
-def fetch_future_trends(state: str, indicator_id: str, year: int) -> Any:
+def fetch_future_trends(state: str, indicator_id: str, year: int, resolution: str = "municipio") -> Any:
     """
-    Fetches future trends for a given indicator_id in a state/year.
+    Fetches future trends for a given indicator_id in a state/year for specified resolution.
     """
-    url = f"https://sistema.adaptabrasil.mcti.gov.br/api/total/{state}/municipio/{indicator_id}/null/{year}"
+    url = f"https://sistema.adaptabrasil.mcti.gov.br/api/total/{state}/{resolution}/{indicator_id}/null/{year}"
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
@@ -142,11 +142,25 @@ def main():
     logging.info("=== Batch Ingestor Started ===")
     config = load_config()
     states = parse_states(config["state"])
+    resolution = config.get("resolution", "municipio")  # Get resolution from config
     delay = float(config.get("delay_seconds", config.get("delay", 1.0)))  # Support both delay_seconds and delay
     output_dir = config.get("output_dir", "output/")
     debug = config.get("save_full_response", config.get("debug", False))  # Support both save_full_response and debug
 
     ensure_dir(output_dir)
+    
+    # Determine if we need a special folder structure for supra-state resolutions
+    is_regional_resolution = resolution == "regiao"
+    if is_regional_resolution:
+        # For regional data, create a BR (Brasil) folder
+        br_output_dir = os.path.join(output_dir, "BR")
+        ensure_dir(br_output_dir)
+        effective_output_dir = br_output_dir
+        # For regional resolution, we'll still process by state but save in BR folder
+        logging.info(f"Using regional resolution '{resolution}' - files will be saved in BR/ folder")
+    else:
+        effective_output_dir = output_dir
+        logging.info(f"Using intra-state resolution '{resolution}' - files will be saved by state")
     
     # Calculate total workload for progress tracking
     mapa_dados_indicators = load_indicator_year_pairs(config.get("mapa_dados_file", "mapa-dados.txt"))
@@ -161,7 +175,11 @@ def main():
     print(f"\n🌍 AdaptaBrasil Batch Ingestor")
     print(f"═" * 50)
     print(f"📍 States to process: {len(states)} ({', '.join(states)})")
-    print(f"📊 Present indicators per state: {len(mapa_dados_indicators)}")
+    print(f"🎯 Resolution: {resolution}")  # Show current resolution
+    print(f"� Output directory: {effective_output_dir}")
+    if is_regional_resolution:
+        print(f"🌎 Regional resolution detected - using BR/ folder structure")
+    print(f"�📊 Present indicators per state: {len(mapa_dados_indicators)}")
     print(f"🔮 Future trend indicators per state: {len(trends_indicators)}")
     print(f"📈 Total indicators per state: {indicators_per_state}")
     print(f"🎯 Total API requests: {total_requests}")
@@ -198,12 +216,12 @@ def main():
             print(f" | {indicator_id}/{year}")
             print_progress_bar(global_progress, total_requests, prefix="  Overall")
             
-            ab_response = fetch_with_retries(fetch_indicators, state, indicator_id, year, log_context=log_ctx)
+            ab_response = fetch_with_retries(fetch_indicators, state, indicator_id, year, resolution, log_context=log_ctx)
             if ab_response is not None:
-                summary_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}.json")
+                summary_path = os.path.join(effective_output_dir, f"mapa-dados_{resolution}_{state}_{indicator_id}_{year}.json")
                 save_json(ab_response, summary_path)
                 if debug:
-                    debug_path = os.path.join(output_dir, f"mapa-dados_{state}_{indicator_id}_{year}_raw.json")
+                    debug_path = os.path.join(effective_output_dir, f"mapa-dados_{resolution}_{state}_{indicator_id}_{year}_raw.json")
                     save_json(ab_response, debug_path)
                 success += 1
             else:
@@ -232,12 +250,12 @@ def main():
                 print(f" | {indicator_id}/{year}")
                 print_progress_bar(global_progress, total_requests, prefix="  Overall")
                 
-                future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, log_context=log_ctx)
+                future_response = fetch_with_retries(fetch_future_trends, state, indicator_id, year, resolution, log_context=log_ctx)
                 if future_response is not None:
-                    future_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}.json")
+                    future_path = os.path.join(effective_output_dir, f"future_trends_{resolution}_{state}_{indicator_id}_{year}.json")
                     save_json(future_response, future_path)
                     if debug:
-                        debug_path = os.path.join(output_dir, f"future_trends_{state}_{indicator_id}_{year}_raw.json")
+                        debug_path = os.path.join(effective_output_dir, f"future_trends_{resolution}_{state}_{indicator_id}_{year}_raw.json")
                         save_json(future_response, debug_path)
                     success += 1
                 else:
