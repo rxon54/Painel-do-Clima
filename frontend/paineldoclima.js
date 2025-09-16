@@ -309,7 +309,9 @@ function renderIndentedList(container, root) {
         li.setAttribute('data-level', node.nivel);
         // --- GRID ROW ---
         const row = document.createElement('span');
-        row.className = 'indicator-row-grid';
+        row.className = 'indicator-row-grid indicator-row';
+        row.setAttribute('data-indicator-id', node.id);
+        
         // Tree label (with toggle if needed)
         const labelCell = document.createElement('span');
         labelCell.className = 'tree-label-cell';
@@ -325,7 +327,11 @@ function renderIndentedList(container, root) {
         // FIX: Call showIndicatorDoc directly, not via global
         idSpan.addEventListener('click', function(e) {
             e.stopPropagation();
-            showIndicatorDoc(node.id);
+            // Only allow clicks on available indicators
+            const row = e.target.closest('.indicator-row');
+            if (row && !row.classList.contains('indicator-unavailable')) {
+                showIndicatorDoc(node.id);
+            }
         });
         label.innerHTML = '';
         label.appendChild(idSpan);
@@ -386,6 +392,13 @@ function renderIndentedList(container, root) {
 
 // --- Update indicator values in the indented list ---
 function updateIndicatorValues(data) {
+    // First, reset all indicators to unavailable state
+    resetIndicatorAvailability();
+    
+    // Create a set of available indicator IDs for quick lookup
+    const availableIndicators = new Set(data.map(record => record.indicator_id));
+    
+    // Update indicators with actual data
     data.forEach(record => {
         // Present value
         const elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}']`);
@@ -421,6 +434,41 @@ function updateIndicatorValues(data) {
                 el2050.style.background = '#eee';
                 el2050.style.color = '#aaa';
             }
+        }
+        
+        // Mark indicator as available
+        markIndicatorAsAvailable(record.indicator_id);
+    });
+    
+    // Mark indicators without data as unavailable
+    markUnavailableIndicators(availableIndicators);
+}
+
+// Helper function to reset all indicators to default state
+function resetIndicatorAvailability() {
+    // Reset all indicator rows to normal appearance
+    document.querySelectorAll('.indicator-row').forEach(row => {
+        row.classList.remove('indicator-unavailable');
+        row.classList.remove('indicator-available');
+    });
+}
+
+// Helper function to mark an indicator as available
+function markIndicatorAsAvailable(indicatorId) {
+    const row = document.querySelector(`.indicator-row[data-indicator-id='${indicatorId}']`);
+    if (row) {
+        row.classList.remove('indicator-unavailable');
+        row.classList.add('indicator-available');
+    }
+}
+
+// Helper function to mark indicators without data as unavailable
+function markUnavailableIndicators(availableIndicators) {
+    document.querySelectorAll('.indicator-row').forEach(row => {
+        const indicatorId = row.getAttribute('data-indicator-id');
+        if (indicatorId && !availableIndicators.has(parseInt(indicatorId))) {
+            row.classList.remove('indicator-available');
+            row.classList.add('indicator-unavailable');
         }
     });
 }
@@ -598,86 +646,373 @@ function loadJsonData(jsonData) {
     }
 }
 
-// --- City and L2 selection logic ---
-let cityFileList = {};
-let stateCityMap = {};
+// --- Resolution and Entity selection logic ---
+let entityFileList = {};
+let ibgeGeographicData = null;
+let selectedResolution = 'municipio';
 let selectedState = null;
-let selectedCity = null;
+let selectedEntity = null;
 
-async function loadCityFileList() {
+// IBGE API integration
+const IBGE_API_BASE = 'https://servicodados.ibge.gov.br/api/v1/localidades';
+
+async function loadIBGEGeographicData() {
     try {
-        const resp = await fetch('data/city_filelist.json');
-        if (!resp.ok) throw new Error('city_filelist.json não encontrado');
-        cityFileList = await resp.json();
-        // Build stateCityMap: {state: {cityId: {name, ...}}}
-        stateCityMap = {};
-        Object.entries(cityFileList).forEach(([cityId, info]) => {
-            if (!info.state) return;
-            if (!stateCityMap[info.state]) stateCityMap[info.state] = {};
-            stateCityMap[info.state][cityId] = info;
+        console.log('Loading IBGE geographic data...');
+        
+        // Get all states with region info
+        const statesResp = await fetch(`${IBGE_API_BASE}/estados`);
+        const states = await statesResp.json();
+        
+        // Get all regions  
+        const regionsResp = await fetch(`${IBGE_API_BASE}/regioes`);
+        const regions = await regionsResp.json();
+        
+        // Transform to our entity format
+        const ibgeData = {
+            estados: {},
+            regioes: {}
+        };
+        
+        // Process states
+        states.forEach(state => {
+            // Check if we have actual climate data for this state
+            const stateFile = `${state.sigla}/state_${state.id}.json`;
+            console.log(`Mapping state ${state.nome} (ID: ${state.id}, Sigla: ${state.sigla}) to file: ${stateFile}`);
+            
+            ibgeData.estados[state.id] = {
+                name: state.nome,
+                state: state.sigla,
+                file: stateFile, // Point to potential state data file
+                geocod_ibge: String(state.id),
+                resolution: 'estado',
+                region_id: state.regiao.id,
+                region_name: state.regiao.nome
+            };
         });
-        populateStateDropdown();
-    } catch (e) {
-        alert('Erro ao carregar city_filelist.json: ' + e);
+        
+        // Process regions
+        regions.forEach(region => {
+            // Check if we have actual climate data for this region
+            const regionFile = `region_${region.id}.json`;
+            
+            ibgeData.regioes[region.id] = {
+                name: region.nome,
+                file: regionFile, // Point to potential region data file
+                geocod_ibge: String(region.id),
+                resolution: 'regiao'
+            };
+        });
+        
+        ibgeGeographicData = ibgeData;
+        console.log('IBGE data loaded successfully:', ibgeData);
+        return ibgeData;
+        
+    } catch (error) {
+        console.error('Error loading IBGE data:', error);
+        return null;
     }
+}
+
+// Resolution cascade configuration
+const RESOLUTION_CASCADE = {
+    'regiao': {
+        levels: ['regiao'],
+        labels: ['Região'],
+        placeholder: 'Selecione uma região...'
+    },
+    'estado': {
+        levels: ['estado'], 
+        labels: ['Estado'],
+        placeholder: 'Selecione um estado...'
+    },
+    'mesorregiao': {
+        levels: ['estado', 'mesorregiao'],
+        labels: ['Estado', 'Mesorregião'],
+        placeholder: 'Selecione uma mesorregião...'
+    },
+    'microrregiao': {
+        levels: ['estado', 'microrregiao'],
+        labels: ['Estado', 'Microrregião'],
+        placeholder: 'Selecione uma microrregião...'
+    },
+    'municipio': {
+        levels: ['estado', 'municipio'],
+        labels: ['Estado', 'Cidade'],
+        placeholder: 'Selecione uma cidade...'
+    }
+};
+
+async function loadEntityFileList() {
+    // Show loading indicator
+    const fileInfoElement = document.getElementById('file-info');
+    if (fileInfoElement) fileInfoElement.textContent = 'Carregando listas de entidades...';
+    
+    try {
+        const resp = await fetch('data/entity_filelist.json');
+        if (!resp.ok) throw new Error('entity_filelist.json não encontrado');
+        entityFileList = await resp.json();
+        console.log('Loaded entity_filelist.json:', entityFileList);
+        
+        // Check if municipio section exists, if not load from city_filelist.json
+        if (!entityFileList['municipio']) {
+            console.log('No municipio section found. Loading municipalities from city_filelist.json...');
+            try {
+                const cityResp = await fetch('data/city_filelist.json');
+                if (cityResp.ok) {
+                    const cityData = await cityResp.json();
+                    // Add municipio section with proper resolution format
+                    entityFileList['municipio'] = {};
+                    Object.entries(cityData).forEach(([cityId, info]) => {
+                        entityFileList['municipio'][cityId] = {
+                            ...info,
+                            resolution: 'municipio',
+                            geocod_ibge: cityId // Use city ID as geocode for now
+                        };
+                    });
+                    console.log(`Loaded ${Object.keys(entityFileList['municipio']).length} municipalities from city_filelist.json`);
+                } else {
+                    console.warn('Could not fetch city_filelist.json');
+                }
+            } catch (cityError) {
+                console.warn('Could not load city_filelist.json:', cityError);
+            }
+        } else {
+            console.log(`Found ${Object.keys(entityFileList['municipio']).length} municipalities in entity_filelist.json`);
+        }
+        
+        // Load IBGE data for estados and regioes
+        console.log('Loading IBGE geographic data...');
+        const ibgeData = await loadIBGEGeographicData();
+        if (ibgeData) {
+            // Merge IBGE data into entityFileList
+            entityFileList['estado'] = ibgeData.estados;
+            entityFileList['regiao'] = ibgeData.regioes;
+            console.log(`Loaded ${Object.keys(ibgeData.estados).length} states and ${Object.keys(ibgeData.regioes).length} regions from IBGE`);
+        }
+        
+        console.log('Final entityFileList structure:', Object.keys(entityFileList));
+        setupResolutionCascade();
+        
+        if (fileInfoElement) fileInfoElement.textContent = 'Listas de entidades carregadas';
+    } catch (e) {
+        console.error('Error loading entity_filelist.json:', e);
+        // Fallback to old city_filelist.json for backward compatibility
+        console.log('Falling back to city_filelist.json only...');
+        try {
+            const resp = await fetch('data/city_filelist.json');
+            if (!resp.ok) throw new Error('city_filelist.json não encontrado');
+            const cityFileList = await resp.json();
+            // Convert old format to new format
+            entityFileList = {
+                'municipio': {}
+            };
+            
+            // Convert city data to proper format
+            Object.entries(cityFileList).forEach(([cityId, info]) => {
+                entityFileList['municipio'][cityId] = {
+                    ...info,
+                    resolution: 'municipio',
+                    geocod_ibge: cityId
+                };
+            });
+            
+            console.log(`Fallback: Loaded ${Object.keys(entityFileList['municipio']).length} municipalities`);
+            
+            // Still try to load IBGE data for estados and regioes
+            const ibgeData = await loadIBGEGeographicData();
+            if (ibgeData) {
+                entityFileList['estado'] = ibgeData.estados;
+                entityFileList['regiao'] = ibgeData.regioes;
+            }
+            
+            setupResolutionCascade();
+            if (fileInfoElement) fileInfoElement.textContent = 'Listas carregadas (modo compatibilidade)';
+        } catch (e2) {
+            console.error('Fallback also failed:', e2);
+            if (fileInfoElement) fileInfoElement.textContent = 'Erro ao carregar listas de entidades';
+            alert('Erro ao carregar listas de entidades: ' + e);
+        }
+    }
+}
+
+function setupResolutionCascade() {
+    updateCascadeVisibility();
+    populateDropdowns();
+    
+    // Add event listeners
+    document.getElementById('resolution-select').addEventListener('change', function(e) {
+        selectedResolution = e.target.value;
+        selectedState = null;
+        selectedEntity = null;
+        updateCascadeVisibility();
+        populateDropdowns();
+    });
+    
+    document.getElementById('state-select').addEventListener('change', function(e) {
+        selectedState = e.target.value;
+        selectedEntity = null;
+        populateEntityDropdown();
+    });
+    
+    document.getElementById('entity-select').addEventListener('change', async function(e) {
+        selectedEntity = e.target.value;
+        if (selectedEntity) {
+            // Show loading indicator
+            document.getElementById('file-info').textContent = 'Carregando dados...';
+            await loadEntityData();
+        }
+    });
+    
+    document.getElementById('reload-entity-list').addEventListener('click', function() {
+        document.getElementById('file-info').textContent = 'Recarregando listas...';
+        populateDropdowns();
+        document.getElementById('file-info').textContent = 'Listas atualizadas';
+    });
+}
+
+function updateCascadeVisibility() {
+    const cascade = RESOLUTION_CASCADE[selectedResolution];
+    const stateLevel = document.getElementById('state-level');
+    const entityLevel = document.getElementById('entity-level');
+    const entityLabel = document.getElementById('entity-label');
+    
+    if (cascade.levels.length === 1) {
+        // Single level (regiao, estado)
+        stateLevel.style.display = 'none';
+        entityLevel.style.display = 'block';
+        entityLabel.textContent = cascade.labels[0] + ':';
+        document.getElementById('entity-select').innerHTML = 
+            `<option value="">${cascade.placeholder}</option>`;
+    } else {
+        // Two levels (estado + municipio/micro/meso)
+        stateLevel.style.display = 'block';
+        entityLevel.style.display = 'block';
+        entityLabel.textContent = cascade.labels[1] + ':';
+        document.getElementById('entity-select').innerHTML = 
+            `<option value="">${cascade.placeholder}</option>`;
+    }
+}
+
+function populateDropdowns() {
+    populateStateDropdown();
+    populateEntityDropdown();
 }
 
 function populateStateDropdown() {
     const stateSelect = document.getElementById('state-select');
     stateSelect.innerHTML = '<option value="">Selecione o estado...</option>';
-    Object.keys(stateCityMap).sort().forEach(state => {
+    
+    const cascade = RESOLUTION_CASCADE[selectedResolution];
+    if (cascade.levels.length === 1) {
+        // No state dropdown needed
+        return;
+    }
+    
+    // Get unique states for current resolution
+    const entities = entityFileList[selectedResolution] || {};
+    const states = new Set();
+    Object.values(entities).forEach(entity => {
+        if (entity.state) states.add(entity.state);
+    });
+    
+    Array.from(states).sort().forEach(state => {
         const opt = document.createElement('option');
         opt.value = state;
         opt.textContent = state;
         stateSelect.appendChild(opt);
     });
-    populateCityDropdown();
 }
 
-function populateCityDropdown() {
-    const citySelect = document.getElementById('city-select');
-    citySelect.innerHTML = '<option value="">Selecione uma cidade...</option>';
-    if (!selectedState || !stateCityMap[selectedState]) return;
-    // Sort cities by name (case-insensitive) before populating
-    const sortedCities = Object.entries(stateCityMap[selectedState])
-        .sort((a, b) => {
-            const nameA = (a[1].name || '').toLowerCase();
-            const nameB = (b[1].name || '').toLowerCase();
-            if (nameA < nameB) return -1;
-            if (nameA > nameB) return 1;
-            return 0;
+function populateEntityDropdown() {
+    const entitySelect = document.getElementById('entity-select');
+    const cascade = RESOLUTION_CASCADE[selectedResolution];
+    entitySelect.innerHTML = `<option value="">${cascade.placeholder}</option>`;
+    
+    const entities = entityFileList[selectedResolution] || {};
+    
+    if (cascade.levels.length === 1) {
+        // Single level - show all entities for this resolution
+        const sortedEntities = Object.entries(entities)
+            .sort((a, b) => (a[1].name || '').localeCompare(b[1].name || ''));
+            
+        sortedEntities.forEach(([entityId, info]) => {
+            const opt = document.createElement('option');
+            opt.value = entityId;
+            opt.textContent = info.name || entityId;
+            entitySelect.appendChild(opt);
         });
-    sortedCities.forEach(([cityId, info]) => {
-        const opt = document.createElement('option');
-        opt.value = cityId;
-        opt.textContent = info.name || cityId;
-        citySelect.appendChild(opt);
-    });
+    } else {
+        // Two levels - filter by selected state
+        if (!selectedState) return;
+        
+        const sortedEntities = Object.entries(entities)
+            .filter(([_, info]) => info.state === selectedState)
+            .sort((a, b) => (a[1].name || '').localeCompare(b[1].name || ''));
+            
+        sortedEntities.forEach(([entityId, info]) => {
+            const opt = document.createElement('option');
+            opt.value = entityId;
+            opt.textContent = info.name || entityId;
+            entitySelect.appendChild(opt);
+        });
+    }
 }
 
-document.getElementById('state-select').addEventListener('change', function(e) {
-    selectedState = e.target.value;
-    selectedCity = null;
-    populateCityDropdown();
-});
-
-document.getElementById('city-select').addEventListener('change', async function(e) {
-    selectedCity = e.target.value;
-    if (!selectedState || !selectedCity || !stateCityMap[selectedState][selectedCity]) return;
-    // Load all indicators for this city
-    try {
-        const cityInfo = stateCityMap[selectedState][selectedCity];
-        // Assume cityInfo.file points to the city file (e.g., PR/city_<city_code>.json)
-        const resp = await fetch(`data/${cityInfo.file}`);
-        if (!resp.ok) throw new Error('Arquivo da cidade não encontrado');
-        const cityData = await resp.json();
-        // cityData.indicators is an array of indicator records
-        updateIndicatorValues(cityData.indicators || []);
-        document.getElementById('file-info').textContent = `Arquivo carregado: ${cityInfo.file}`;
-    } catch (err) {
-        alert('Erro ao carregar arquivo da cidade: ' + err);
+async function loadEntityData() {
+    if (!selectedEntity || !entityFileList[selectedResolution] || !entityFileList[selectedResolution][selectedEntity]) {
+        return;
     }
-});
+    
+    try {
+        const entityInfo = entityFileList[selectedResolution][selectedEntity];
+        
+        // Try to load the data file
+        if (!entityInfo.file) {
+            // No file specified - show placeholder message
+            const entityName = entityInfo.name || selectedEntity;
+            const resolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+            
+            document.getElementById('file-info').textContent = 
+                `${resolutionName} selecionada: ${entityName} (dados climáticos não disponíveis ainda)`;
+                
+            // Clear indicator values since we don't have data
+            updateIndicatorValues([]);
+            return;
+        }
+        
+        // Try to load the actual climate data file
+        console.log(`Attempting to load: data/${entityInfo.file}`);
+        const resp = await fetch(`data/${entityInfo.file}`);
+        
+        if (!resp.ok) {
+            // File doesn't exist - show informative message but don't error
+            console.log(`File not found: data/${entityInfo.file}`);
+            const entityName = entityInfo.name || selectedEntity;
+            const resolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+            
+            document.getElementById('file-info').textContent = 
+                `${resolutionName} selecionada: ${entityName} (arquivo de dados não encontrado: ${entityInfo.file})`;
+                
+            // Clear indicator values since we don't have data
+            updateIndicatorValues([]);
+            return;
+        }
+        
+        const entityData = await resp.json();
+        console.log(`Successfully loaded data for ${entityInfo.name}:`, entityData);
+        
+        // Update indicator values with entity data
+        updateIndicatorValues(entityData.indicators || []);
+        document.getElementById('file-info').textContent = `Arquivo carregado: ${entityInfo.file} (${entityInfo.name})`;
+        
+    } catch (err) {
+        console.error('Error loading entity data:', err);
+        const entityName = entityFileList[selectedResolution][selectedEntity]?.name || selectedEntity;
+        document.getElementById('file-info').textContent = `Erro ao carregar dados para ${entityName}: ${err.message}`;
+        updateIndicatorValues([]);
+    }
+}
 
 // --- Structure file logic ---
 let structureLoaded = false;
@@ -727,17 +1062,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// Load city_filelist.json on startup
-document.addEventListener('DOMContentLoaded', loadCityFileList);
+// Load entity_filelist.json on startup
+document.addEventListener('DOMContentLoaded', loadEntityFileList);
 
-// Reload city list button
-const reloadBtn = document.getElementById("reload-city-list");
-if (reloadBtn) reloadBtn.addEventListener("click", populateCityDropdown);
-
-// Populate on load
-document.addEventListener("DOMContentLoaded", populateCityDropdown);
-
-// Event listener for file upload
+// Initialize on page load
 document.addEventListener("DOMContentLoaded", function() {
     const fileInput = document.getElementById("json-file");
     const fileInfo = document.getElementById("file-info");

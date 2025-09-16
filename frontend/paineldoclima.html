@@ -34,15 +34,35 @@
 
     <div class="controls-columns">
         <div class="col">
-            <label for="state-select">Estado:</label>
-            <select id="state-select">
-                <option value="">Selecione o estado...</option>
+            <label for="resolution-select">Resolução:</label>
+            <select id="resolution-select">
+                <option value="municipio" selected>Município</option>
+                <option value="microrregiao">Microrregião</option>
+                <option value="mesorregiao">Mesorregião</option>
+                <option value="estado">Estado</option>
+                <option value="regiao">Região</option>
             </select>
-            <label for="city-select">Cidade:</label>
-            <select id="city-select">
-                <option value="">Selecione uma cidade...</option>
-            </select>
-            <button id="reload-city-list" type="button">Recarregar lista de cidades</button>
+            
+            <!-- Dynamic cascade container -->
+            <div id="cascade-container">
+                <!-- State dropdown (appears for municipio, microrregiao, mesorregiao) -->
+                <div class="cascade-level" id="state-level" style="margin-top: 12px;">
+                    <label for="state-select">Estado:</label>
+                    <select id="state-select">
+                        <option value="">Selecione o estado...</option>
+                    </select>
+                </div>
+                
+                <!-- Final entity dropdown (dynamic label) -->
+                <div class="cascade-level" id="entity-level" style="margin-top: 12px;">
+                    <label for="entity-select" id="entity-label">Cidade:</label>
+                    <select id="entity-select">
+                        <option value="">Selecione uma cidade...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="reload-entity-list" type="button" style="margin-top: 8px;">Recarregar lista</button>
         </div>
         <div class="col">
             <label for="sector-filter">Filtrar por Setor:</label>

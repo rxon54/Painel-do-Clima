@@ -166,6 +166,43 @@ select, button, input {
   font-size: 0.93em;
 }
 
+/* Indicator availability styles */
+.indicator-row.indicator-unavailable {
+    opacity: 0.4;
+    background-color: #f8f8f8;
+}
+
+.indicator-row.indicator-unavailable .indented-label {
+    color: #999;
+    font-style: italic;
+}
+
+.indicator-row.indicator-unavailable .indicator-id-link {
+    color: #bbb;
+    text-decoration: none;
+    cursor: default;
+}
+
+.indicator-row.indicator-unavailable .indicator-value {
+    background-color: #f0f0f0 !important;
+    color: #ccc !important;
+}
+
+.indicator-row.indicator-unavailable .indicator-value::after {
+    content: " (não disponível)";
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.indicator-row.indicator-available {
+    opacity: 1;
+}
+
+/* Hover effect only for available indicators */
+.indicator-row.indicator-available:hover {
+    background-color: #f8f9ff;
+}
+
 /* Overlay for indicator documentation */
 .indicator-doc-overlay, #doc-overlay {
   position: fixed;

@@ -191,9 +191,35 @@ def main():
                 if entities_written % 1000 == 0:  # Show progress every 1000 entities
                     print(f"      → Written {entities_written}/{total_entities_to_write} entity files ({entities_written/total_entities_to_write*100:.1f}%)")
 
-    # Write resolution-aware filelist
+    # Write resolution-aware filelist (MERGE with existing data)
     print("\n📋 Writing entity filelist...")
-    save_json(entity_filelist, os.path.join(data_dir, "entity_filelist.json"))
+    
+    # Load existing entity_filelist.json if it exists
+    entity_filelist_path = os.path.join(data_dir, "entity_filelist.json")
+    existing_entity_filelist = {}
+    if os.path.exists(entity_filelist_path):
+        try:
+            with open(entity_filelist_path, 'r', encoding='utf-8') as f:
+                existing_entity_filelist = json.load(f)
+            print(f"  Loaded existing entity_filelist.json with {len(existing_entity_filelist)} resolution types")
+        except Exception as e:
+            print(f"  Warning: Could not load existing entity_filelist.json: {e}")
+    
+    # Merge new data with existing data
+    for resolution, resolution_data in entity_filelist.items():
+        if resolution in existing_entity_filelist:
+            # Merge with existing resolution data
+            existing_count = len(existing_entity_filelist[resolution])
+            existing_entity_filelist[resolution].update(resolution_data)
+            new_count = len(existing_entity_filelist[resolution])
+            print(f"  Merged {resolution}: {existing_count} existing + {len(resolution_data)} new = {new_count} total entities")
+        else:
+            # Add new resolution
+            existing_entity_filelist[resolution] = resolution_data
+            print(f"  Added new resolution {resolution}: {len(resolution_data)} entities")
+    
+    # Save merged data
+    save_json(existing_entity_filelist, entity_filelist_path)
     
     total_entities_processed = sum(len(resolution_data) for resolution_data in entity_filelist.values())
     total_resolutions = len(resolution_entity_map)
