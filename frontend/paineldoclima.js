@@ -863,12 +863,6 @@ function setupResolutionCascade() {
             await loadEntityData();
         }
     });
-    
-    document.getElementById('reload-entity-list').addEventListener('click', function() {
-        document.getElementById('file-info').textContent = 'Recarregando listas...';
-        populateDropdowns();
-        document.getElementById('file-info').textContent = 'Listas atualizadas';
-    });
 }
 
 function updateCascadeVisibility() {
