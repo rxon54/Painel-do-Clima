@@ -103,12 +103,12 @@ select, button, input {
 }
 .indented-list {
     list-style: none;
-    margin-left: 24px;
-    padding-left: 12px;
-    border-left: 1px solid #ddd;
+    margin-left: 20px;
+    padding-left: 8px;
+    border-left: 1px solid #e0e0e0;
 }
 .indented-node {
-    margin: 4px 0;
+    margin: 2px 0;
     font-size: 14px;
 }
 .indented-label {
@@ -144,26 +144,147 @@ select, button, input {
     vertical-align: middle;
     transition: background 0.2s;
 }
+/* Hide column headers when using table format */
+.comparative-mode .column-headers {
+    display: none;
+}
+
+/* Table-based approach for comparative mode - much more compact */
+.comparative-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0;
+    font-size: 12px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.comparative-table thead th {
+    background: #f8f9fa;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 11px;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    min-width: 65px;
+}
+
+.comparative-table thead th:first-child {
+    text-align: left;
+    width: auto;
+    padding-left: 12px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.comparative-table thead th.primary-header {
+    background: #e6f3ff;
+    color: #0066cc;
+    border-bottom: 2px solid #0066cc;
+}
+
+.comparative-table thead th.secondary-header {
+    background: #fff4e6;
+    color: #cc6600;
+    border-bottom: 2px solid #cc6600;
+}
+
+.comparative-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.comparative-table tbody tr:hover {
+    background-color: #f8f9ff;
+}
+
+.comparative-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+.comparative-table td {
+    padding: 4px 2px;
+    text-align: center;
+    font-size: 11px;
+    border: none;
+    min-width: 65px;
+    vertical-align: middle;
+}
+
+.comparative-table td:first-child {
+    text-align: left;
+    padding-left: 12px;
+    padding-right: 8px;
+    font-weight: 500;
+    width: auto;
+}
+
+.comparative-table .indicator-value {
+    display: inline-block;
+    min-width: 55px;
+    padding: 1px 4px;
+    border-radius: 10px;
+    font-size: 10px;
+    margin: 0;
+}
+
+.comparative-table .primary-value {
+    color: #0066cc;
+    background: #e6f3ff;
+    border: 1px solid #b3daff;
+}
+
+.comparative-table .secondary-value {
+    color: #cc6600;
+    background: #fff4e6;
+    border: 1px solid #f0d4a3;
+}
+
+/* Standard grid for non-comparative mode */
 .indicator-row-grid {
   display: grid;
-  grid-template-columns: auto 90px 90px 90px;
+  grid-template-columns: 1fr 85px 85px 85px;
   align-items: center;
-  gap: 0 10px;
-  min-height: 16px;
+  gap: 0 4px;
+  min-height: 20px;
+  padding: 2px 0;
 }
 .tree-label-cell {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  justify-self: start;
+  padding-right: 8px;
+}
+
+.indented-label {
+  margin-left: 2px;
+  line-height: 1.4;
 }
 .indicator-value {
   justify-self: end;
   text-align: right;
-  min-width: 70px;
+  min-width: 75px;
   white-space: nowrap;
-  border-radius: 8px;
-  padding: 1px 6px;
-  font-size: 0.93em;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.85em;
+  background-color: #f8f9fa;
+}
+
+/* Secondary location indicator values (comparative mode) */
+.indicator-value-secondary {
+  justify-self: end;
+  text-align: right;
+  min-width: 75px;
+  white-space: nowrap;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.85em;
+  /* Background color will be set by JavaScript from data */
+  border: 1px solid #f0ad4e;
 }
 
 /* Indicator availability styles */
@@ -267,4 +388,84 @@ select, button, input {
 @keyframes doc-highlight {
   0% { background: #ffe; }
   100% { background: none; }
+}
+
+/* Location headers for comparative mode */
+.location-header {
+    background: #f5f5f5;
+    padding: 8px 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    font-weight: 600;
+    text-align: center;
+    border-left: 4px solid #0066cc;
+    font-size: 14px;
+}
+
+.location-header.secondary {
+    border-left-color: #cc6600;
+    background: #fff8f0;
+}
+
+/* Comparative mode body class adjustments */
+.comparative-mode #main-content {
+    max-width: 1600px;
+}
+
+/* Column headers */
+.column-headers {
+    margin: 12px 0 8px 0;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 5;
+}
+
+.column-headers-grid {
+    display: grid;
+    grid-template-columns: 1fr 85px 85px 85px;
+    align-items: center;
+    gap: 0 4px;
+    min-height: 32px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 600;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+    margin-bottom: 4px;
+}
+
+.column-headers-grid.comparative {
+    grid-template-columns: 1fr 85px 85px 85px 85px 85px 85px;
+    gap: 0 3px;
+}
+
+.header-cell {
+    text-align: right;
+    color: #495057;
+    padding: 3px 1px;
+    font-size: 0.8em;
+}
+
+.header-cell:first-child {
+    text-align: left;
+    padding-left: 8px;
+    font-weight: 700;
+}
+
+.header-cell.primary {
+    color: #0066cc;
+    background: #f0f8ff;
+    border-radius: 3px;
+    padding: 3px 4px;
+    border: 1px solid #cce7ff;
+}
+
+.header-cell.secondary {
+    color: #cc6600;
+    background: #fff8f0;
+    border-radius: 3px;
+    padding: 3px 4px;
+    border: 1px solid #f0d4a3;
 }

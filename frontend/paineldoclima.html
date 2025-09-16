@@ -26,14 +26,56 @@
             gap: 6px;
         }
         #structure-upload { margin-top: 0; }
-        #main-content { max-width: 1000px; }
+        #main-content { max-width: 1400px; }
+        
+        /* Comparative mode styles */
+        .comparative-mode #main-content {
+            max-width: 1600px;
+        }
+        
+        .location-header {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            border-left: 4px solid #0066cc;
+        }
+        
+        .location-header.secondary {
+            border-left-color: #cc6600;
+        }
+        
+        .indicator-row-grid.comparative {
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        }
+        
+        .indicator-value-secondary {
+            padding: 2px 6px;
+            text-align: center;
+            font-size: 0.85em;
+            min-width: 60px;
+            background-color: #fff5e6;
+        }
     </style>
 </head>
 <body>
     <h2>Painel do Clima - Visualização de Hierarquia de Indicadores do AdaptaBrasil</h2>
 
-    <div class="controls-columns">
+    <!-- Comparative Mode Toggle -->
+    <div class="controls-columns" style="margin-bottom: 12px;">
         <div class="col">
+            <label>
+                <input type="checkbox" id="comparative-mode-toggle"> Modo Comparativo
+            </label>
+        </div>
+    </div>
+
+    <div class="controls-columns">
+        <!-- Primary Location Controls -->
+        <div class="col" id="primary-location">
+            <h4 style="margin: 0 0 8px 0; color: #0066cc;">Localidade Principal</h4>
             <label for="resolution-select">Resolução:</label>
             <select id="resolution-select">
                 <option value="municipio" selected>Município</option>
@@ -62,6 +104,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Secondary Location Controls (hidden by default) -->
+        <div class="col" id="secondary-location" style="display: none;">
+            <h4 style="margin: 0 0 8px 0; color: #cc6600;">Localidade para Comparação</h4>
+            <label for="resolution-select-2">Resolução:</label>
+            <select id="resolution-select-2">
+                <option value="municipio" selected>Município</option>
+                <option value="microrregiao">Microrregião</option>
+                <option value="mesorregiao">Mesorregião</option>
+                <option value="estado">Estado</option>
+                <option value="regiao">Região</option>
+            </select>
+            
+            <!-- Dynamic cascade container for second location -->
+            <div id="cascade-container-2">
+                <!-- State dropdown (appears for municipio, microrregiao, mesorregiao) -->
+                <div class="cascade-level" id="state-level-2" style="margin-top: 12px;">
+                    <label for="state-select-2">Estado:</label>
+                    <select id="state-select-2">
+                        <option value="">Selecione o estado...</option>
+                    </select>
+                </div>
+                
+                <!-- Final entity dropdown (dynamic label) -->
+                <div class="cascade-level" id="entity-level-2" style="margin-top: 12px;">
+                    <label for="entity-select-2" id="entity-label-2">Cidade:</label>
+                    <select id="entity-select-2">
+                        <option value="">Selecione uma cidade...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="col">
             <label for="sector-filter">Filtrar por Setor:</label>
             <select id="sector-filter" multiple size="7" style="min-width:160px;">
@@ -78,6 +152,7 @@
                 <button id="expand-all">Expandir Todos</button>
             </div>
         </div>
+
         <div class="col" id="structure-upload" style="display:none; min-width:220px;">
             <label for="json-file">Arquivo JSON com estrutura:</label>
             <input type="file" id="json-file" accept=".json">

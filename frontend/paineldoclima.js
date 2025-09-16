@@ -297,6 +297,145 @@ async function showIndicatorDoc(indicatorId) {
     document.addEventListener('keydown', escListener);
 }
 
+// --- Table-based rendering for comparative mode ---
+function renderComparativeTable(container, root) {
+    console.log('renderComparativeTable called for root:', root.id);
+    
+    // Create table structure
+    const table = document.createElement('table');
+    table.className = 'comparative-table';
+    
+    // Create header
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
+    // Header cells
+    const headers = [
+        'Indicador',
+        'Atual (1)',
+        '2030 (1)', 
+        '2050 (1)',
+        'Atual (2)',
+        '2030 (2)',
+        '2050 (2)'
+    ];
+    
+    headers.forEach((header, index) => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        if (index >= 4) {
+            th.classList.add('secondary-header');
+        } else if (index >= 1 && index <= 3) {
+            th.classList.add('primary-header');
+        }
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    
+    // Create body
+    const tbody = document.createElement('tbody');
+    
+    // Recursive function to build table rows
+    function buildTableRow(node, level = 0) {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-indicator-id', node.id);
+        tr.className = 'indicator-row';
+        
+        // Indicator name cell with proper indentation
+        const nameTd = document.createElement('td');
+        
+        // Create indicator ID link
+        const idSpan = document.createElement('span');
+        idSpan.className = 'indicator-id-link';
+        idSpan.textContent = node.id;
+        idSpan.style.cursor = 'pointer';
+        idSpan.title = 'Ver documentação do indicador';
+        idSpan.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const row = e.target.closest('.indicator-row');
+            if (row && !row.classList.contains('indicator-unavailable')) {
+                showIndicatorDoc(node.id);
+            }
+        });
+        
+        // Add indentation using padding instead of text
+        nameTd.style.paddingLeft = `${12 + (level * 16)}px`;
+        nameTd.appendChild(idSpan);
+        nameTd.appendChild(document.createTextNode(`: ${node.nome}`));
+        nameTd.title = (node.descricao ? node.descricao + '\n' : '') + 
+                      `Nível: ${node.nivel}\nSetor: ${node.sector}`;
+        tr.appendChild(nameTd);
+        
+        // Value cells - Primary location
+        const presentTd = document.createElement('td');
+        const presentSpan = document.createElement('span');
+        presentSpan.className = 'indicator-value indicator-value-present primary-value';
+        presentSpan.setAttribute('data-indicator-id', node.id);
+        presentSpan.setAttribute('data-indicator-year', 'present');
+        presentTd.appendChild(presentSpan);
+        tr.appendChild(presentTd);
+        
+        const td2030 = document.createElement('td');
+        const span2030 = document.createElement('span');
+        span2030.className = 'indicator-value indicator-value-2030 primary-value';
+        span2030.setAttribute('data-indicator-id', node.id);
+        span2030.setAttribute('data-indicator-year', '2030');
+        td2030.appendChild(span2030);
+        tr.appendChild(td2030);
+        
+        const td2050 = document.createElement('td');
+        const span2050 = document.createElement('span');
+        span2050.className = 'indicator-value indicator-value-2050 primary-value';
+        span2050.setAttribute('data-indicator-id', node.id);
+        span2050.setAttribute('data-indicator-year', '2050');
+        td2050.appendChild(span2050);
+        tr.appendChild(td2050);
+        
+        // Value cells - Secondary location
+        const secondaryPresentTd = document.createElement('td');
+        const secondaryPresentSpan = document.createElement('span');
+        secondaryPresentSpan.className = 'indicator-value indicator-value-present secondary-value';
+        secondaryPresentSpan.setAttribute('data-indicator-id', node.id);
+        secondaryPresentSpan.setAttribute('data-indicator-year', 'present');
+        secondaryPresentSpan.setAttribute('data-location', 'secondary');
+        secondaryPresentTd.appendChild(secondaryPresentSpan);
+        tr.appendChild(secondaryPresentTd);
+        
+        const secondary2030Td = document.createElement('td');
+        const secondary2030Span = document.createElement('span');
+        secondary2030Span.className = 'indicator-value indicator-value-2030 secondary-value';
+        secondary2030Span.setAttribute('data-indicator-id', node.id);
+        secondary2030Span.setAttribute('data-indicator-year', '2030');
+        secondary2030Span.setAttribute('data-location', 'secondary');
+        secondary2030Td.appendChild(secondary2030Span);
+        tr.appendChild(secondary2030Td);
+        
+        const secondary2050Td = document.createElement('td');
+        const secondary2050Span = document.createElement('span');
+        secondary2050Span.className = 'indicator-value indicator-value-2050 secondary-value';
+        secondary2050Span.setAttribute('data-indicator-id', node.id);
+        secondary2050Span.setAttribute('data-indicator-year', '2050');
+        secondary2050Span.setAttribute('data-location', 'secondary');
+        secondary2050Td.appendChild(secondary2050Span);
+        tr.appendChild(secondary2050Td);
+        
+        tbody.appendChild(tr);
+        
+        // Add children rows
+        if (node.children && node.children.length > 0) {
+            node.children.forEach(child => {
+                buildTableRow(child, level + 1);
+            });
+        }
+    }
+    
+    buildTableRow(root);
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
 // --- DEBUG: Add global click test ---
 window._testShowIndicatorDoc = showIndicatorDoc;
 
@@ -379,6 +518,36 @@ function renderIndentedList(container, root) {
         row.appendChild(valueSpanPresent);
         row.appendChild(valueSpan2030);
         row.appendChild(valueSpan2050);
+        
+        // Add secondary columns if in comparative mode
+        if (comparativeMode) {
+            // Secondary present value
+            const secondaryPresent = document.createElement('span');
+            secondaryPresent.className = 'indicator-value indicator-value-present indicator-value-secondary';
+            secondaryPresent.setAttribute('data-indicator-id', node.id);
+            secondaryPresent.setAttribute('data-indicator-year', 'present');
+            secondaryPresent.setAttribute('data-location', 'secondary');
+            
+            // Secondary 2030 value
+            const secondary2030 = document.createElement('span');
+            secondary2030.className = 'indicator-value indicator-value-2030 indicator-value-secondary';
+            secondary2030.setAttribute('data-indicator-id', node.id);
+            secondary2030.setAttribute('data-indicator-year', '2030');
+            secondary2030.setAttribute('data-location', 'secondary');
+            
+            // Secondary 2050 value
+            const secondary2050 = document.createElement('span');
+            secondary2050.className = 'indicator-value indicator-value-2050 indicator-value-secondary';
+            secondary2050.setAttribute('data-indicator-id', node.id);
+            secondary2050.setAttribute('data-indicator-year', '2050');
+            secondary2050.setAttribute('data-location', 'secondary');
+            
+            row.appendChild(secondaryPresent);
+            row.appendChild(secondary2030);
+            row.appendChild(secondary2050);
+            row.classList.add('comparative');
+        }
+        
         li.appendChild(row);
         if (ul) li.appendChild(ul);
         return li;
@@ -391,57 +560,138 @@ function renderIndentedList(container, root) {
 }
 
 // --- Update indicator values in the indented list ---
-function updateIndicatorValues(data) {
-    // First, reset all indicators to unavailable state
-    resetIndicatorAvailability();
+function updateIndicatorValues(data, isSecondary = false) {
+    console.log(`updateIndicatorValues called with ${data.length} records, isSecondary=${isSecondary}`);
+    
+    // First, reset all indicators to unavailable state (only for primary)
+    if (!isSecondary) {
+        resetIndicatorAvailability();
+    }
     
     // Create a set of available indicator IDs for quick lookup
     const availableIndicators = new Set(data.map(record => record.indicator_id));
     
     // Update indicators with actual data
     data.forEach(record => {
+        console.log(`Processing record for indicator ${record.indicator_id}, isSecondary=${isSecondary}`);
+        
         // Present value
-        const elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}']`);
-        if (elPresent) {
-            elPresent.textContent = `${record.value} ${record.rangelabel || record.valuelabel || ''}`;
-            elPresent.style.background = record.valuecolor || '#eee';
-            elPresent.style.color = '#222';
+        let elPresent;
+        if (isSecondary) {
+            elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}'][data-location="secondary"]`);
+            console.log(`Secondary present element search result:`, elPresent);
+            
+            // Debug: Let's see what secondary elements actually exist
+            if (!elPresent) {
+                const allSecondaryElements = document.querySelectorAll(`[data-location="secondary"]`);
+                const secondaryPresentElements = document.querySelectorAll(`.indicator-value-present[data-location="secondary"]`);
+                const specificIndicatorElements = document.querySelectorAll(`[data-indicator-id='${record.indicator_id}']`);
+                
+                console.log(`Debug for indicator ${record.indicator_id}:`);
+                console.log(`- Total secondary elements in DOM: ${allSecondaryElements.length}`);
+                console.log(`- Secondary present elements: ${secondaryPresentElements.length}`);
+                console.log(`- Elements for this indicator: ${specificIndicatorElements.length}`);
+                
+                // Only log this once to avoid spam
+                if (record.indicator_id === '60034') {
+                    console.log('Sample secondary element:', allSecondaryElements[0]);
+                    console.log('Sample indicator element:', specificIndicatorElements[0]);
+                }
+            }
+        } else {
+            elPresent = document.querySelector(`.indicator-value-present[data-indicator-id='${record.indicator_id}']:not([data-location="secondary"])`);
         }
+        if (elPresent) {
+            console.log(`Found present element for ${record.indicator_id}, updating with:`, record.value);
+            elPresent.textContent = `${record.value} ${record.rangelabel || record.valuelabel || ''}`;
+            if (isSecondary) {
+                // For secondary values, use data colors but with slight transparency/border
+                elPresent.style.background = record.valuecolor || '#fff8f0';
+                elPresent.style.color = '#333';
+                elPresent.style.border = '1px solid #f0ad4e';
+            } else {
+                // For primary values, use original styling
+                elPresent.style.background = record.valuecolor || '#eee';
+                elPresent.style.color = '#222';
+            }
+        } else {
+            console.log(`Present element NOT found for ${record.indicator_id}, isSecondary=${isSecondary}`);
+        }
+        
         // 2030 value (future trends)
-        const el2030 = document.querySelector(`.indicator-value-2030[data-indicator-id='${record.indicator_id}']`);
+        let el2030;
+        if (isSecondary) {
+            el2030 = document.querySelector(`.indicator-value-2030[data-indicator-id='${record.indicator_id}'][data-location="secondary"]`);
+        } else {
+            el2030 = document.querySelector(`.indicator-value-2030[data-indicator-id='${record.indicator_id}']:not([data-location="secondary"])`);
+        }
         if (el2030) {
             if (record.future_trends && record.future_trends["2030"]) {
                 const ft = record.future_trends["2030"];
                 el2030.textContent = `${ft.value}` + (ft.valuelabel ? ` ${ft.valuelabel}` : '');
-                el2030.style.background = ft.valuecolor || '#eee';
-                el2030.style.color = '#222';
+                if (isSecondary) {
+                    el2030.style.background = ft.valuecolor || '#fff8f0';
+                    el2030.style.color = '#333';
+                    el2030.style.border = '1px solid #f0ad4e';
+                } else {
+                    el2030.style.background = ft.valuecolor || '#eee';
+                    el2030.style.color = '#222';
+                }
             } else {
                 el2030.textContent = '';
-                el2030.style.background = '#eee';
-                el2030.style.color = '#aaa';
+                if (isSecondary) {
+                    el2030.style.background = '#fff8f0';
+                    el2030.style.color = '#aaa';
+                    el2030.style.border = '1px solid #f0ad4e';
+                } else {
+                    el2030.style.background = '#eee';
+                    el2030.style.color = '#aaa';
+                }
             }
         }
+        
         // 2050 value (future trends)
-        const el2050 = document.querySelector(`.indicator-value-2050[data-indicator-id='${record.indicator_id}']`);
+        let el2050;
+        if (isSecondary) {
+            el2050 = document.querySelector(`.indicator-value-2050[data-indicator-id='${record.indicator_id}'][data-location="secondary"]`);
+        } else {
+            el2050 = document.querySelector(`.indicator-value-2050[data-indicator-id='${record.indicator_id}']:not([data-location="secondary"])`);
+        }
         if (el2050) {
             if (record.future_trends && record.future_trends["2050"]) {
                 const ft = record.future_trends["2050"];
                 el2050.textContent = `${ft.value}` + (ft.valuelabel ? ` ${ft.valuelabel}` : '');
-                el2050.style.background = ft.valuecolor || '#eee';
-                el2050.style.color = '#222';
+                if (isSecondary) {
+                    el2050.style.background = ft.valuecolor || '#fff8f0';
+                    el2050.style.color = '#333';
+                    el2050.style.border = '1px solid #f0ad4e';
+                } else {
+                    el2050.style.background = ft.valuecolor || '#eee';
+                    el2050.style.color = '#222';
+                }
             } else {
                 el2050.textContent = '';
-                el2050.style.background = '#eee';
-                el2050.style.color = '#aaa';
+                if (isSecondary) {
+                    el2050.style.background = '#fff8f0';
+                    el2050.style.color = '#aaa';
+                    el2050.style.border = '1px solid #f0ad4e';
+                } else {
+                    el2050.style.background = '#eee';
+                    el2050.style.color = '#aaa';
+                }
             }
         }
         
-        // Mark indicator as available
-        markIndicatorAsAvailable(record.indicator_id);
+        // Mark indicator as available (only for primary)
+        if (!isSecondary) {
+            markIndicatorAsAvailable(record.indicator_id);
+        }
     });
     
-    // Mark indicators without data as unavailable
-    markUnavailableIndicators(availableIndicators);
+    // Mark indicators without data as unavailable (only for primary)
+    if (!isSecondary) {
+        markUnavailableIndicators(availableIndicators);
+    }
 }
 
 // Helper function to reset all indicators to default state
@@ -477,6 +727,9 @@ function markUnavailableIndicators(availableIndicators) {
 function renderHierarchy(hierarchyData) {
     const visualization = d3.select("#visualization");
     visualization.html(""); // Clear previous content
+
+    // Add column headers first
+    addColumnHeaders();
 
     // Populate sector filter (now multi-select)
     const sectorFilter = d3.select("#sector-filter")
@@ -566,7 +819,15 @@ function renderHierarchy(hierarchyData) {
                         .style('text-align', 'center')
                         .style('min-width', '70px')
                         .text(d => d);
-                    renderIndentedList(rootContainer, root);
+                    // Use table format for comparative mode, grid format otherwise
+                    console.log('renderHierarchy: comparativeMode =', comparativeMode, 'for root:', root.id);
+                    if (comparativeMode) {
+                        console.log('Using table format for root:', root.id);
+                        renderComparativeTable(rootContainer.node(), root);
+                    } else {
+                        console.log('Using grid format for root:', root.id);
+                        renderIndentedList(rootContainer, root);
+                    }
                     // Insert a line break after each Level 2 tree
                     flexRow.append('div')
                         .style('flex-basis', '100%')
@@ -581,7 +842,15 @@ function renderHierarchy(hierarchyData) {
                 rootContainer.append("div")
                     .attr("class", "root-title")
                     .text(`${root.id}: ${root.nome} (Nível ${root.nivel})`);
-                renderIndentedList(rootContainer, root);
+                // Use table format for comparative mode, grid format otherwise
+                console.log('renderHierarchy: comparativeMode =', comparativeMode, 'for root:', root.id);
+                if (comparativeMode) {
+                    console.log('Using table format for root:', root.id);
+                    renderComparativeTable(rootContainer.node(), root);
+                } else {
+                    console.log('Using grid format for root:', root.id);
+                    renderIndentedList(rootContainer, root);
+                }
             });
         } else {
             sectorDiv.append("p").text("Nenhum indicador neste setor.");
@@ -638,8 +907,9 @@ function loadJsonData(jsonData) {
             nivel_num: item.nivel ? parseInt(item.nivel) : 0
         }));
 
-        const hierarchyData = buildHierarchy(processedData);
-        renderHierarchy(hierarchyData);
+        const hierarchyDataLocal = buildHierarchy(processedData);
+        hierarchyData = hierarchyDataLocal; // Set the global variable
+        renderHierarchy(hierarchyDataLocal);
     } else {
         console.error("Invalid JSON data format");
         alert("Formato de dados inválido. Certifique-se de que o arquivo JSON contém uma matriz de indicadores.");
@@ -652,6 +922,12 @@ let ibgeGeographicData = null;
 let selectedResolution = 'municipio';
 let selectedState = null;
 let selectedEntity = null;
+
+// Comparative mode variables
+let comparativeMode = false;
+let selectedResolution2 = 'municipio';
+let selectedState2 = null;
+let selectedEntity2 = null;
 
 // IBGE API integration
 const IBGE_API_BASE = 'https://servicodados.ibge.gov.br/api/v1/localidades';
@@ -840,71 +1116,276 @@ function setupResolutionCascade() {
     updateCascadeVisibility();
     populateDropdowns();
     
-    // Add event listeners
+    // Setup comparative mode toggle
+    document.getElementById('comparative-mode-toggle').addEventListener('change', function(e) {
+        comparativeMode = e.target.checked;
+        toggleComparativeMode(comparativeMode);
+    });
+    
+    // Primary location event listeners
     document.getElementById('resolution-select').addEventListener('change', function(e) {
         selectedResolution = e.target.value;
         selectedState = null;
         selectedEntity = null;
         updateCascadeVisibility();
         populateDropdowns();
+        updateLocationHeaders();
     });
     
     document.getElementById('state-select').addEventListener('change', function(e) {
         selectedState = e.target.value;
         selectedEntity = null;
         populateEntityDropdown();
+        updateLocationHeaders();
     });
     
     document.getElementById('entity-select').addEventListener('change', async function(e) {
         selectedEntity = e.target.value;
         if (selectedEntity) {
-            // Show loading indicator
             document.getElementById('file-info').textContent = 'Carregando dados...';
             await loadEntityData();
+            updateLocationHeaders();
+        }
+    });
+
+    // Secondary location event listeners (for comparative mode)
+    document.getElementById('resolution-select-2').addEventListener('change', function(e) {
+        selectedResolution2 = e.target.value;
+        selectedState2 = null;
+        selectedEntity2 = null;
+        updateCascadeVisibility(true); // true for secondary
+        populateDropdowns(true); // true for secondary
+        updateLocationHeaders();
+    });
+    
+    document.getElementById('state-select-2').addEventListener('change', function(e) {
+        selectedState2 = e.target.value;
+        selectedEntity2 = null;
+        populateEntityDropdown(true); // true for secondary
+        updateLocationHeaders();
+    });
+    
+    document.getElementById('entity-select-2').addEventListener('change', async function(e) {
+        selectedEntity2 = e.target.value;
+        if (selectedEntity2) {
+            document.getElementById('file-info').textContent = 'Carregando dados comparativos...';
+            await loadEntityData(true); // true for secondary
+            updateLocationHeaders();
         }
     });
 }
 
-function updateCascadeVisibility() {
-    const cascade = RESOLUTION_CASCADE[selectedResolution];
-    const stateLevel = document.getElementById('state-level');
-    const entityLevel = document.getElementById('entity-level');
-    const entityLabel = document.getElementById('entity-label');
+function toggleComparativeMode(enable) {
+    const secondaryLocation = document.getElementById('secondary-location');
+    const body = document.body;
+    
+    // Update the global comparativeMode variable
+    comparativeMode = enable;
+    console.log('toggleComparativeMode: setting comparativeMode to', enable);
+    
+    if (enable) {
+        secondaryLocation.style.display = 'block';
+        body.classList.add('comparative-mode');
+        updateCascadeVisibility(true); // Setup secondary controls
+        populateDropdowns(true); // Populate secondary dropdowns
+    } else {
+        secondaryLocation.style.display = 'none';
+        body.classList.remove('comparative-mode');
+        selectedResolution2 = 'municipio';
+        selectedState2 = null;
+        selectedEntity2 = null;
+    }
+    
+    // Re-render the entire visualization since table/grid formats are different
+    console.log('toggleComparativeMode: hierarchyData available?', !!hierarchyData);
+    console.log('toggleComparativeMode: comparativeMode =', comparativeMode);
+    if (hierarchyData) {
+        renderHierarchy(hierarchyData);
+    } else {
+        console.log('hierarchyData not available, cannot re-render');
+    }
+    updateLocationHeaders();
+    addColumnHeaders(); // Add this line to update column headers
+}
+
+function updateLocationHeaders() {
+    // Remove existing headers
+    document.querySelectorAll('.location-header').forEach(header => header.remove());
+    
+    if (comparativeMode) {
+        // Add headers for comparative mode
+        addLocationHeader('primary');
+        if (selectedEntity2) {
+            addLocationHeader('secondary');
+        }
+    }
+}
+
+function addLocationHeader(type) {
+    const isSecondary = type === 'secondary';
+    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+    const entity = isSecondary ? selectedEntity2 : selectedEntity;
+    
+    if (!entity || !entityFileList[resolution] || !entityFileList[resolution][entity]) {
+        return;
+    }
+    
+    const entityInfo = entityFileList[resolution][entity];
+    const resolutionName = RESOLUTION_CASCADE[resolution].labels[RESOLUTION_CASCADE[resolution].labels.length - 1];
+    const entityName = entityInfo.name || entity;
+    
+    const header = document.createElement('div');
+    header.className = `location-header ${isSecondary ? 'secondary' : ''}`;
+    header.textContent = `${resolutionName}: ${entityName}`;
+    
+    // Insert the header before the indicator values
+    const visualization = document.getElementById('visualization');
+    const firstChild = visualization.firstChild;
+    if (firstChild) {
+        visualization.insertBefore(header, firstChild);
+    } else {
+        visualization.appendChild(header);
+    }
+}
+
+function addColumnHeaders() {
+    // Remove existing column headers
+    const existingHeaders = document.querySelectorAll('.column-headers');
+    existingHeaders.forEach(header => header.remove());
+    
+    const visualization = document.getElementById('visualization');
+    const columnHeaders = document.createElement('div');
+    columnHeaders.className = 'column-headers';
+    
+    if (comparativeMode) {
+        columnHeaders.innerHTML = `
+            <div class="column-headers-grid comparative">
+                <span class="header-cell">Indicador</span>
+                <span class="header-cell primary">Presente</span>
+                <span class="header-cell primary">2030</span>
+                <span class="header-cell primary">2050</span>
+                <span class="header-cell secondary">Presente</span>
+                <span class="header-cell secondary">2030</span>
+                <span class="header-cell secondary">2050</span>
+            </div>
+        `;
+    } else {
+        columnHeaders.innerHTML = `
+            <div class="column-headers-grid">
+                <span class="header-cell">Indicador</span>
+                <span class="header-cell">Presente</span>
+                <span class="header-cell">2030</span>
+                <span class="header-cell">2050</span>
+            </div>
+        `;
+    }
+    
+    // Insert at the beginning of visualization
+    const firstChild = visualization.firstChild;
+    if (firstChild) {
+        visualization.insertBefore(columnHeaders, firstChild);
+    } else {
+        visualization.appendChild(columnHeaders);
+    }
+}
+
+function updateVisualizationForComparative(enable) {
+    const rows = document.querySelectorAll('.indicator-row-grid');
+    rows.forEach(row => {
+        if (enable) {
+            row.classList.add('comparative');
+            // Add secondary columns if they don't exist
+            addSecondaryColumns(row);
+        } else {
+            row.classList.remove('comparative');
+            // Remove secondary columns
+            removeSecondaryColumns(row);
+        }
+    });
+}
+
+function addSecondaryColumns(row) {
+    // Check if secondary columns already exist
+    if (row.querySelector('.indicator-value-secondary')) {
+        return;
+    }
+    
+    // Add three secondary columns (present, 2030, 2050)
+    const indicatorId = row.getAttribute('data-indicator-id');
+    
+    const secondaryPresent = document.createElement('span');
+    secondaryPresent.className = 'indicator-value indicator-value-present indicator-value-secondary';
+    secondaryPresent.setAttribute('data-indicator-id', indicatorId);
+    secondaryPresent.setAttribute('data-indicator-year', 'present');
+    secondaryPresent.setAttribute('data-location', 'secondary');
+    
+    const secondary2030 = document.createElement('span');
+    secondary2030.className = 'indicator-value indicator-value-2030 indicator-value-secondary';
+    secondary2030.setAttribute('data-indicator-id', indicatorId);
+    secondary2030.setAttribute('data-indicator-year', '2030');
+    secondary2030.setAttribute('data-location', 'secondary');
+    
+    const secondary2050 = document.createElement('span');
+    secondary2050.className = 'indicator-value indicator-value-2050 indicator-value-secondary';
+    secondary2050.setAttribute('data-indicator-id', indicatorId);
+    secondary2050.setAttribute('data-indicator-year', '2050');
+    secondary2050.setAttribute('data-location', 'secondary');
+    
+    row.appendChild(secondaryPresent);
+    row.appendChild(secondary2030);
+    row.appendChild(secondary2050);
+}
+
+function removeSecondaryColumns(row) {
+    const secondaryColumns = row.querySelectorAll('.indicator-value-secondary');
+    secondaryColumns.forEach(col => col.remove());
+}
+
+function updateCascadeVisibility(isSecondary = false) {
+    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+    const cascade = RESOLUTION_CASCADE[resolution];
+    const suffix = isSecondary ? '-2' : '';
+    
+    const stateLevel = document.getElementById(`state-level${suffix}`);
+    const entityLevel = document.getElementById(`entity-level${suffix}`);
+    const entityLabel = document.getElementById(`entity-label${suffix}`);
+    const entitySelect = document.getElementById(`entity-select${suffix}`);
     
     if (cascade.levels.length === 1) {
         // Single level (regiao, estado)
         stateLevel.style.display = 'none';
         entityLevel.style.display = 'block';
         entityLabel.textContent = cascade.labels[0] + ':';
-        document.getElementById('entity-select').innerHTML = 
-            `<option value="">${cascade.placeholder}</option>`;
+        entitySelect.innerHTML = `<option value="">${cascade.placeholder}</option>`;
     } else {
         // Two levels (estado + municipio/micro/meso)
         stateLevel.style.display = 'block';
         entityLevel.style.display = 'block';
         entityLabel.textContent = cascade.labels[1] + ':';
-        document.getElementById('entity-select').innerHTML = 
-            `<option value="">${cascade.placeholder}</option>`;
+        entitySelect.innerHTML = `<option value="">${cascade.placeholder}</option>`;
     }
 }
 
-function populateDropdowns() {
-    populateStateDropdown();
-    populateEntityDropdown();
+function populateDropdowns(isSecondary = false) {
+    populateStateDropdown(isSecondary);
+    populateEntityDropdown(isSecondary);
 }
 
-function populateStateDropdown() {
-    const stateSelect = document.getElementById('state-select');
+function populateStateDropdown(isSecondary = false) {
+    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+    const suffix = isSecondary ? '-2' : '';
+    const stateSelect = document.getElementById(`state-select${suffix}`);
+    
     stateSelect.innerHTML = '<option value="">Selecione o estado...</option>';
     
-    const cascade = RESOLUTION_CASCADE[selectedResolution];
+    const cascade = RESOLUTION_CASCADE[resolution];
     if (cascade.levels.length === 1) {
         // No state dropdown needed
         return;
     }
     
     // Get unique states for current resolution
-    const entities = entityFileList[selectedResolution] || {};
+    const entities = entityFileList[resolution] || {};
     const states = new Set();
     Object.values(entities).forEach(entity => {
         if (entity.state) states.add(entity.state);
@@ -918,12 +1399,16 @@ function populateStateDropdown() {
     });
 }
 
-function populateEntityDropdown() {
-    const entitySelect = document.getElementById('entity-select');
-    const cascade = RESOLUTION_CASCADE[selectedResolution];
+function populateEntityDropdown(isSecondary = false) {
+    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+    const currentSelectedState = isSecondary ? selectedState2 : selectedState;
+    const suffix = isSecondary ? '-2' : '';
+    
+    const entitySelect = document.getElementById(`entity-select${suffix}`);
+    const cascade = RESOLUTION_CASCADE[resolution];
     entitySelect.innerHTML = `<option value="">${cascade.placeholder}</option>`;
     
-    const entities = entityFileList[selectedResolution] || {};
+    const entities = entityFileList[resolution] || {};
     
     if (cascade.levels.length === 1) {
         // Single level - show all entities for this resolution
@@ -938,10 +1423,10 @@ function populateEntityDropdown() {
         });
     } else {
         // Two levels - filter by selected state
-        if (!selectedState) return;
+        if (!currentSelectedState) return;
         
         const sortedEntities = Object.entries(entities)
-            .filter(([_, info]) => info.state === selectedState)
+            .filter(([_, info]) => info.state === currentSelectedState)
             .sort((a, b) => (a[1].name || '').localeCompare(b[1].name || ''));
             
         sortedEntities.forEach(([entityId, info]) => {
@@ -953,25 +1438,30 @@ function populateEntityDropdown() {
     }
 }
 
-async function loadEntityData() {
-    if (!selectedEntity || !entityFileList[selectedResolution] || !entityFileList[selectedResolution][selectedEntity]) {
+async function loadEntityData(isSecondary = false) {
+    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+    const entity = isSecondary ? selectedEntity2 : selectedEntity;
+    
+    if (!entity || !entityFileList[resolution] || !entityFileList[resolution][entity]) {
         return;
     }
     
     try {
-        const entityInfo = entityFileList[selectedResolution][selectedEntity];
+        const entityInfo = entityFileList[resolution][entity];
         
         // Try to load the data file
         if (!entityInfo.file) {
             // No file specified - show placeholder message
-            const entityName = entityInfo.name || selectedEntity;
-            const resolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+            const entityName = entityInfo.name || entity;
+            const resolutionName = RESOLUTION_CASCADE[resolution].labels[RESOLUTION_CASCADE[resolution].labels.length - 1];
             
-            document.getElementById('file-info').textContent = 
-                `${resolutionName} selecionada: ${entityName} (dados climáticos não disponíveis ainda)`;
+            if (!isSecondary) {
+                document.getElementById('file-info').textContent = 
+                    `${resolutionName} selecionada: ${entityName} (dados climáticos não disponíveis ainda)`;
+            }
                 
             // Clear indicator values since we don't have data
-            updateIndicatorValues([]);
+            updateIndicatorValues([], isSecondary);
             return;
         }
         
@@ -982,14 +1472,16 @@ async function loadEntityData() {
         if (!resp.ok) {
             // File doesn't exist - show informative message but don't error
             console.log(`File not found: data/${entityInfo.file}`);
-            const entityName = entityInfo.name || selectedEntity;
-            const resolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+            const entityName = entityInfo.name || entity;
+            const resolutionName = RESOLUTION_CASCADE[resolution].labels[RESOLUTION_CASCADE[resolution].labels.length - 1];
             
-            document.getElementById('file-info').textContent = 
-                `${resolutionName} selecionada: ${entityName} (arquivo de dados não encontrado: ${entityInfo.file})`;
+            if (!isSecondary) {
+                document.getElementById('file-info').textContent = 
+                    `${resolutionName} selecionada: ${entityName} (arquivo de dados não encontrado: ${entityInfo.file})`;
+            }
                 
             // Clear indicator values since we don't have data
-            updateIndicatorValues([]);
+            updateIndicatorValues([], isSecondary);
             return;
         }
         
@@ -997,14 +1489,23 @@ async function loadEntityData() {
         console.log(`Successfully loaded data for ${entityInfo.name}:`, entityData);
         
         // Update indicator values with entity data
-        updateIndicatorValues(entityData.indicators || []);
-        document.getElementById('file-info').textContent = `Arquivo carregado: ${entityInfo.file} (${entityInfo.name})`;
+        updateIndicatorValues(entityData.indicators || [], isSecondary);
+        
+        if (!isSecondary) {
+            document.getElementById('file-info').textContent = `Arquivo carregado: ${entityInfo.file} (${entityInfo.name})`;
+        }
         
     } catch (err) {
         console.error('Error loading entity data:', err);
-        const entityName = entityFileList[selectedResolution][selectedEntity]?.name || selectedEntity;
-        document.getElementById('file-info').textContent = `Erro ao carregar dados para ${entityName}: ${err.message}`;
-        updateIndicatorValues([]);
+        const resolution = isSecondary ? selectedResolution2 : selectedResolution;
+        const entity = isSecondary ? selectedEntity2 : selectedEntity;
+        const entityName = entityFileList[resolution][entity]?.name || entity;
+        
+        if (!isSecondary) {
+            document.getElementById('file-info').textContent = `Erro ao carregar dados para ${entityName}: ${err.message}`;
+        }
+        
+        updateIndicatorValues([], isSecondary);
     }
 }
 
