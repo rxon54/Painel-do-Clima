@@ -307,17 +307,75 @@ function renderComparativeTable(container, root) {
     
     // Create header
     const thead = document.createElement('thead');
+    
+    // Create location header row (above the column headers)
+    const locationHeaderRow = document.createElement('tr');
+    locationHeaderRow.className = 'location-header-row';
+    
+    // Empty cell for indicator column
+    const emptyTh = document.createElement('th');
+    emptyTh.style.border = 'none';
+    emptyTh.style.background = 'transparent';
+    locationHeaderRow.appendChild(emptyTh);
+    
+    // Primary location header (spans 3 columns: Atual, 2030, 2050)
+    const primaryLocationTh = document.createElement('th');
+    primaryLocationTh.setAttribute('colspan', '3');
+    primaryLocationTh.className = 'primary-location-header location-header-cell';
+    primaryLocationTh.style.textAlign = 'center';
+    primaryLocationTh.style.fontWeight = 'bold';
+    primaryLocationTh.style.color = '#0066cc';
+    primaryLocationTh.style.background = '#e6f3ff';
+    primaryLocationTh.style.border = '1px solid #0066cc';
+    primaryLocationTh.style.padding = '8px';
+    
+    // Populate primary location
+    if (selectedEntity && entityFileList[selectedResolution] && entityFileList[selectedResolution][selectedEntity]) {
+        const primaryEntityInfo = entityFileList[selectedResolution][selectedEntity];
+        const primaryResolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+        const primaryEntityName = primaryEntityInfo.name || selectedEntity;
+        primaryLocationTh.textContent = `${primaryResolutionName}: ${primaryEntityName}`;
+    } else {
+        primaryLocationTh.textContent = 'Localidade não selecionada';
+    }
+    locationHeaderRow.appendChild(primaryLocationTh);
+    
+    // Secondary location header (spans 3 columns: Atual, 2030, 2050)
+    const secondaryLocationTh = document.createElement('th');
+    secondaryLocationTh.setAttribute('colspan', '3');
+    secondaryLocationTh.className = 'secondary-location-header location-header-cell';
+    secondaryLocationTh.style.textAlign = 'center';
+    secondaryLocationTh.style.fontWeight = 'bold';
+    secondaryLocationTh.style.color = '#cc6600';
+    secondaryLocationTh.style.background = '#fff4e6';
+    secondaryLocationTh.style.border = '1px solid #cc6600';
+    secondaryLocationTh.style.padding = '8px';
+    
+    // Populate secondary location
+    if (selectedEntity2 && entityFileList[selectedResolution2] && entityFileList[selectedResolution2][selectedEntity2]) {
+        const secondaryEntityInfo = entityFileList[selectedResolution2][selectedEntity2];
+        const secondaryResolutionName = RESOLUTION_CASCADE[selectedResolution2].labels[RESOLUTION_CASCADE[selectedResolution2].labels.length - 1];
+        const secondaryEntityName = secondaryEntityInfo.name || selectedEntity2;
+        secondaryLocationTh.textContent = `${secondaryResolutionName}: ${secondaryEntityName}`;
+    } else {
+        secondaryLocationTh.textContent = 'Localidade não selecionada';
+    }
+    locationHeaderRow.appendChild(secondaryLocationTh);
+    
+    thead.appendChild(locationHeaderRow);
+    
+    // Create column header row
     const headerRow = document.createElement('tr');
     
     // Header cells
     const headers = [
         'Indicador',
-        'Atual (1)',
-        '2030 (1)', 
-        '2050 (1)',
-        'Atual (2)',
-        '2030 (2)',
-        '2050 (2)'
+        'Atual',
+        '2030', 
+        '2050',
+        'Atual',
+        '2030',
+        '2050'
     ];
     
     headers.forEach((header, index) => {
@@ -341,6 +399,7 @@ function renderComparativeTable(container, root) {
     function buildTableRow(node, level = 0) {
         const tr = document.createElement('tr');
         tr.setAttribute('data-indicator-id', node.id);
+        tr.setAttribute('data-level', node.nivel); // Add level attribute for filtering
         tr.className = 'indicator-row';
         
         // Indicator name cell with proper indentation
@@ -723,6 +782,52 @@ function markUnavailableIndicators(availableIndicators) {
     });
 }
 
+// Unified level filtering functions (global scope)
+function applyLevelFilter(selectedLevel) {
+    console.log('Applying level filter:', selectedLevel, 'Comparative mode:', comparativeMode);
+    
+    if (selectedLevel === "all") {
+        showAllIndicators();
+    } else {
+        const maxLevel = parseInt(selectedLevel);
+        filterByLevel(maxLevel);
+    }
+}
+
+function showAllIndicators() {
+    if (comparativeMode) {
+        document.querySelectorAll(".comparative-table tbody tr").forEach(row => {
+            row.style.display = "";
+        });
+    } else {
+        document.querySelectorAll(".indented-node").forEach(node => {
+            node.style.display = "";
+        });
+    }
+}
+
+function filterByLevel(maxLevel) {
+    if (comparativeMode) {
+        document.querySelectorAll(".comparative-table tbody tr").forEach(row => {
+            const level = parseInt(row.getAttribute('data-level'));
+            if (level >= 2 && level <= maxLevel) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    } else {
+        document.querySelectorAll(".indented-node").forEach(node => {
+            const nodeLevel = parseInt(node.getAttribute('data-level'));
+            if (nodeLevel >= 2 && nodeLevel <= maxLevel) {
+                node.style.display = "";
+            } else {
+                node.style.display = "none";
+            }
+        });
+    }
+}
+
 // Function to render the hierarchy
 function renderHierarchy(hierarchyData) {
     const visualization = d3.select("#visualization");
@@ -804,21 +909,46 @@ function renderHierarchy(hierarchyData) {
                     rootTitleRow.append('div')
                         .attr('class', 'root-title')
                         .text(`${root.id}: ${root.nome} (Nível ${root.nivel})`);
-                    // Add indicator year headers
-                    rootTitleRow.append('div')
-                        .attr('class', 'indicator-years-header')
-                        .style('display', 'flex')
-                        .style('gap', '30px')
-                        .style('min-width', '270px')
-                        .selectAll('span')
-                        .data(['Presente', '2030', '2050'])
-                        .enter()
-                        .append('span')
-                        .style('font-weight', 'bold')
-                        .style('color', '#444')
-                        .style('text-align', 'center')
-                        .style('min-width', '70px')
-                        .text(d => d);
+                    
+                    // Add location headers (only for non-comparative mode)
+                    if (!comparativeMode) {
+                        const locationHeadersDiv = rootTitleRow.append('div')
+                            .attr('class', 'location-headers')
+                            .style('display', 'flex')
+                            .style('gap', '30px')
+                            .style('min-width', '270px');
+                        
+                        // Always add primary location header (even if empty initially)
+                        const primaryLocationHeader = locationHeadersDiv.append('div')
+                            .attr('class', 'primary-location-header')
+                            .style('font-weight', 'bold')
+                            .style('color', '#444')
+                            .style('text-align', 'center')
+                            .style('min-width', '270px');
+                        
+                        // Populate primary location if available
+                        if (selectedEntity && entityFileList[selectedResolution] && entityFileList[selectedResolution][selectedEntity]) {
+                            const primaryEntityInfo = entityFileList[selectedResolution][selectedEntity];
+                            const primaryResolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+                            const primaryEntityName = primaryEntityInfo.name || selectedEntity;
+                            primaryLocationHeader.text(`${primaryResolutionName}: ${primaryEntityName}`);
+                        } else {
+                            primaryLocationHeader.text('Localidade não selecionada');
+                        }
+                    }
+                    
+                    // Add column headers for simple mode (after the root title)
+                    if (!comparativeMode) {
+                        const simpleHeaders = rootContainer.append('div')
+                            .attr('class', 'simple-mode-headers');
+                        
+                        simpleHeaders.html(`
+                            <span class="header-cell">Indicador</span>
+                            <span class="header-cell">Atual</span>
+                            <span class="header-cell">2030</span>
+                            <span class="header-cell">2050</span>
+                        `);
+                    }
                     // Use table format for comparative mode, grid format otherwise
                     console.log('renderHierarchy: comparativeMode =', comparativeMode, 'for root:', root.id);
                     if (comparativeMode) {
@@ -839,9 +969,57 @@ function renderHierarchy(hierarchyData) {
                 const rootContainer = sectorDiv.append('div')
                     .attr("class", "root-container")
                     .style("margin-bottom", "40px");
-                rootContainer.append("div")
-                    .attr("class", "root-title")
+                
+                // Add root title row with location headers (consistent with level2 roots)
+                const rootTitleRow = rootContainer.append('div')
+                    .attr('class', 'root-title-row')
+                    .style('display', 'flex')
+                    .style('justify-content', 'space-between')
+                    .style('align-items', 'center');
+                    
+                rootTitleRow.append('div')
+                    .attr('class', 'root-title')
                     .text(`${root.id}: ${root.nome} (Nível ${root.nivel})`);
+                
+                // Add location headers (only for non-comparative mode)
+                if (!comparativeMode) {
+                    const locationHeadersDiv = rootTitleRow.append('div')
+                        .attr('class', 'location-headers')
+                        .style('display', 'flex')
+                        .style('gap', '30px')
+                        .style('min-width', '270px');
+                    
+                    // Always add primary location header (even if empty initially)
+                    const primaryLocationHeader = locationHeadersDiv.append('div')
+                        .attr('class', 'primary-location-header')
+                        .style('font-weight', 'bold')
+                        .style('color', '#444')
+                        .style('text-align', 'center')
+                        .style('min-width', '270px');
+                    
+                    // Populate primary location if available
+                    if (selectedEntity && entityFileList[selectedResolution] && entityFileList[selectedResolution][selectedEntity]) {
+                        const primaryEntityInfo = entityFileList[selectedResolution][selectedEntity];
+                        const primaryResolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+                        const primaryEntityName = primaryEntityInfo.name || selectedEntity;
+                        primaryLocationHeader.text(`${primaryResolutionName}: ${primaryEntityName}`);
+                    } else {
+                        primaryLocationHeader.text('Localidade não selecionada');
+                    }
+                }
+                
+                // Add column headers for simple mode (after the root title)
+                if (!comparativeMode) {
+                    const simpleHeaders = rootContainer.append('div')
+                        .attr('class', 'simple-mode-headers');
+                    
+                    simpleHeaders.html(`
+                        <span class="header-cell">Indicador</span>
+                        <span class="header-cell">Atual</span>
+                        <span class="header-cell">2030</span>
+                        <span class="header-cell">2050</span>
+                    `);
+                }
                 // Use table format for comparative mode, grid format otherwise
                 console.log('renderHierarchy: comparativeMode =', comparativeMode, 'for root:', root.id);
                 if (comparativeMode) {
@@ -870,25 +1048,7 @@ function renderHierarchy(hierarchyData) {
     });
 
     levelFilter.on("change", function() {
-        const selectedLevel = this.value;
-        if (selectedLevel === "all") {
-            // Show all indented nodes
-            document.querySelectorAll(".indented-node").forEach(node => {
-                node.style.display = "";
-            });
-        } else {
-            // Hierarchical depth filtering: show levels 2 through selected level
-            const maxLevel = parseInt(selectedLevel);
-            document.querySelectorAll(".indented-node").forEach(node => {
-                const nodeLevel = parseInt(node.getAttribute('data-level'));
-                // Show if level is 2 or higher AND level is <= selected max level
-                if (nodeLevel >= 2 && nodeLevel <= maxLevel) {
-                    node.style.display = "";
-                } else {
-                    node.style.display = "none";
-                }
-            });
-        }
+        applyLevelFilter(this.value);
     });
 }
 
@@ -988,6 +1148,53 @@ async function loadIBGEGeographicData() {
         console.error('Error loading IBGE data:', error);
         return null;
     }
+}
+
+// Function to update location headers when selections change
+function updateLocationHeaders() {
+    console.log('updateLocationHeaders called');
+    console.log('- selectedEntity:', selectedEntity);
+    console.log('- selectedResolution:', selectedResolution);
+    console.log('- entityFileList available:', !!entityFileList);
+    console.log('- comparativeMode:', comparativeMode);
+    console.log('- selectedEntity2:', selectedEntity2);
+    console.log('- selectedResolution2:', selectedResolution2);
+    
+    // Find all primary location header elements (both in tables and root title areas)
+    const primaryHeaders = document.querySelectorAll('.primary-location-header');
+    console.log('- Found primary headers:', primaryHeaders.length);
+    
+    primaryHeaders.forEach(header => {
+        if (selectedEntity && entityFileList[selectedResolution] && entityFileList[selectedResolution][selectedEntity]) {
+            const primaryEntityInfo = entityFileList[selectedResolution][selectedEntity];
+            const primaryResolutionName = RESOLUTION_CASCADE[selectedResolution].labels[RESOLUTION_CASCADE[selectedResolution].labels.length - 1];
+            const primaryEntityName = primaryEntityInfo.name || selectedEntity;
+            const text = `${primaryResolutionName}: ${primaryEntityName}`;
+            console.log('- Setting primary header text:', text);
+            header.textContent = text;
+        } else {
+            console.log('- Setting primary header to default text');
+            header.textContent = 'Localidade não selecionada';
+        }
+    });
+    
+    // Find all secondary location header elements (both in tables and root title areas)
+    const secondaryHeaders = document.querySelectorAll('.secondary-location-header');
+    console.log('- Found secondary headers:', secondaryHeaders.length);
+    
+    secondaryHeaders.forEach(header => {
+        if (comparativeMode && selectedEntity2 && entityFileList[selectedResolution2] && entityFileList[selectedResolution2][selectedEntity2]) {
+            const secondaryEntityInfo = entityFileList[selectedResolution2][selectedEntity2];
+            const secondaryResolutionName = RESOLUTION_CASCADE[selectedResolution2].labels[RESOLUTION_CASCADE[selectedResolution2].labels.length - 1];
+            const secondaryEntityName = secondaryEntityInfo.name || selectedEntity2;
+            const text = `${secondaryResolutionName}: ${secondaryEntityName}`;
+            console.log('- Setting secondary header text:', text);
+            header.textContent = text;
+        } else if (comparativeMode) {
+            console.log('- Setting secondary header to default text');
+            header.textContent = 'Localidade não selecionada';
+        }
+    });
 }
 
 // Resolution cascade configuration
@@ -1201,51 +1408,35 @@ function toggleComparativeMode(enable) {
     console.log('toggleComparativeMode: comparativeMode =', comparativeMode);
     if (hierarchyData) {
         renderHierarchy(hierarchyData);
+        
+        // Re-apply current level filter after mode change
+        const levelFilterElement = document.getElementById('level-filter');
+        if (levelFilterElement && levelFilterElement.value) {
+            setTimeout(() => {
+                applyLevelFilter(levelFilterElement.value);
+            }, 100); // Small delay to ensure DOM is updated
+        }
+        
+        // Reload data for both locations when switching modes
+        setTimeout(async () => {
+            console.log('Reloading location data after mode change...');
+            
+            // Reload primary location data if available
+            if (selectedEntity && entityFileList[selectedResolution] && entityFileList[selectedResolution][selectedEntity]) {
+                console.log('Reloading primary location data');
+                await loadEntityData(false);
+            }
+            
+            // Reload secondary location data if in comparative mode and available
+            if (enable && selectedEntity2 && entityFileList[selectedResolution2] && entityFileList[selectedResolution2][selectedEntity2]) {
+                console.log('Reloading secondary location data');
+                await loadEntityData(true);
+            }
+        }, 200); // Small delay to ensure DOM is fully updated
     } else {
         console.log('hierarchyData not available, cannot re-render');
     }
-    updateLocationHeaders();
     addColumnHeaders(); // Add this line to update column headers
-}
-
-function updateLocationHeaders() {
-    // Remove existing headers
-    document.querySelectorAll('.location-header').forEach(header => header.remove());
-    
-    if (comparativeMode) {
-        // Add headers for comparative mode
-        addLocationHeader('primary');
-        if (selectedEntity2) {
-            addLocationHeader('secondary');
-        }
-    }
-}
-
-function addLocationHeader(type) {
-    const isSecondary = type === 'secondary';
-    const resolution = isSecondary ? selectedResolution2 : selectedResolution;
-    const entity = isSecondary ? selectedEntity2 : selectedEntity;
-    
-    if (!entity || !entityFileList[resolution] || !entityFileList[resolution][entity]) {
-        return;
-    }
-    
-    const entityInfo = entityFileList[resolution][entity];
-    const resolutionName = RESOLUTION_CASCADE[resolution].labels[RESOLUTION_CASCADE[resolution].labels.length - 1];
-    const entityName = entityInfo.name || entity;
-    
-    const header = document.createElement('div');
-    header.className = `location-header ${isSecondary ? 'secondary' : ''}`;
-    header.textContent = `${resolutionName}: ${entityName}`;
-    
-    // Insert the header before the indicator values
-    const visualization = document.getElementById('visualization');
-    const firstChild = visualization.firstChild;
-    if (firstChild) {
-        visualization.insertBefore(header, firstChild);
-    } else {
-        visualization.appendChild(header);
-    }
 }
 
 function addColumnHeaders() {
@@ -1253,40 +1444,34 @@ function addColumnHeaders() {
     const existingHeaders = document.querySelectorAll('.column-headers');
     existingHeaders.forEach(header => header.remove());
     
-    const visualization = document.getElementById('visualization');
-    const columnHeaders = document.createElement('div');
-    columnHeaders.className = 'column-headers';
-    
+    // For comparative mode, we still use the global approach since tables handle their own headers
     if (comparativeMode) {
+        const visualization = document.getElementById('visualization');
+        const columnHeaders = document.createElement('div');
+        columnHeaders.className = 'column-headers';
+        
         columnHeaders.innerHTML = `
             <div class="column-headers-grid comparative">
                 <span class="header-cell">Indicador</span>
-                <span class="header-cell primary">Presente</span>
+                <span class="header-cell primary">Atual</span>
                 <span class="header-cell primary">2030</span>
                 <span class="header-cell primary">2050</span>
-                <span class="header-cell secondary">Presente</span>
+                <span class="header-cell secondary">Atual</span>
                 <span class="header-cell secondary">2030</span>
                 <span class="header-cell secondary">2050</span>
             </div>
         `;
-    } else {
-        columnHeaders.innerHTML = `
-            <div class="column-headers-grid">
-                <span class="header-cell">Indicador</span>
-                <span class="header-cell">Presente</span>
-                <span class="header-cell">2030</span>
-                <span class="header-cell">2050</span>
-            </div>
-        `;
+        
+        // Insert at the beginning of visualization
+        const firstChild = visualization.firstChild;
+        if (firstChild) {
+            visualization.insertBefore(columnHeaders, firstChild);
+        } else {
+            visualization.appendChild(columnHeaders);
+        }
     }
-    
-    // Insert at the beginning of visualization
-    const firstChild = visualization.firstChild;
-    if (firstChild) {
-        visualization.insertBefore(columnHeaders, firstChild);
-    } else {
-        visualization.appendChild(columnHeaders);
-    }
+    // For simple mode, headers will be added individually after each root title
+    // This is handled in the renderHierarchy function
 }
 
 function updateVisualizationForComparative(enable) {

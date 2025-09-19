@@ -172,12 +172,12 @@ select, button, input {
     font-size: 14px;
     color: #495057;
     border-bottom: 2px solid #dee2e6;
-    width: 10%;
+    width: 13%;
 }
 
 .comparative-table thead th:first-child {
     text-align: left;
-    width: 40%;
+    width: 15%;
     padding-left: 8px;
     padding-right: 16px;
     font-weight: 700;
@@ -196,6 +196,31 @@ select, button, input {
     border-bottom: 2px solid #cc6600;
 }
 
+/* Location header row styles for comparative table */
+.comparative-table .location-header-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.comparative-table .location-header-cell {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.comparative-table .primary-location-header.location-header-cell {
+    background: #e6f3ff !important;
+    color: #0066cc !important;
+    border-color: #0066cc !important;
+}
+
+.comparative-table .secondary-location-header.location-header-cell {
+    background: #fff4e6 !important;
+    color: #cc6600 !important;
+    border-color: #cc6600 !important;
+}
+
 .comparative-table tbody tr {
     transition: background-color 0.15s ease;
 }
@@ -212,10 +237,10 @@ select, button, input {
 .comparative-table td {
     padding: 1px 2px;
     text-align: left;
-    min-width: 95px;
+    min-width: 130px;
     font-size: 0.93em;
     border: none;
-    width: 10%;
+    width: 15%;
     vertical-align: middle;
 }
 
@@ -224,12 +249,12 @@ select, button, input {
     padding-left: 8px;
     padding-right: 16px;
     font-weight: 500;
-    width: 40%;
+    width: 10%;
 }
 
 .comparative-table .indicator-value {
     display: inline-block;
-    min-width: 95px;
+    min-width: 130px;
     padding: 1px 6px;
     border-radius: 6px;
     font-size: 0.93em;
@@ -444,6 +469,16 @@ select, button, input {
 .column-headers-grid.comparative {
     grid-template-columns: 1fr 85px 85px 85px 85px 85px 85px;
     gap: 0 3px;
+}
+
+/* Simple mode headers styling */
+.simple-mode-headers {
+    display: grid;
+    grid-template-columns: 1fr 120px 120px 120px;
+    align-items: left;
+    gap: 0 4px;
+    padding: 4px 8px;
+    font-weight: 600;
 }
 
 .header-cell {
