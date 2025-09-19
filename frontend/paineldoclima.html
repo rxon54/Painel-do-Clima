@@ -76,19 +76,21 @@
         <!-- Primary Location Controls -->
         <div class="col" id="primary-location">
             <h4 style="margin: 0 0 8px 0; color: #0066cc;">Localidade Principal</h4>
-            <label for="resolution-select">Resolução:</label>
-            <select id="resolution-select">
-                <option value="municipio" selected>Município</option>
-                <option value="microrregiao">Microrregião</option>
-                <option value="mesorregiao">Mesorregião</option>
-                <option value="estado">Estado</option>
-                <option value="regiao">Região</option>
-            </select>
+            <div class="resolution-control">
+                <label for="resolution-select">Resolução:</label>
+                <select id="resolution-select">
+                    <option value="municipio" selected>Município</option>
+                    <option value="microrregiao">Microrregião</option>
+                    <option value="mesorregiao">Mesorregião</option>
+                    <option value="estado">Estado</option>
+                    <option value="regiao">Região</option>
+                </select>
+            </div>
             
             <!-- Dynamic cascade container -->
-            <div id="cascade-container">
+            <div id="cascade-container" class="aligned-dropdowns">
                 <!-- State dropdown (appears for municipio, microrregiao, mesorregiao) -->
-                <div class="cascade-level" id="state-level" style="margin-top: 12px;">
+                <div class="cascade-level" id="state-level">
                     <label for="state-select">Estado:</label>
                     <select id="state-select">
                         <option value="">Selecione o estado...</option>
@@ -96,7 +98,7 @@
                 </div>
                 
                 <!-- Final entity dropdown (dynamic label) -->
-                <div class="cascade-level" id="entity-level" style="margin-top: 12px;">
+                <div class="cascade-level" id="entity-level">
                     <label for="entity-select" id="entity-label">Cidade:</label>
                     <select id="entity-select">
                         <option value="">Selecione uma cidade...</option>
@@ -108,19 +110,21 @@
         <!-- Secondary Location Controls (hidden by default) -->
         <div class="col" id="secondary-location" style="display: none;">
             <h4 style="margin: 0 0 8px 0; color: #cc6600;">Localidade para Comparação</h4>
-            <label for="resolution-select-2">Resolução:</label>
-            <select id="resolution-select-2">
-                <option value="municipio" selected>Município</option>
-                <option value="microrregiao">Microrregião</option>
-                <option value="mesorregiao">Mesorregião</option>
-                <option value="estado">Estado</option>
-                <option value="regiao">Região</option>
-            </select>
+            <div class="resolution-control">
+                <label for="resolution-select-2">Resolução:</label>
+                <select id="resolution-select-2">
+                    <option value="municipio" selected>Município</option>
+                    <option value="microrregiao">Microrregião</option>
+                    <option value="mesorregiao">Mesorregião</option>
+                    <option value="estado">Estado</option>
+                    <option value="regiao">Região</option>
+                </select>
+            </div>
             
             <!-- Dynamic cascade container for second location -->
-            <div id="cascade-container-2">
+            <div id="cascade-container-2" class="aligned-dropdowns">
                 <!-- State dropdown (appears for municipio, microrregiao, mesorregiao) -->
-                <div class="cascade-level" id="state-level-2" style="margin-top: 12px;">
+                <div class="cascade-level" id="state-level-2">
                     <label for="state-select-2">Estado:</label>
                     <select id="state-select-2">
                         <option value="">Selecione o estado...</option>
@@ -128,7 +132,7 @@
                 </div>
                 
                 <!-- Final entity dropdown (dynamic label) -->
-                <div class="cascade-level" id="entity-level-2" style="margin-top: 12px;">
+                <div class="cascade-level" id="entity-level-2">
                     <label for="entity-select-2" id="entity-label-2">Cidade:</label>
                     <select id="entity-select-2">
                         <option value="">Selecione uma cidade...</option>

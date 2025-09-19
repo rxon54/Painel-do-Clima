@@ -103,13 +103,13 @@ select, button, input {
 }
 .indented-list {
     list-style: none;
-    margin-left: 20px;
-    padding-left: 8px;
+    margin-left: 12px;
     border-left: 1px solid #e0e0e0;
 }
 .indented-node {
     margin: 2px 0;
     font-size: 14px;
+
 }
 .indented-label {
     margin-left: 2px;
@@ -136,13 +136,15 @@ select, button, input {
     display: inline-block;
     min-width: 48px;
     margin-left: 10px;
-    padding: 2px 8px;
-    border-radius: 12px;
+    padding: 2px 6px;
+    border-radius: 6px;
     font-size: 12px;
     color: #333;
     background: #eee;
     vertical-align: middle;
+    text-align: left;
     transition: background 0.2s;
+
 }
 /* Hide column headers when using table format */
 .comparative-mode .column-headers {
@@ -153,29 +155,31 @@ select, button, input {
 .comparative-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 4px 0;
-    font-size: 12px;
+    margin: 2px 0;
+    font-size: 14px;
     background: white;
     border: 1px solid #e9ecef;
-    border-radius: 6px;
+    border-radius: 4px;
     overflow: hidden;
+    table-layout: fixed;
 }
 
 .comparative-table thead th {
     background: #f8f9fa;
-    padding: 6px 4px;
+    padding: 4px 0px;
     text-align: center;
     font-weight: 600;
-    font-size: 11px;
+    font-size: 14px;
     color: #495057;
     border-bottom: 2px solid #dee2e6;
-    min-width: 65px;
+    width: 10%;
 }
 
 .comparative-table thead th:first-child {
     text-align: left;
-    width: auto;
-    padding-left: 12px;
+    width: 40%;
+    padding-left: 8px;
+    padding-right: 16px;
     font-weight: 700;
     color: #212529;
 }
@@ -204,52 +208,55 @@ select, button, input {
     background-color: #fafbfc;
 }
 
+/* indicators tree   rx looking */
 .comparative-table td {
-    padding: 4px 2px;
-    text-align: center;
-    font-size: 11px;
+    padding: 1px 2px;
+    text-align: left;
+    min-width: 95px;
+    font-size: 0.93em;
     border: none;
-    min-width: 65px;
+    width: 10%;
     vertical-align: middle;
 }
 
 .comparative-table td:first-child {
     text-align: left;
-    padding-left: 12px;
-    padding-right: 8px;
+    padding-left: 8px;
+    padding-right: 16px;
     font-weight: 500;
-    width: auto;
+    width: 40%;
 }
 
 .comparative-table .indicator-value {
     display: inline-block;
-    min-width: 55px;
-    padding: 1px 4px;
-    border-radius: 10px;
-    font-size: 10px;
+    min-width: 95px;
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 0.93em;
     margin: 0;
+    white-space: nowrap;
 }
 
 .comparative-table .primary-value {
     color: #0066cc;
     background: #e6f3ff;
-    border: 1px solid #b3daff;
+   
 }
 
 .comparative-table .secondary-value {
     color: #cc6600;
     background: #fff4e6;
-    border: 1px solid #f0d4a3;
+   
 }
 
 /* Standard grid for non-comparative mode */
 .indicator-row-grid {
   display: grid;
-  grid-template-columns: 1fr 85px 85px 85px;
+  grid-template-columns: auto 85px 85px 85px;
   align-items: center;
-  gap: 0 4px;
-  min-height: 20px;
-  padding: 2px 0;
+  gap: 0 24px;
+  min-height: 12px;
+  padding: 0px 0;
 }
 .tree-label-cell {
   white-space: nowrap;
@@ -265,12 +272,12 @@ select, button, input {
 }
 .indicator-value {
   justify-self: end;
-  text-align: right;
-  min-width: 75px;
+  text-align: left;
+  min-width: 95px;
   white-space: nowrap;
-  border-radius: 4px;
-  padding: 1px 4px;
-  font-size: 0.85em;
+  border-radius: 8px;
+  padding: 1px 6px;
+  font-size: 0.93em;
   background-color: #f8f9fa;
 }
 
@@ -278,13 +285,11 @@ select, button, input {
 .indicator-value-secondary {
   justify-self: end;
   text-align: right;
-  min-width: 75px;
+  min-width: 95px;
   white-space: nowrap;
-  border-radius: 4px;
-  padding: 1px 4px;
-  font-size: 0.85em;
-  /* Background color will be set by JavaScript from data */
-  border: 1px solid #f0ad4e;
+  border-radius: 8px;
+  padding: 1px 6px;
+  font-size: 11px;  
 }
 
 /* Indicator availability styles */
@@ -423,7 +428,7 @@ select, button, input {
 
 .column-headers-grid {
     display: grid;
-    grid-template-columns: 1fr 85px 85px 85px;
+    grid-template-columns: 1fr 100px 100px 100px;
     align-items: center;
     gap: 0 4px;
     min-height: 32px;
@@ -468,4 +473,25 @@ select, button, input {
     border-radius: 3px;
     padding: 3px 4px;
     border: 1px solid #f0d4a3;
+}
+ul {
+    padding-inline-start: 12px;
+}
+
+.resolution-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aligned-dropdowns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cascade-level {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }

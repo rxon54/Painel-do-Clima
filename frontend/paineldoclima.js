@@ -608,7 +608,7 @@ function updateIndicatorValues(data, isSecondary = false) {
                 // For secondary values, use data colors but with slight transparency/border
                 elPresent.style.background = record.valuecolor || '#fff8f0';
                 elPresent.style.color = '#333';
-                elPresent.style.border = '1px solid #f0ad4e';
+                //elPresent.style.border = '1px solid #f0ad4e';
             } else {
                 // For primary values, use original styling
                 elPresent.style.background = record.valuecolor || '#eee';
@@ -1184,7 +1184,7 @@ function toggleComparativeMode(enable) {
     console.log('toggleComparativeMode: setting comparativeMode to', enable);
     
     if (enable) {
-        secondaryLocation.style.display = 'block';
+        secondaryLocation.style.display = 'flex'; //rx trying to match primary location formatting
         body.classList.add('comparative-mode');
         updateCascadeVisibility(true); // Setup secondary controls
         populateDropdowns(true); // Populate secondary dropdowns
