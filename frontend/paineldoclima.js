@@ -691,7 +691,7 @@ function updateIndicatorValues(data, isSecondary = false) {
                 if (isSecondary) {
                     el2030.style.background = ft.valuecolor || '#fff8f0';
                     el2030.style.color = '#333';
-                    el2030.style.border = '1px solid #f0ad4e';
+                    //el2030.style.border = '1px solid #f0ad4e';
                 } else {
                     el2030.style.background = ft.valuecolor || '#eee';
                     el2030.style.color = '#222';
@@ -701,7 +701,7 @@ function updateIndicatorValues(data, isSecondary = false) {
                 if (isSecondary) {
                     el2030.style.background = '#fff8f0';
                     el2030.style.color = '#aaa';
-                    el2030.style.border = '1px solid #f0ad4e';
+                    //el2030.style.border = '1px solid #f0ad4e';
                 } else {
                     el2030.style.background = '#eee';
                     el2030.style.color = '#aaa';
@@ -733,7 +733,7 @@ function updateIndicatorValues(data, isSecondary = false) {
                 if (isSecondary) {
                     el2050.style.background = '#fff8f0';
                     el2050.style.color = '#aaa';
-                    el2050.style.border = '1px solid #f0ad4e';
+                    //el2050.style.border = '1px solid #f0ad4e';
                 } else {
                     el2050.style.background = '#eee';
                     el2050.style.color = '#aaa';
