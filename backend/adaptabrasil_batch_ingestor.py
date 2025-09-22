@@ -126,26 +126,28 @@ def parse_states(state_config: str) -> List[str]:
         # Single state
         return [str(state_config).strip().upper()]
 
-def parse_resolutions(resolution_config: str) -> List[str]:
-    """
-    Parse resolution configuration to handle both single resolution and comma-separated resolutions.
-    
-    Args:
-        resolution_config: Resolution configuration from config.yaml (e.g., "municipio" or "microrregiao, estado")
-        
-    Returns:
-        List of resolution types
-    """
+def parse_resolutions(resolution_config):
+    """Parse resolutions from config, handling both single string and list formats."""
     if isinstance(resolution_config, str):
-        # Handle comma-separated resolutions
-        resolutions = [res.strip().lower() for res in resolution_config.split(',')]
-        return [res for res in resolutions if res]  # Filter out empty strings
+        return [resolution_config]
     elif isinstance(resolution_config, list):
-        # Handle list format
-        return [str(res).strip().lower() for res in resolution_config]
+        return resolution_config
     else:
-        # Single resolution
-        return [str(resolution_config).strip().lower()]
+        return []
+
+def get_all_brazilian_states():
+    """
+    Return list of all Brazilian state abbreviations for national scope processing.
+    
+    Used by smart state override when resolution: regiao is detected to ensure
+    complete regional data collection. Brazilian regions (Norte, Sul, etc.) span
+    multiple states, so single-state processing would result in incomplete regional data.
+    """
+    return [
+        "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", 
+        "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", 
+        "RO", "RR", "RS", "SC", "SE", "SP", "TO"
+    ]
 
 def load_indicator_year_pairs(path: str = "mapa-dados.txt"):
     """
@@ -168,6 +170,32 @@ def main():
     config = load_config()
     states = parse_states(config["state"])
     resolutions = parse_resolutions(config.get("resolution", "municipio"))  # Parse multiple resolutions
+    
+    # Smart state override for regional resolution
+    # Regional entities (Norte, Sul, Sudeste, etc.) span multiple states, so they require
+    # national scope data collection to be complete. If user configured a subset of states
+    # with regional resolution, we automatically override to include all Brazilian states.
+    if "regiao" in resolutions:
+        original_states = states.copy()
+        all_states = get_all_brazilian_states()
+        
+        # Check if we need to override (not already using all states)
+        if len(states) < len(all_states) or set(states) != set(all_states):
+            states = all_states
+            print(f"\n🌍 REGIONAL RESOLUTION DETECTED")
+            print(f"═" * 50)
+            print(f"📍 Original states: {', '.join(original_states)}")
+            print(f"🔄 Override: Using all Brazilian states for regional data")
+            print(f"💡 Reason: Regions (Norte, Sul, etc.) span multiple states")
+            print(f"   Single-state processing would give incomplete regional data")
+            print(f"📍 New states: All {len(states)} Brazilian states")
+            print(f"═" * 50)
+            
+            logging.warning(f"Regional resolution detected - overriding states from {original_states} to all Brazilian states")
+            logging.info(f"Regional override reason: Regions require national scope for complete data")
+        else:
+            logging.info(f"Regional resolution with national scope already configured - no override needed")
+    
     delay = float(config.get("delay_seconds", config.get("delay", 1.0)))  # Support both delay_seconds and delay
     output_dir = config.get("output_dir", "output/")
     debug = config.get("save_full_response", config.get("debug", False))  # Support both save_full_response and debug

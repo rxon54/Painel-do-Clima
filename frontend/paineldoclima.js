@@ -1268,13 +1268,31 @@ async function loadEntityFileList() {
         console.log('Loading IBGE geographic data...');
         const ibgeData = await loadIBGEGeographicData();
         if (ibgeData) {
-            // Merge IBGE data into entityFileList
-            entityFileList['estado'] = ibgeData.estados;
-            entityFileList['regiao'] = ibgeData.regioes;
-            console.log(`Loaded ${Object.keys(ibgeData.estados).length} states and ${Object.keys(ibgeData.regioes).length} regions from IBGE`);
+            // Merge IBGE data into entityFileList - but preserve existing data from entity_filelist.json
+            
+            // For estados, use IBGE data if we don't have it already
+            if (!entityFileList['estado']) {
+                entityFileList['estado'] = ibgeData.estados;
+            }
+            
+            // For regioes, preserve existing processed data, only add missing entries from IBGE
+            if (!entityFileList['regiao']) {
+                entityFileList['regiao'] = ibgeData.regioes;
+            } else {
+                // entityFileList already has processed region data - keep it and just log
+                console.log(`Using existing processed region data from entity_filelist.json (${Object.keys(entityFileList['regiao']).length} regions)`);
+            }
+            
+            console.log(`Final data: ${Object.keys(entityFileList['estado'] || {}).length} states and ${Object.keys(entityFileList['regiao'] || {}).length} regions`);
         }
         
         console.log('Final entityFileList structure:', Object.keys(entityFileList));
+        Object.keys(entityFileList).forEach(resolution => {
+            console.log(`${resolution}: ${Object.keys(entityFileList[resolution]).length} entities`);
+            if (resolution === 'regiao') {
+                console.log('Region entities:', Object.entries(entityFileList[resolution]).map(([id, info]) => `${id}: ${info.name} (file: ${info.file})`));
+            }
+        });
         setupResolutionCascade();
         
         if (fileInfoElement) fileInfoElement.textContent = 'Listas de entidades carregadas';
@@ -1597,6 +1615,7 @@ function populateEntityDropdown(isSecondary = false) {
     
     if (cascade.levels.length === 1) {
         // Single level - show all entities for this resolution
+        console.log(`Populating ${resolution} dropdown with ${Object.keys(entities).length} entities`);
         const sortedEntities = Object.entries(entities)
             .sort((a, b) => (a[1].name || '').localeCompare(b[1].name || ''));
             
@@ -1605,6 +1624,7 @@ function populateEntityDropdown(isSecondary = false) {
             opt.value = entityId;
             opt.textContent = info.name || entityId;
             entitySelect.appendChild(opt);
+            console.log(`Added ${resolution} option: ${entityId} - ${info.name}`);
         });
     } else {
         // Two levels - filter by selected state
@@ -1652,6 +1672,7 @@ async function loadEntityData(isSecondary = false) {
         
         // Try to load the actual climate data file
         console.log(`Attempting to load: data/${entityInfo.file}`);
+        console.log(`Entity info:`, entityInfo);
         const resp = await fetch(`data/${entityInfo.file}`);
         
         if (!resp.ok) {
